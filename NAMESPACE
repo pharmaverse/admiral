@@ -16,6 +16,7 @@ S3method(print,source)
 S3method(print,summary_admiral_df)
 S3method(summary,admiral_df)
 export("%>%")
+export(admiral_df)
 export(admiral_labels_attrs_section)
 export(ae_event)
 export(ae_gr1_event)
@@ -27,7 +28,6 @@ export(ae_gr5_event)
 export(ae_ser_event)
 export(ae_sev_event)
 export(ae_wd_event)
-export(as_admiral_df)
 export(basket_select)
 export(call_derivation)
 export(censor_source)
@@ -138,6 +138,9 @@ export(filter_not_exist)
 export(filter_relative)
 export(flag_event)
 export(get_admiral_option)
+export(get_dataset_class)
+export(get_dataset_keys)
+export(get_dataset_name)
 export(get_duplicates_dataset)
 export(get_flagged_records)
 export(get_many_to_one_dataset)
@@ -157,7 +160,6 @@ export(params)
 export(print_named_list)
 export(query)
 export(restrict_derivation)
-export(set_admiral_keys)
 export(set_admiral_options)
 export(signal_duplicate_records)
 export(slice_derivation)
@@ -251,6 +253,7 @@ importFrom(lubridate,
   rollback,
   second,
   time_length,
+  tz,
   weeks,
   years,
   ymd,

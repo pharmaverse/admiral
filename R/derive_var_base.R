@@ -109,5 +109,5 @@ derive_var_base <- function(dataset,
       "{.var {by_vars}}"
     )
   ) %>%
-    as_admiral_df()
+    new_admiral_df()
 }

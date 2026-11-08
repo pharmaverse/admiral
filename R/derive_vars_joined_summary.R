@@ -497,5 +497,5 @@ derive_vars_joined_summary <- function(dataset,
       missing_values = missing_values
     ) %>%
     remove_tmp_vars() %>%
-    as_admiral_df()
+    new_admiral_df()
 }

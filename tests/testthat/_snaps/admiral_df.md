@@ -1,7 +1,7 @@
-# set_admiral_keys Test 8: empty keys are stored, keys not in the dataset are not
+# admiral_df Test 9: empty keys are stored, keys not in the dataset are not
 
     Code
-      typo <- set_admiral_keys(input, keys = exprs(USUBJID, PARMACD), dataset_name = "ADVS")
+      typo <- admiral_df(input, dataset_keys = exprs(USUBJID, PARMACD), dataset_name = "ADVS")
     Condition
       Warning:
       Key variable `PARMACD` is not in `dataset`, so no keys were set.
@@ -9,28 +9,27 @@
 ---
 
     Code
-      rekeyed <- set_admiral_keys(keyed, keys = exprs(USUBJID, PARMACD, AVISIT))
+      rekeyed <- admiral_df(keyed, dataset_keys = exprs(USUBJID, PARMACD, AVISIT))
     Condition
       Warning:
       Key variables `PARMACD` and `AVISIT` are not in `dataset`, so no keys were set.
       i The keys set previously are kept: `USUBJID` and `PARAMCD`.
 
-# set_admiral_keys Test 10: an error is issued for invalid arguments
+# admiral_df Test 11: an error is issued for invalid arguments
 
     Code
-      set_admiral_keys(input, keys = c("USUBJID", "PARAMCD"))
+      admiral_df(input, dataset_class = "ADAE")
     Condition
-      Error in `set_admiral_keys()`:
-      ! Argument `keys` must be a list of variables created by `exprs()`, but is a character vector.
-      i Use `chr2vars()` to convert a character vector, e.g. `chr2vars(metacore::get_keys(spec, "ADVS")$variable)`.
+      Error in `admiral_df()`:
+      ! Argument `dataset_class` must be equal to one of "ADSL", "BDS", "OCCDS", "TTE", "ADDL", "MDBDS", "MDTTE", or "MDOCCDS".
 
-# print.admiral_df Test 34: the name, type and keys are printed in a header
+# print.admiral_df Test 27: the name, class and keys are printed in a header
 
     Code
-      print(set_admiral_keys(input, keys = exprs(USUBJID, PARAMCD, AVISIT),
-      dataset_name = "ADVS"))
+      print(admiral_df(input, dataset_keys = exprs(USUBJID, PARAMCD, AVISIT),
+      dataset_name = "ADVS", dataset_class = "BDS"))
     Output
-      # An admiral dataset (name: ADVS, type: BDS, keys: USUBJID, PARAMCD, AVISIT)
+      # An admiral dataset (name: ADVS, class: BDS, keys: USUBJID, PARAMCD, AVISIT)
       # A tibble: 2 x 5
         STUDYID USUBJID PARAMCD AVISIT    AVAL
         <chr>   <chr>   <chr>   <chr>    <dbl>
@@ -40,9 +39,9 @@
 ---
 
     Code
-      print(set_admiral_keys(input, keys = exprs(USUBJID, PARAMCD, AVISIT)))
+      print(admiral_df(input, dataset_keys = exprs(USUBJID, PARAMCD, AVISIT)))
     Output
-      # An admiral dataset (type: BDS, keys: USUBJID, PARAMCD, AVISIT)
+      # An admiral dataset (class: BDS (inferred), keys: USUBJID, PARAMCD, AVISIT)
       # A tibble: 2 x 5
         STUDYID USUBJID PARAMCD AVISIT    AVAL
         <chr>   <chr>   <chr>   <chr>    <dbl>
@@ -52,9 +51,9 @@
 ---
 
     Code
-      print(set_admiral_keys(input, keys = exprs(), dataset_name = "ADVS"))
+      print(admiral_df(input, dataset_class = "BDS"))
     Output
-      # An admiral dataset (name: ADVS, type: BDS, keys: none)
+      # An admiral dataset (class: BDS)
       # A tibble: 2 x 5
         STUDYID USUBJID PARAMCD AVISIT    AVAL
         <chr>   <chr>   <chr>   <chr>    <dbl>
@@ -64,18 +63,19 @@
 ---
 
     Code
-      print(set_admiral_keys(as.data.frame(input), keys = exprs(USUBJID),
-      dataset_name = "ADVS"))
+      print(admiral_df(input, dataset_keys = exprs(USUBJID), dataset_class = "TTE"))
     Output
-      # An admiral dataset (name: ADVS, type: BDS, keys: USUBJID)
-        STUDYID USUBJID PARAMCD   AVISIT AVAL
-      1       P       1   DIABP BASELINE   51
-      2       P       1   SYSBP BASELINE  121
+      # An admiral dataset (class: TTE, keys: USUBJID)
+      # A tibble: 2 x 5
+        STUDYID USUBJID PARAMCD AVISIT    AVAL
+        <chr>   <chr>   <chr>   <chr>    <dbl>
+      1 P       1       DIABP   BASELINE    51
+      2 P       1       SYSBP   BASELINE   121
 
 ---
 
     Code
-      print(set_admiral_keys(lookup, keys = exprs(PARAMCD), dataset_name = "PARAMS"))
+      print(admiral_df(lookup, dataset_keys = exprs(PARAMCD), dataset_name = "PARAMS"))
     Output
       # An admiral dataset (name: PARAMS, keys: PARAMCD)
       # A tibble: 1 x 2
@@ -83,7 +83,44 @@
         <chr>   <chr>                          
       1 DIABP   Diastolic Blood Pressure (mmHg)
 
-# summary.admiral_df Test 38: duplicate, missing and empty declared keys
+---
+
+    Code
+      print(admiral_df(input, dataset_keys = exprs(), dataset_name = "ADVS"))
+    Output
+      # An admiral dataset (name: ADVS, class: BDS (inferred), keys: none)
+      # A tibble: 2 x 5
+        STUDYID USUBJID PARAMCD AVISIT    AVAL
+        <chr>   <chr>   <chr>   <chr>    <dbl>
+      1 P       1       DIABP   BASELINE    51
+      2 P       1       SYSBP   BASELINE   121
+
+---
+
+    Code
+      print(admiral_df(as.data.frame(input), dataset_keys = exprs(USUBJID),
+      dataset_name = "ADVS"))
+    Output
+      # An admiral dataset (name: ADVS, class: BDS (inferred), keys: USUBJID)
+        STUDYID USUBJID PARAMCD   AVISIT AVAL
+      1       P       1   DIABP BASELINE   51
+      2       P       1   SYSBP BASELINE  121
+
+# summary.admiral_df Test 30: the structure is not checked if no keys were set
+
+    Code
+      print(actual)
+    Message
+      -- input: BDS summary ----------------------------------------------------------
+      Subjects (USUBJID): 2
+      Observations: 3 | Variables: 5
+      i Structure: not checked, no keys set (see `admiral_df()`)
+      Parameters (1):
+        PARAMCD  records  subjects  visits  missing  min  median  max
+        SYSBP          3         2       2        0  118     121  130
+      Analysis visits (AVISIT): BASELINE, WEEK 2
+
+# summary.admiral_df Test 31: duplicate, missing and empty declared keys
 
     Code
       print(duplicated)
@@ -105,7 +142,7 @@
       -- renamed: BDS summary --------------------------------------------------------
       Subjects (USUBJID): 2
       Observations: 3 | Variables: 5
-      ! Structure: not checked, declared key AVISIT is not in the dataset
+      ! Structure: not checked, key AVISIT is not in the dataset
       Parameters (1):
         PARAMCD  records  subjects  missing  min  median  max
         SYSBP          3         2        0  118     121  130
@@ -124,7 +161,7 @@
         SYSBP          3         2       2        0  118     121  130
       Analysis visits (AVISIT): BASELINE, WEEK 2
 
-# summary.admiral_df Test 39: the ADSL summary
+# summary.admiral_df Test 32: the ADSL summary
 
     Code
       print(actual)
@@ -136,7 +173,7 @@
       Subjects per treatment arm (TRT01P): Drug A: 2 | Placebo: 1
       Populations: SAFFL 2 | ITTFL 3
 
-# summary.admiral_df Test 40: the BDS summary
+# summary.admiral_df Test 33: the BDS summary
 
     Code
       print(actual)
@@ -144,7 +181,7 @@
       -- input: BDS summary ----------------------------------------------------------
       Subjects (USUBJID): 2
       Observations: 4 | Variables: 6
-      v Structure (inferred): one record per USUBJID, PARAMCD, AVISITN
+      i Structure: not checked, no keys set (see `admiral_df()`)
       Parameters (2):
         PARAMCD  records  subjects  visits  missing  min  median  max
         DIABP          1         1       1        0   79      79   79
@@ -159,7 +196,7 @@
       -- many_params: BDS summary ----------------------------------------------------
       Subjects (USUBJID): 1
       Observations: 12 | Variables: 4
-      v Structure (inferred): one record per USUBJID, PARAMCD
+      i Structure: not checked, no keys set (see `admiral_df()`)
       Parameters (12):
         PARAMCD  records  subjects  missing  min  median  max
         P01            1         1        0    1       1    1
@@ -174,7 +211,7 @@
         P10            1         1        0    1       1    1
       ... and 2 more parameters
 
-# summary.admiral_df Test 41: the OCCDS summary
+# summary.admiral_df Test 34: the OCCDS summary
 
     Code
       print(actual)
@@ -182,11 +219,11 @@
       -- input: OCCDS summary --------------------------------------------------------
       Subjects (USUBJID): 2
       Observations: 3 | Variables: 6
-      v Structure (inferred): one record per USUBJID, AESEQ
+      i Structure: not checked, no keys set (see `admiral_df()`)
       Distinct terms: AEBODSYS 2 | AEDECOD 2
       Treatment emergent (TRTEMFL): 2 of 3 records
 
-# summary.admiral_df Test 42: the TTE summary
+# summary.admiral_df Test 35: the TTE summary
 
     Code
       print(actual)
@@ -194,20 +231,20 @@
       -- input: TTE summary ----------------------------------------------------------
       Subjects (USUBJID): 2
       Observations: 3 | Variables: 6
-      v Structure (inferred): one record per USUBJID, PARAMCD
+      i Structure: not checked, no keys set (see `admiral_df()`)
       Events and censored per parameter (CNSR):
         PARAMCD  events  censored
         OS            1         1
         PFS           0         1
 
-# summary.admiral_df Test 43: datasets with little to report do not error
+# summary.admiral_df Test 36: datasets with little to report do not error
 
     Code
       print(summary(lookup))
     Message
       -- lookup: Dataset summary -----------------------------------------------------
       Observations: 2 | Variables: 1
-      i Structure: could not be determined
+      i Structure: not checked, no keys set (see `admiral_df()`)
 
 ---
 
@@ -217,9 +254,9 @@
       -- empty: Dataset summary ------------------------------------------------------
       Subjects (USUBJID): 0
       Observations: 0 | Variables: 2
-      i Structure: could not be determined
+      i Structure: not checked, no keys set (see `admiral_df()`)
 
-# print_summary_table Test 45: tables are aligned, counts are not rounded, NA is shown as `.`
+# print_summary_table Test 38: tables are aligned, counts are not rounded, NA is shown as `.`
 
     Code
       print_summary_table(tbl)
@@ -238,7 +275,7 @@
         DIABP      11509  80.12       254
       ... and 2 more parameters
 
-# summary.admiral_df Test 46: the ADSL subject flow, outcome and demographics
+# summary.admiral_df Test 39: the ADSL subject flow, outcome and demographics
 
     Code
       print(summary(input))
@@ -253,7 +290,7 @@
       Deaths (DTHFL): 1 (ADVERSE EVENT: 1)
       Demographics: AGE median 59 (range 40-71) | SEX F: 2 | M: 2
 
-# summary.admiral_df Test 47: the BDS per-parameter statistics and derived records
+# summary.admiral_df Test 40: the BDS per-parameter statistics and derived records
 
     Code
       print(summary(input))
@@ -261,7 +298,7 @@
       -- input: BDS summary ----------------------------------------------------------
       Subjects (USUBJID): 2
       Observations: 5 | Variables: 7
-      v Structure (inferred): one record per USUBJID, PARAMCD, AVISIT, DTYPE
+      i Structure: not checked, no keys set (see `admiral_df()`)
       Parameters (2):
         PARAMCD  records  subjects  visits  missing  min  median    max
         DIABP          1         1       0        1    .       .      .

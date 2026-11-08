@@ -509,5 +509,5 @@ derive_var_trtemfl <- function(dataset,
     ) %>%
     # Remove temporary variable
     remove_tmp_vars()
-  as_admiral_df(dataset)
+  new_admiral_df(dataset)
 }

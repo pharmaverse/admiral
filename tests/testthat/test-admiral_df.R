@@ -1,13 +1,13 @@
-# as_admiral_df ----
+# new_admiral_df ----
 ## Test 1: adds the admiral_df class to a data frame ----
-test_that("as_admiral_df Test 1: adds the admiral_df class to a data frame", {
+test_that("new_admiral_df Test 1: adds the admiral_df class to a data frame", {
   input <- tibble::tribble(
     ~USUBJID, ~AVAL,
     "1",      10,
     "2",      20
   )
 
-  actual <- as_admiral_df(input)
+  actual <- new_admiral_df(input)
 
   expect_equal(class(actual), c("admiral_df", class(input)))
   # Test that the dataset is not changed
@@ -15,55 +15,79 @@ test_that("as_admiral_df Test 1: adds the admiral_df class to a data frame", {
 })
 
 ## Test 2: is idempotent when the class is already present ----
-test_that("as_admiral_df Test 2: is idempotent when the class is already present", {
+test_that("new_admiral_df Test 2: is idempotent when the class is already present", {
   input <- tibble::tribble(
     ~USUBJID, ~AVAL,
     "1",      10
   )
 
-  once <- as_admiral_df(input)
-  twice <- as_admiral_df(once)
+  once <- new_admiral_df(input)
+  twice <- new_admiral_df(once)
 
   expect_equal(class(once), class(twice))
   expect_equal(sum(class(twice) == "admiral_df"), 1L)
 })
 
 ## Test 3: returns NULL unchanged ----
-test_that("as_admiral_df Test 3: returns NULL unchanged", {
-  expect_null(as_admiral_df(NULL))
+test_that("new_admiral_df Test 3: returns NULL unchanged", {
+  expect_null(new_admiral_df(NULL))
 })
 
-# set_admiral_keys ----
-## Test 4: stores the keys, the dataset name, and the admiral_df class ----
-test_that("set_admiral_keys Test 4: stores the keys, the dataset name, and the admiral_df class", { # nolint
+## Test 4: keeps the metadata already set ----
+test_that("new_admiral_df Test 4: keeps the metadata already set", {
+  input <- admiral_df(
+    tibble::tribble(
+      ~USUBJID, ~AVAL,
+      "1",      10
+    ),
+    dataset_keys = exprs(USUBJID),
+    dataset_name = "ADSL",
+    dataset_class = "ADSL"
+  )
+
+  # every derivation tags its output, which must not lose the metadata the user
+  # set on its input
+  actual <- new_admiral_df(input)
+
+  expect_identical(attr(actual, "admiral_dataset_keys"), "USUBJID")
+  expect_identical(attr(actual, "admiral_dataset_name"), "ADSL")
+  expect_identical(attr(actual, "admiral_dataset_class"), "ADSL")
+})
+
+# admiral_df ----
+## Test 5: stores the keys, name, ADaM class, and the admiral_df class ----
+test_that("admiral_df Test 5: stores the keys, name, ADaM class, and the admiral_df class", {
   input <- tibble::tribble(
     ~USUBJID, ~PARAMCD, ~AVISIT,    ~AVAL,
     "1",      "DIABP",  "BASELINE",    51,
     "1",      "SYSBP",  "BASELINE",   121
   )
 
-  actual <- set_admiral_keys(
+  actual <- admiral_df(
     input,
-    keys = exprs(USUBJID, PARAMCD, AVISIT),
-    dataset_name = "ADVS"
+    dataset_keys = exprs(USUBJID, PARAMCD, AVISIT),
+    dataset_name = "ADVS",
+    dataset_class = "BDS"
   )
 
   expect_equal(
-    attr(actual, "admiral_keys"),
+    attr(actual, "admiral_dataset_keys"),
     c("USUBJID", "PARAMCD", "AVISIT")
   )
-  expect_equal(attr(actual, "admiral_ds_name"), "ADVS")
+  expect_equal(attr(actual, "admiral_dataset_name"), "ADVS")
+  expect_equal(attr(actual, "admiral_dataset_class"), "BDS")
   expect_s3_class(actual, "admiral_df")
   # Test that the data itself is not changed
   stripped <- actual
-  attr(stripped, "admiral_keys") <- NULL
-  attr(stripped, "admiral_ds_name") <- NULL
+  attr(stripped, "admiral_dataset_keys") <- NULL
+  attr(stripped, "admiral_dataset_name") <- NULL
+  attr(stripped, "admiral_dataset_class") <- NULL
   class(stripped) <- class(input)
   expect_equal(stripped, input)
 })
 
-## Test 5: keys from a specification are passed via chr2vars() ----
-test_that("set_admiral_keys Test 5: keys from a specification are passed via chr2vars()", {
+## Test 6: keys from a specification are passed via chr2vars() ----
+test_that("admiral_df Test 6: keys from a specification are passed via chr2vars()", {
   input <- tibble::tribble(
     ~USUBJID, ~PARAMCD, ~AVAL,
     "1",      "DIABP",     51
@@ -72,39 +96,60 @@ test_that("set_admiral_keys Test 5: keys from a specification are passed via chr
   spec_keys <- c("USUBJID", "PARAMCD")
   attr(spec_keys, "label") <- "Variable Name"
 
-  from_exprs <- set_admiral_keys(input, keys = exprs(USUBJID, PARAMCD))
-  from_spec <- set_admiral_keys(input, keys = chr2vars(spec_keys))
+  from_exprs <- admiral_df(input, dataset_keys = exprs(USUBJID, PARAMCD))
+  from_spec <- admiral_df(input, dataset_keys = chr2vars(spec_keys))
 
-  expect_identical(attr(from_spec, "admiral_keys"), attr(from_exprs, "admiral_keys"))
+  expect_identical(
+    attr(from_spec, "admiral_dataset_keys"),
+    attr(from_exprs, "admiral_dataset_keys")
+  )
 })
 
-## Test 6: the dataset name is stored, preserved, and replaced ----
-test_that("set_admiral_keys Test 6: the dataset name is stored, preserved, and replaced", {
+## Test 7: the metadata is stored, preserved, and replaced ----
+test_that("admiral_df Test 7: the metadata is stored, preserved, and replaced", {
   input <- tibble::tribble(
     ~USUBJID, ~PARAMCD, ~AVAL,
     "1",      "DIABP",     51
   )
 
-  # nothing is stored when there is no name to store
-  unnamed <- set_admiral_keys(input, keys = exprs(USUBJID))
-  expect_equal(attr(unnamed, "admiral_keys"), "USUBJID")
-  expect_null(attr(unnamed, "admiral_ds_name"))
+  # nothing is stored when there is nothing to store
+  bare <- admiral_df(input)
+  expect_s3_class(bare, "admiral_df")
+  expect_null(attr(bare, "admiral_dataset_keys"))
+  expect_null(attr(bare, "admiral_dataset_name"))
+  expect_null(attr(bare, "admiral_dataset_class"))
 
-  # `dataset_name` is not repeated, so the name of the dataset is not lost by
-  # a call which only revises its keys
-  named <- set_admiral_keys(input, keys = exprs(USUBJID), dataset_name = "ADVS")
-  rekeyed <- set_admiral_keys(named, keys = exprs(USUBJID, PARAMCD))
-  expect_equal(attr(rekeyed, "admiral_keys"), c("USUBJID", "PARAMCD"))
-  expect_equal(attr(rekeyed, "admiral_ds_name"), "ADVS")
+  # an argument which is not repeated is not lost by a call which only revises
+  # another
+  named <- admiral_df(
+    input,
+    dataset_keys = exprs(USUBJID),
+    dataset_name = "ADVS",
+    dataset_class = "BDS"
+  )
+  rekeyed <- admiral_df(named, dataset_keys = exprs(USUBJID, PARAMCD))
+  expect_equal(attr(rekeyed, "admiral_dataset_keys"), c("USUBJID", "PARAMCD"))
+  expect_equal(attr(rekeyed, "admiral_dataset_name"), "ADVS")
+  expect_equal(attr(rekeyed, "admiral_dataset_class"), "BDS")
 
-  # both the keys and the name give way when a later call supplies them
-  renamed <- set_admiral_keys(named, keys = exprs(USUBJID, PARAMCD), dataset_name = "ADSL")
-  expect_equal(attr(renamed, "admiral_keys"), c("USUBJID", "PARAMCD"))
-  expect_equal(attr(renamed, "admiral_ds_name"), "ADSL")
+  retyped <- admiral_df(named, dataset_class = "TTE")
+  expect_equal(attr(retyped, "admiral_dataset_keys"), "USUBJID")
+  expect_equal(attr(retyped, "admiral_dataset_class"), "TTE")
+
+  # all give way when a later call supplies them
+  renamed <- admiral_df(
+    named,
+    dataset_keys = exprs(USUBJID, PARAMCD),
+    dataset_name = "ADSL",
+    dataset_class = "ADSL"
+  )
+  expect_equal(attr(renamed, "admiral_dataset_keys"), c("USUBJID", "PARAMCD"))
+  expect_equal(attr(renamed, "admiral_dataset_name"), "ADSL")
+  expect_equal(attr(renamed, "admiral_dataset_class"), "ADSL")
 })
 
-## Test 7: the keys are stored as a plain character vector ----
-test_that("set_admiral_keys Test 7: the keys are stored as a plain character vector", {
+## Test 8: the keys are stored as a plain character vector ----
+test_that("admiral_df Test 8: the keys are stored as a plain character vector", {
   input <- tibble::tribble(
     ~USUBJID, ~AVAL,
     "1",      10
@@ -112,13 +157,13 @@ test_that("set_admiral_keys Test 7: the keys are stored as a plain character vec
 
   # `vars2chr()` returns a named vector, which must not end up on the stored
   # attribute
-  actual <- set_admiral_keys(input, keys = exprs(USUBJID, AVAL))
+  actual <- admiral_df(input, dataset_keys = exprs(USUBJID, AVAL))
 
-  expect_identical(attr(actual, "admiral_keys"), c("USUBJID", "AVAL"))
+  expect_identical(attr(actual, "admiral_dataset_keys"), c("USUBJID", "AVAL"))
 })
 
-## Test 8: empty keys are stored, keys not in the dataset are not ----
-test_that("set_admiral_keys Test 8: empty keys are stored, keys not in the dataset are not", { # nolint
+## Test 9: empty keys are stored, keys not in the dataset are not ----
+test_that("admiral_df Test 9: empty keys are stored, keys not in the dataset are not", {
   input <- tibble::tribble(
     ~USUBJID, ~PARAMCD, ~AVAL,
     "1",      "DIABP",     51
@@ -126,39 +171,40 @@ test_that("set_admiral_keys Test 8: empty keys are stored, keys not in the datas
 
   # the empty attribute is a statement that the dataset has no key variables,
   # so it must be distinguishable from an attribute which was never set
-  expect_silent(empty <- set_admiral_keys(input, keys = exprs()))
-  expect_identical(attr(empty, "admiral_keys"), character(0))
-  expect_false(is.null(attr(empty, "admiral_keys")))
+  expect_silent(empty <- admiral_df(input, dataset_keys = exprs()))
+  expect_identical(attr(empty, "admiral_dataset_keys"), character(0))
+  expect_false(is.null(attr(empty, "admiral_dataset_keys")))
   expect_s3_class(empty, "admiral_df")
 
   # a key which is not in the dataset is most likely a typo, so the keys are
   # not set and a warning says so; the name and the class are still applied
   expect_snapshot(
-    typo <- set_admiral_keys(input, keys = exprs(USUBJID, PARMACD), dataset_name = "ADVS")
+    typo <- admiral_df(input, dataset_keys = exprs(USUBJID, PARMACD), dataset_name = "ADVS")
   )
-  expect_null(attr(typo, "admiral_keys"))
-  expect_identical(attr(typo, "admiral_ds_name"), "ADVS")
+  expect_null(attr(typo, "admiral_dataset_keys"))
+  expect_identical(attr(typo, "admiral_dataset_name"), "ADVS")
   expect_s3_class(typo, "admiral_df")
 
   # re-keying with a typo keeps the keys set previously, and the warning says
   # which they are
-  keyed <- set_admiral_keys(input, keys = exprs(USUBJID, PARAMCD))
+  keyed <- admiral_df(input, dataset_keys = exprs(USUBJID, PARAMCD))
   expect_snapshot(
-    rekeyed <- set_admiral_keys(keyed, keys = exprs(USUBJID, PARMACD, AVISIT))
+    rekeyed <- admiral_df(keyed, dataset_keys = exprs(USUBJID, PARMACD, AVISIT))
   )
-  expect_identical(attr(rekeyed, "admiral_keys"), c("USUBJID", "PARAMCD"))
+  expect_identical(attr(rekeyed, "admiral_dataset_keys"), c("USUBJID", "PARAMCD"))
 })
 
-## Test 9: the keys and the class survive a dplyr pipeline ----
-test_that("set_admiral_keys Test 9: the keys and the class survive a dplyr pipeline", {
-  input <- set_admiral_keys(
+## Test 10: the metadata and the class survive a dplyr pipeline ----
+test_that("admiral_df Test 10: the metadata and the class survive a dplyr pipeline", {
+  input <- admiral_df(
     tibble::tribble(
       ~USUBJID, ~PARAMCD, ~AVAL,
       "1",      "DIABP",     51,
       "2",      "DIABP",     79
     ),
-    keys = exprs(USUBJID, PARAMCD),
-    dataset_name = "ADVS"
+    dataset_keys = exprs(USUBJID, PARAMCD),
+    dataset_name = "ADVS",
+    dataset_class = "BDS"
   )
   adsl <- tibble::tribble(
     ~USUBJID, ~TRT01P,
@@ -166,9 +212,9 @@ test_that("set_admiral_keys Test 9: the keys and the class survive a dplyr pipel
     "2",      "Xanomeline"
   )
 
-  # the usefulness of the attribute rests on it surviving the verbs a derivation
-  # pipeline is built from -- which is a promise about `{dplyr}`, not about
-  # admiral, so it is worth pinning against a dependency update
+  # the usefulness of the attributes rests on them surviving the verbs a
+  # derivation pipeline is built from -- which is a promise about `{dplyr}`,
+  # not about admiral, so it is worth pinning against a dependency update
   actual <- input %>%
     mutate(BASE = AVAL) %>%
     filter(AVAL > 0) %>%
@@ -176,46 +222,69 @@ test_that("set_admiral_keys Test 9: the keys and the class survive a dplyr pipel
     select(USUBJID, PARAMCD, AVAL, BASE) %>%
     left_join(adsl, by = "USUBJID")
 
-  expect_equal(attr(actual, "admiral_keys"), c("USUBJID", "PARAMCD"))
-  expect_equal(attr(actual, "admiral_ds_name"), "ADVS")
+  expect_equal(attr(actual, "admiral_dataset_keys"), c("USUBJID", "PARAMCD"))
+  expect_equal(attr(actual, "admiral_dataset_name"), "ADVS")
+  expect_equal(attr(actual, "admiral_dataset_class"), "BDS")
   expect_s3_class(actual, "admiral_df")
 })
 
-## Test 10: an error is issued for invalid arguments ----
-test_that("set_admiral_keys Test 10: an error is issued for invalid arguments", {
+## Test 11: an error is issued for invalid arguments ----
+test_that("admiral_df Test 11: an error is issued for invalid arguments", {
   input <- tibble::tribble(
     ~USUBJID, ~AVAL,
     "1",      10
   )
 
-  expect_error(set_admiral_keys(list(), keys = exprs(USUBJID)))
-  expect_error(set_admiral_keys(input, keys = 1))
-  expect_error(set_admiral_keys(input, keys = iris))
-  expect_error(set_admiral_keys(input, keys = exprs(USUBJID + 1)))
-  expect_error(set_admiral_keys(input, keys = exprs(USUBJID), dataset_name = c("A", "B")))
+  expect_error(admiral_df(list(), dataset_keys = exprs(USUBJID)), class = "assert_data_frame")
+  expect_error(admiral_df(input, dataset_keys = 1), class = "assert_vars")
+  expect_error(admiral_df(input, dataset_keys = iris), class = "assert_vars")
+  expect_error(admiral_df(input, dataset_keys = exprs(USUBJID + 1)), class = "assert_vars")
+  expect_error(
+    admiral_df(input, dataset_keys = exprs(USUBJID), dataset_name = c("A", "B")),
+    class = "assert_character_scalar"
+  )
+  expect_error(
+    admiral_df(input, dataset_class = c("BDS", "TTE")),
+    class = "assert_character_scalar"
+  )
 
-  # keys taken from a specification are a character vector, so the error
-  # points to the conversion
-  expect_snapshot(set_admiral_keys(input, keys = c("USUBJID", "PARAMCD")), error = TRUE)
+  # the class is one of the ADaM dataset classes
+  expect_snapshot(admiral_df(input, dataset_class = "ADAE"), error = TRUE)
 })
 
-# get_admiral_df_type ----
-## Test 11: classifies the common ADaM structures ----
-test_that("get_admiral_df_type Test 11: classifies the common ADaM structures", {
+## Test 12: device classes are accepted ----
+test_that("admiral_df Test 12: device classes are accepted", {
+  input <- tibble::tribble(
+    ~STUDYID, ~SPDEVID, ~PARAMCD, ~AVAL,
+    "P",      "D-1",    "BATTV",    3.1,
+    "P",      "D-2",    "BATTV",    2.9
+  )
+
+  for (dataset_class in c("ADDL", "MDBDS", "MDTTE", "MDOCCDS")) {
+    expect_silent(actual <- admiral_df(input, dataset_class = dataset_class))
+    expect_identical(attr(actual, "admiral_dataset_class"), dataset_class)
+  }
+})
+
+# infer_dataset_class ----
+## Test 13: classifies the common ADaM structures ----
+test_that("infer_dataset_class Test 13: classifies the common ADaM structures", {
   bds <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~PARAMCD, ~AVAL, ~AVISIT,
     "P",      "1",      "MAP",       90, "BASELINE"
   )
-  expect_identical(get_admiral_df_type(bds), "BDS")
+  expect_identical(infer_dataset_class(bds), "BDS")
 
   # BDS is satisfied by either analysis value variable
   expect_identical(
-    get_admiral_df_type(tibble::tibble(STUDYID = "P", USUBJID = "1", PARAMCD = "A", AVALC = "X")),
+    infer_dataset_class(
+      tibble::tibble(STUDYID = "P", USUBJID = "1", PARAMCD = "A", AVALC = "X")
+    ),
     "BDS"
   )
   # with neither, it is not a BDS dataset
   expect_identical(
-    get_admiral_df_type(tibble::tibble(
+    infer_dataset_class(tibble::tibble(
       STUDYID = "P", USUBJID = c("1", "1"), PARAMCD = "A", FOO = 1
     )),
     "other"
@@ -228,26 +297,26 @@ test_that("get_admiral_df_type Test 11: classifies the common ADaM structures", 
     "P",      "1",      "OS",       100,     0, as.Date("2020-01-01"),
     "P",      "1",      "PFS",       60,     1, as.Date("2020-01-01")
   )
-  expect_identical(get_admiral_df_type(tte), "TTE")
+  expect_identical(infer_dataset_class(tte), "TTE")
 
   # the TTE signal needs all three of its variables: dropping any one term falls
   # back to BDS rather than staying TTE
-  expect_identical(get_admiral_df_type(select(tte, -CNSR)), "BDS")
-  expect_identical(get_admiral_df_type(select(tte, -STARTDT)), "BDS")
-  expect_identical(get_admiral_df_type(select(tte, -PARAMCD)), "other")
+  expect_identical(infer_dataset_class(select(tte, -CNSR)), "BDS")
+  expect_identical(infer_dataset_class(select(tte, -STARTDT)), "BDS")
+  expect_identical(infer_dataset_class(select(tte, -PARAMCD)), "other")
 
   adsl <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~TRT01P,
     "P",      "1",      "A",
     "P",      "2",      "B"
   )
-  expect_identical(get_admiral_df_type(adsl), "ADSL")
+  expect_identical(infer_dataset_class(adsl), "ADSL")
 
   other <- tibble::tribble(
     ~FOO, ~BAR,
     1,    2
   )
-  expect_identical(get_admiral_df_type(other), "other")
+  expect_identical(infer_dataset_class(other), "other")
 
   # a summary of a BDS dataset shares its `PARAMCD` and `AVAL` but has no
   # subjects, so it is not a BDS dataset itself
@@ -256,11 +325,11 @@ test_that("get_admiral_df_type Test 11: classifies the common ADaM structures", 
     "A",     "SYSBP",    125,
     "B",     "SYSBP",    125
   )
-  expect_identical(get_admiral_df_type(bds_summary), "other")
+  expect_identical(infer_dataset_class(bds_summary), "other")
 })
 
-## Test 12: each occurrence signal is recognized on its own ----
-test_that("get_admiral_df_type Test 12: each occurrence signal is recognized on its own", {
+## Test 14: each occurrence signal is recognized on its own ----
+test_that("infer_dataset_class Test 14: each occurrence signal is recognized on its own", {
   # two records for one subject, so that a dataset which fails every occurrence
   # test is not subject-level either and the fallback is visible as "other"
   occds <- function(...) {
@@ -272,17 +341,17 @@ test_that("get_admiral_df_type Test 12: each occurrence signal is recognized on 
   for (flag in c("AOCCFL", "AOCCIFL", "AOCCSFL", "AOCCPFL", "AOCCPIFL", "AOCC02FL")) {
     input <- occds()
     input[[flag]] <- c("Y", "N")
-    expect_identical(get_admiral_df_type(input), "OCCDS", info = flag)
+    expect_identical(infer_dataset_class(input), "OCCDS", info = flag)
   }
 
-  expect_identical(get_admiral_df_type(occds(TRTEMFL = c("Y", "N"))), "OCCDS")
-  expect_identical(get_admiral_df_type(occds(AEDECOD = c("A", "B"))), "OCCDS")
-  expect_identical(get_admiral_df_type(occds(MHTERM = c("A", "B"))), "OCCDS")
-  expect_identical(get_admiral_df_type(occds(CMTERM = c("A", "B"))), "OCCDS")
+  expect_identical(infer_dataset_class(occds(TRTEMFL = c("Y", "N"))), "OCCDS")
+  expect_identical(infer_dataset_class(occds(AEDECOD = c("A", "B"))), "OCCDS")
+  expect_identical(infer_dataset_class(occds(MHTERM = c("A", "B"))), "OCCDS")
+  expect_identical(infer_dataset_class(occds(CMTERM = c("A", "B"))), "OCCDS")
 })
 
-## Test 13: an occurrence signal which is not corroborated does not classify ----
-test_that("get_admiral_df_type Test 13: an occurrence signal which is not corroborated does not classify", { # nolint
+## Test 15: an occurrence signal which is not corroborated does not classify ----
+test_that("infer_dataset_class Test 15: an occurrence signal which is not corroborated does not classify", { # nolint
   # `LONGTERM` ends in TERM but is not a `--TERM` variable, and the two-letter
   # SDTM domain prefix is what distinguishes the two
   not_occds <- tibble::tribble(
@@ -290,14 +359,14 @@ test_that("get_admiral_df_type Test 13: an occurrence signal which is not corrob
     "P",      "1",      "Y",          10,
     "P",      "1",      "N",          20
   )
-  expect_identical(get_admiral_df_type(not_occds), "other")
+  expect_identical(infer_dataset_class(not_occds), "other")
 
   # the naming signal alone, with nothing identifying a subject, is not enough
   no_subject <- tibble::tribble(
     ~AEDECOD,   ~AESEV,
     "HEADACHE", "MILD"
   )
-  expect_identical(get_admiral_df_type(no_subject), "other")
+  expect_identical(infer_dataset_class(no_subject), "other")
 
   # nor is a subset of the subject keys: `STUDYID` is constant within a study,
   # so a lookup table carrying it still identifies no subject
@@ -306,24 +375,24 @@ test_that("get_admiral_df_type Test 13: an occurrence signal which is not corrob
     "P",      "HEADACHE",
     "P",      "NAUSEA"
   )
-  expect_identical(get_admiral_df_type(study_only), "other")
+  expect_identical(infer_dataset_class(study_only), "other")
 
   # a lone severity variable is not an occurrence signal either
   severity_only <- tibble::tibble(
     STUDYID = "P", USUBJID = c("1", "1"), AESEV = c("MILD", "SEVERE")
   )
-  expect_identical(get_admiral_df_type(severity_only), "other")
+  expect_identical(infer_dataset_class(severity_only), "other")
 })
 
-## Test 14: the type precedence resolves datasets matching more than one type ----
-test_that("get_admiral_df_type Test 14: the type precedence resolves datasets matching more than one type", { # nolint
+## Test 16: the class precedence resolves datasets matching more than one class ----
+test_that("infer_dataset_class Test 16: the class precedence resolves datasets matching more than one class", { # nolint
   # BDS over OCCDS: an occurrence dataset which has acquired a parameter is
   # reported per parameter, so `PARAMCD` excludes the OCCDS branch outright
   bds_and_occds <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~PARAMCD, ~AVAL, ~AEDECOD,   ~TRTEMFL,
     "P",      "1",      "AEHLT",      1, "HEADACHE", "Y"
   )
-  expect_identical(get_admiral_df_type(bds_and_occds), "BDS")
+  expect_identical(infer_dataset_class(bds_and_occds), "BDS")
 
   # OCCDS over ADSL: one adverse event per subject is still an occurrence
   # dataset, even though it is trivially one record per subject and carries a
@@ -333,60 +402,64 @@ test_that("get_admiral_df_type Test 14: the type precedence resolves datasets ma
     "P",      "1",      "HEADACHE", "Placebo", as.Date("2020-01-01"),
     "P",      "2",      "NAUSEA",   "Drug",    as.Date("2020-01-02")
   )
-  expect_identical(get_admiral_df_type(occds_and_adsl), "OCCDS")
+  expect_identical(infer_dataset_class(occds_and_adsl), "OCCDS")
 })
 
-## Test 15: an empty dataset is typed from the variables it declares ----
-test_that("get_admiral_df_type Test 15: an empty dataset is typed from the variables it declares", { # nolint
+## Test 17: an empty dataset is classified from the variables it declares ----
+test_that("infer_dataset_class Test 17: an empty dataset is classified from the variables it declares", { # nolint
   empty_bds <- tibble::tibble(
     STUDYID = character(0), USUBJID = character(0), PARAMCD = character(0),
     AVAL = numeric(0)
   )
-  expect_identical(get_admiral_df_type(empty_bds), "BDS")
+  expect_identical(infer_dataset_class(empty_bds), "BDS")
 
   # ADSL is decided by the records, and an empty dataset cannot show whether it
   # has one record per subject -- the record and subject counts are trivially
-  # equal -- so the type is unknown, whatever treatment variables it carries
+  # equal -- so the class is unknown, whatever treatment variables it carries
   empty_adsl <- tibble::tibble(
     STUDYID = character(0), USUBJID = character(0), TRT01P = character(0)
   )
-  expect_identical(get_admiral_df_type(empty_adsl), NA_character_)
+  expect_identical(infer_dataset_class(empty_adsl), NA_character_)
 
   empty_shell <- tibble::tibble(
     STUDYID = character(0), USUBJID = character(0), AVAL = numeric(0)
   )
-  expect_identical(get_admiral_df_type(empty_shell), NA_character_)
+  expect_identical(infer_dataset_class(empty_shell), NA_character_)
 
-  # where the variables decide the type, the missing records do not matter:
+  # the same holds with `PARAMCD` but no analysis value: with records this is
+  # "other", without any it is unknown
+  empty_paramcd <- tibble::tibble(
+    STUDYID = character(0), USUBJID = character(0), PARAMCD = character(0)
+  )
+  expect_identical(infer_dataset_class(empty_paramcd), NA_character_)
+
+  # where the variables decide the class, the missing records do not matter:
   # without the subject keys it is not subject data at all
   empty_lookup <- tibble::tibble(AEDECOD = character(0), AETERM = character(0))
-  expect_identical(get_admiral_df_type(empty_lookup), "other")
-
-  # nothing is inferred for an empty dataset, whatever its type
-  expect_identical(infer_admiral_keys(empty_adsl), character(0))
+  expect_identical(infer_dataset_class(empty_lookup), "other")
 })
 
-## Test 16: an error is issued for a non-data-frame dataset ----
-test_that("get_admiral_df_type Test 16: an error is issued for a non-data-frame dataset", {
-  expect_error(get_admiral_df_type(matrix(1:4, nrow = 2)))
-  expect_error(get_admiral_df_type("ADSL"))
+## Test 18: an error is issued for a non-data-frame dataset ----
+test_that("infer_dataset_class Test 18: an error is issued for a non-data-frame dataset", {
+  expect_error(infer_dataset_class(matrix(1:4, nrow = 2)), class = "assert_data_frame")
+  expect_error(infer_dataset_class("ADSL"), class = "assert_data_frame")
 })
 
-## Test 17: ADSL is decided by the records ----
-test_that("get_admiral_df_type Test 17: ADSL is decided by the records", {
+## Test 19: ADSL is decided by the records ----
+test_that("infer_dataset_class Test 19: ADSL is decided by the records", {
   one_per_subject <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~AGE,
     "P",      "1",        63,
     "P",      "2",        71
   )
-  expect_identical(get_admiral_df_type(one_per_subject), "ADSL")
+  expect_identical(infer_dataset_class(one_per_subject), "ADSL")
 
   many_per_subject <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~AVAL,
     "P",      "1",         10,
     "P",      "1",         20
   )
-  expect_identical(get_admiral_df_type(many_per_subject), "other")
+  expect_identical(infer_dataset_class(many_per_subject), "other")
 
   # all the subject keys are needed: `STUDYID` is constant within a study, so a
   # single-study lookup table carrying it is one record per study, not subject
@@ -394,11 +467,11 @@ test_that("get_admiral_df_type Test 17: ADSL is decided by the records", {
     ~STUDYID, ~PARAM,
     "P",      "Code list A"
   )
-  expect_identical(get_admiral_df_type(study_only), "other")
+  expect_identical(infer_dataset_class(study_only), "other")
 })
 
-## Test 18: treatment variables are no evidence of ADSL ----
-test_that("get_admiral_df_type Test 18: treatment variables are no evidence of ADSL", {
+## Test 20: treatment variables are no evidence of ADSL ----
+test_that("infer_dataset_class Test 20: treatment variables are no evidence of ADSL", {
   # the shape every BDS/OCCDS derivation passes through: the ADSL variables have
   # been merged on, but `PARAMCD` has not been assigned yet. It carries every
   # treatment variable ADSL does while having many records per subject, so
@@ -411,19 +484,19 @@ test_that("get_admiral_df_type Test 18: treatment variables are no evidence of A
     "P",      "2",      "DIABP",          85, "Drug",    "Drug",    as.Date("2020-01-02")
   )
 
-  expect_identical(get_admiral_df_type(mid_derivation), "other")
+  expect_identical(infer_dataset_class(mid_derivation), "other")
   # the period-numbered form is equally no evidence
-  expect_identical(get_admiral_df_type(mutate(mid_derivation, TRT02A = "Drug")), "other")
+  expect_identical(infer_dataset_class(mutate(mid_derivation, TRT02A = "Drug")), "other")
 
   # the finished ADSL, with the same variables and one record per subject, is
   expect_identical(
-    get_admiral_df_type(distinct(mid_derivation, STUDYID, USUBJID, TRT01P, TRT01A, TRTSDT)),
+    infer_dataset_class(distinct(mid_derivation, STUDYID, USUBJID, TRT01P, TRT01A, TRTSDT)),
     "ADSL"
   )
 })
 
-## Test 19: a grouped dataset is judged on its records overall ----
-test_that("get_admiral_df_type Test 19: a grouped dataset is judged on its records overall", {
+## Test 21: a grouped dataset is judged on its records overall ----
+test_that("infer_dataset_class Test 21: a grouped dataset is judged on its records overall", {
   many_per_subject <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~AVISIT,    ~AVAL,
     "P",      "1",      "BASELINE",    10,
@@ -433,11 +506,11 @@ test_that("get_admiral_df_type Test 19: a grouped dataset is judged on its recor
   # `distinct()` on a grouped dataset silently adds the grouping variables, so
   # without `ungroup()` this would test one record per subject *per visit* and
   # report a findings dataset as subject-level
-  expect_identical(get_admiral_df_type(group_by(many_per_subject, AVISIT)), "other")
+  expect_identical(infer_dataset_class(group_by(many_per_subject, AVISIT)), "other")
 })
 
-## Test 20: the subject keys option is respected ----
-test_that("get_admiral_df_type Test 20: the subject keys option is respected", {
+## Test 22: the subject keys option is respected ----
+test_that("infer_dataset_class Test 22: the subject keys option is respected", {
   # one record per STUDYID + USUBJID (the default subject keys), but `SUBJID`
   # repeats across the two studies
   input <- tibble::tribble(
@@ -446,7 +519,7 @@ test_that("get_admiral_df_type Test 20: the subject keys option is respected", {
     "B",      "B-1",    "1",       71
   )
 
-  expect_identical(get_admiral_df_type(input), "ADSL")
+  expect_identical(infer_dataset_class(input), "ADSL")
 
   subject_keys <- get_admiral_option("subject_keys")
   withr::defer(set_admiral_options(subject_keys = subject_keys))
@@ -454,331 +527,171 @@ test_that("get_admiral_df_type Test 20: the subject keys option is respected", {
 
   # what counts as one record per subject follows the option, so the same
   # dataset is no longer subject-level
-  expect_identical(get_admiral_df_type(input), "other")
+  expect_identical(infer_dataset_class(input), "other")
 })
 
-## Test 21: declared keys decide ADSL rather than the records ----
-test_that("get_admiral_df_type Test 21: declared keys decide ADSL rather than the records", { # nolint
-  duplicated_adsl <- tibble::tribble(
-    ~STUDYID, ~USUBJID, ~TRT01P,
-    "P",      "1",      "Placebo",
-    "P",      "1",      "Placebo",
-    "P",      "2",      "Drug A"
+## Test 23: device datasets are inferred as the device classes ----
+test_that("infer_dataset_class Test 23: device datasets are inferred as the device classes", {
+  # device data: `SPDEVID`, and no subject keys
+  addl <- tibble::tribble(
+    ~STUDYID, ~SPDEVID, ~DEVTYPE,
+    "P",      "D-1",    "INSULIN PUMP",
+    "P",      "D-2",    "INSULIN PUMP"
   )
-  # without declared keys the duplicated subject makes it not ADSL ...
-  expect_identical(get_admiral_df_type(duplicated_adsl), "other")
-  # ... but keys declaring one record per subject keep the type, so that the
-  # duplicates are reported as a defect of the ADSL
+  expect_identical(infer_dataset_class(addl), "ADDL")
+
+  mdbds <- tibble::tribble(
+    ~STUDYID, ~SPDEVID, ~PARAMCD, ~AVISITN, ~AVAL,
+    "P",      "D-1",    "BATTV",         0,   3.1,
+    "P",      "D-1",    "BATTV",         4,   2.9
+  )
+  expect_identical(infer_dataset_class(mdbds), "MDBDS")
+
+  mdoccds <- tibble::tribble(
+    ~STUDYID, ~SPDEVID, ~DEDECOD,    ~ASEQ,
+    "P",      "D-1",    "OCCLUSION",     1,
+    "P",      "D-1",    "OCCLUSION",     2
+  )
+  expect_identical(infer_dataset_class(mdoccds), "MDOCCDS")
+
+  # TTE is tested before BDS for device data too
+  mdtte <- tibble::tribble(
+    ~STUDYID, ~SPDEVID, ~PARAMCD, ~AVAL, ~CNSR, ~STARTDT,
+    "P",      "D-1",    "TTFAIL",   120,     0, lubridate::ymd("2022-01-01")
+  )
+  expect_identical(infer_dataset_class(mdtte), "MDTTE")
+
+  # more than one record per device, and no parameter or occurrence signal
+  device_other <- tibble::tribble(
+    ~STUDYID, ~SPDEVID, ~LOTNUM,
+    "P",      "D-1",    "L-1",
+    "P",      "D-1",    "L-2"
+  )
+  expect_identical(infer_dataset_class(device_other), "other")
+
+  # `USUBJID` is conditional in a device dataset, so the subject keys do not
+  # decide the class: populated for every record, missing for some, or absent,
+  # a dataset with `SPDEVID` for every record is device data
+  mdbds_subject <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~SPDEVID, ~PARAMCD, ~AVAL,
+    "P",      "1",      "D-1",    "BATTV",    3.1,
+    "P",      "2",      "D-2",    "BATTV",    2.9
+  )
+  expect_identical(infer_dataset_class(mdbds_subject), "MDBDS")
   expect_identical(
-    get_admiral_df_type(set_admiral_keys(duplicated_adsl, keys = exprs(USUBJID))),
-    "ADSL"
+    infer_dataset_class(mutate(mdbds_subject, USUBJID = c("1", NA))),
+    "MDBDS"
   )
-  expect_identical(get_admiral_df_type(duplicated_adsl, keys = c("STUDYID", "USUBJID")), "ADSL")
-
-  # keys declaring more than one record per subject are not ADSL, even where
-  # the records happen to be one per subject
-  one_per_subject <- dplyr::distinct(duplicated_adsl)
-  expect_identical(get_admiral_df_type(one_per_subject), "ADSL")
-  expect_identical(get_admiral_df_type(one_per_subject, keys = c("USUBJID", "TRT01P")), "other")
-
-  # empty keys declare no structure, so the records decide
-  expect_identical(get_admiral_df_type(duplicated_adsl, keys = character(0)), "other")
-  expect_identical(get_admiral_df_type(one_per_subject, keys = character(0)), "ADSL")
-
-  # an empty dataset is ADSL if its keys say so
-  expect_identical(get_admiral_df_type(duplicated_adsl[0, ], keys = "USUBJID"), "ADSL")
-
-  # the variables still take precedence over the keys
-  bds <- tibble::tibble(STUDYID = "P", USUBJID = "1", PARAMCD = "A", AVAL = 1)
-  expect_identical(get_admiral_df_type(bds, keys = "USUBJID"), "BDS")
-})
-
-# minimal_unique_key ----
-## Test 22: returns must_have when it is already unique ----
-test_that("minimal_unique_key Test 22: returns must_have when it is already unique", {
-  input <- tibble::tribble(
-    ~USUBJID, ~PARAMCD, ~AVISIT,
-    "1",      "DIABP",  "BASELINE",
-    "2",      "DIABP",  "BASELINE"
+  mdoccds_subject <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~SPDEVID, ~DEDECOD,
+    "P",      "1",      "D-1",    "OCCLUSION",
+    "P",      "1",      "D-1",    "LEAK"
   )
+  expect_identical(infer_dataset_class(mdoccds_subject), "MDOCCDS")
 
-  expect_identical(
-    minimal_unique_key(input, must_have = "USUBJID", optional = "AVISIT"),
-    "USUBJID"
+  # one record per device is ADDL, not ADSL, whether each subject has one
+  # device or several
+  addl_one_per_subject <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~SPDEVID, ~DEVTYPE,
+    "P",      "1",      "D-1",    "INSULIN PUMP",
+    "P",      "2",      "D-2",    "INSULIN PUMP"
   )
-})
-
-## Test 23: drops candidates which do not discriminate ----
-test_that("minimal_unique_key Test 23: drops candidates which do not discriminate", {
-  # `AVISIT` is redundant with `AVISITN`, and `ATPT` is constant; both sit ahead
-  # of `DTYPE` in the candidate order, so the walk carries them on its way to the
-  # variable which actually separates the records
-  input <- tibble::tribble(
-    ~USUBJID, ~AVISITN, ~AVISIT,  ~ATPT, ~DTYPE,
-    "1",             2, "WEEK 2", "PRE", NA,
-    "1",             2, "WEEK 2", "PRE", "LOCF",
-    "1",             4, "WEEK 4", "PRE", NA,
-    "1",             4, "WEEK 4", "PRE", "LOCF"
+  expect_identical(infer_dataset_class(addl_one_per_subject), "ADDL")
+  addl_many_per_subject <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~SPDEVID, ~DEVTYPE,
+    "P",      "1",      "D-1",    "INSULIN PUMP",
+    "P",      "1",      "D-2",    "CGM SENSOR"
   )
+  expect_identical(infer_dataset_class(addl_many_per_subject), "ADDL")
 
-  expect_identical(
-    minimal_unique_key(
-      input,
-      must_have = "USUBJID",
-      optional = c("AVISITN", "AVISIT", "ATPT", "DTYPE")
-    ),
-    c("USUBJID", "AVISITN", "DTYPE")
+  # a subject dataset records `SPDEVID` only for the records involving a
+  # device, e.g. an adverse event dataset, so it is subject data -- whether the
+  # missing values are `NA` or blank, as in data read from SAS
+  adae <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~SPDEVID, ~AEDECOD,
+    "P",      "1",      "D-1",    "HEADACHE",
+    "P",      "2",      NA,       "NAUSEA"
   )
-})
+  expect_identical(infer_dataset_class(adae), "OCCDS")
+  expect_identical(infer_dataset_class(mutate(adae, SPDEVID = c("D-1", ""))), "OCCDS")
 
-## Test 24: returns everything when uniqueness is never reached ----
-test_that("minimal_unique_key Test 24: returns everything when uniqueness is never reached", {
-  # wholly duplicated records: no combination of the candidates separates them,
-  # so the caller sees duplicates against the returned key and can report them
-  input <- tibble::tribble(
-    ~USUBJID, ~PARAMCD, ~AVISIT,
-    "1",      "DIABP",  "BASELINE",
-    "1",      "DIABP",  "BASELINE"
-  )
+  # without the subject keys, a partly populated `SPDEVID` is neither class
+  expect_identical(infer_dataset_class(select(adae, -USUBJID)), "other")
 
-  expect_identical(
-    minimal_unique_key(input, must_have = "USUBJID", optional = c("PARAMCD", "AVISIT")),
-    c("USUBJID", "PARAMCD", "AVISIT")
-  )
-})
-
-# infer_admiral_keys ----
-## Test 25: the inferred key spans the common BDS shapes ----
-test_that("infer_admiral_keys Test 25: the inferred key spans the common BDS shapes", {
-  # exposure: one record per subject, parameter and dosing interval, keyed by
-  # the interval start rather than by an analysis date or a visit
-  adex <- tibble::tribble(
-    ~STUDYID, ~USUBJID, ~PARAMCD, ~AVAL, ~ASTDT,                ~AENDT,
-    "P",      "1",      "DOSE",      54, as.Date("2024-01-01"), as.Date("2024-01-31"),
-    "P",      "1",      "DOSE",      81, as.Date("2024-02-01"), as.Date("2024-02-28")
-  )
-  expect_identical(infer_admiral_keys(adex), c("USUBJID", "PARAMCD", "ASTDT"))
-
-  # population PK: keyed by relative time, with no visit structure at all
-  adppk <- tibble::tribble(
-    ~STUDYID, ~USUBJID, ~PARAMCD, ~NFRLT, ~AVAL,
-    "P",      "1",      "CONC",        0,     0,
-    "P",      "1",      "CONC",        1,    12,
-    "P",      "1",      "CONC",        2,     8
-  )
-  expect_identical(infer_admiral_keys(adppk), c("USUBJID", "PARAMCD", "NFRLT"))
-
-  # a derived record shares every analysis variable with the record it was
-  # derived from, so only DTYPE separates the two within a visit
-  locf <- tibble::tribble(
-    ~STUDYID, ~USUBJID, ~PARAMCD, ~AVISITN, ~AVAL, ~DTYPE,
-    "P",      "1",      "SYSBP",         2,   121, NA,
-    "P",      "1",      "SYSBP",         2,   121, "LOCF",
-    "P",      "1",      "SYSBP",         4,   130, NA,
-    "P",      "1",      "SYSBP",         4,   130, "LOCF"
-  )
-  expect_identical(
-    infer_admiral_keys(locf),
-    c("USUBJID", "PARAMCD", "AVISITN", "DTYPE")
-  )
-})
-
-## Test 26: multi-period designs are keyed by period ----
-test_that("infer_admiral_keys Test 26: multi-period designs are keyed by period", {
-  # the same visit recurs in each period, so nothing but APERIOD separates the
-  # records -- a vaccine study shape
-  input <- tibble::tribble(
-    ~STUDYID, ~USUBJID, ~PARAMCD, ~AVISITN, ~APERIOD, ~AVAL,
-    "P",      "1",      "SYSBP",         1,        1,   121,
-    "P",      "1",      "SYSBP",         1,        2,   130,
-    "P",      "1",      "SYSBP",         2,        1,   118,
-    "P",      "1",      "SYSBP",         2,        2,   125
-  )
-
-  expect_identical(
-    infer_admiral_keys(input),
-    c("USUBJID", "PARAMCD", "AVISITN", "APERIOD")
-  )
-})
-
-## Test 27: ADSL, TTE and unrecognized datasets ----
-test_that("infer_admiral_keys Test 27: ADSL, TTE and unrecognized datasets", {
-  adsl <- tibble::tribble(
-    ~STUDYID, ~USUBJID, ~TRT01P,
-    "P",      "1",      "Placebo",
-    "P",      "2",      "Drug"
-  )
-  expect_identical(infer_admiral_keys(adsl), "USUBJID")
-
-  adtte <- tibble::tribble(
-    ~STUDYID, ~USUBJID, ~PARAMCD, ~AVAL, ~CNSR, ~STARTDT,
-    "P",      "1",      "OS",       100,     0, as.Date("2020-01-01"),
-    "P",      "1",      "PFS",       60,     1, as.Date("2020-01-01")
-  )
-  expect_identical(infer_admiral_keys(adtte), c("USUBJID", "PARAMCD"))
-
-  # nothing is inferred for a dataset whose type could not be determined
-  other <- tibble::tribble(
-    ~FOO, ~BAR,
-    1,    2,
-    1,    3
-  )
-  expect_identical(infer_admiral_keys(other), character(0))
-})
-
-## Test 28: OCCDS is keyed by its sequence variable ----
-test_that("infer_admiral_keys Test 28: OCCDS is keyed by its sequence variable", {
-  occds <- function(...) {
-    tibble::tibble(
-      STUDYID = "P", USUBJID = c("1", "1"),
-      AEDECOD = c("HEADACHE", "NAUSEA"), ...
-    )
-  }
-
-  # `ASEQ` is preferred when present and populated
-  expect_identical(
-    infer_admiral_keys(occds(ASEQ = 1:2, AESEQ = 3:4)),
-    c("USUBJID", "ASEQ")
-  )
-
-  # occurrence datasets most often carry only the domain sequence
-  expect_identical(infer_admiral_keys(occds(AESEQ = 1:2)), c("USUBJID", "AESEQ"))
-  expect_identical(infer_admiral_keys(occds(CMSEQ = 1:2)), c("USUBJID", "CMSEQ"))
-
-  # `SRCSEQ` is provenance added by a merge, not a record key: three letters
-  # before SEQ, so it must not be mistaken for a domain sequence
-  expect_warning(
-    result <- infer_admiral_keys(occds(SRCSEQ = 1:2)),
-    regexp = "domain sequence"
-  )
-  expect_identical(result, character(0))
-
-  # several domain sequences make the record key ambiguous rather than obvious
-  expect_warning(
-    ambiguous <- infer_admiral_keys(occds(AESEQ = 1:2, CESEQ = 1:2)),
-    regexp = "ambiguous"
-  )
-  expect_identical(ambiguous, character(0))
-
-  # an all-NA sequence has not been derived yet, so `ASEQ` gives way to the
-  # populated domain sequence rather than keying the dataset on nothing
-  expect_identical(
-    infer_admiral_keys(occds(ASEQ = NA_integer_, AESEQ = 1:2)),
-    c("USUBJID", "AESEQ")
-  )
-  expect_warning(
-    empty_seq <- infer_admiral_keys(occds(ASEQ = NA_integer_)),
-    regexp = "populated"
-  )
-  expect_identical(empty_seq, character(0))
-})
-
-## Test 29: nothing is inferred for a dataset with no records ----
-test_that("infer_admiral_keys Test 29: nothing is inferred for a dataset with no records", {
-  # every candidate key is trivially unique over no records, so inference would
-  # report a structure the dataset has not demonstrated
-  empty_bds <- tibble::tibble(
-    STUDYID = character(0), USUBJID = character(0), PARAMCD = character(0),
+  # with no records, the variables decide as far as they can
+  empty_mdbds <- tibble::tibble(
+    STUDYID = character(0), SPDEVID = character(0), PARAMCD = character(0),
     AVAL = numeric(0)
   )
-
-  expect_identical(infer_admiral_keys(empty_bds), character(0))
+  expect_identical(infer_dataset_class(empty_mdbds), "MDBDS")
+  empty_addl <- tibble::tibble(STUDYID = character(0), SPDEVID = character(0))
+  expect_identical(infer_dataset_class(empty_addl), NA_character_)
 })
 
-## Test 30: the subject keys option is respected ----
-test_that("infer_admiral_keys Test 30: the subject keys option is respected", {
-  subject_keys <- get_admiral_option("subject_keys")
-  withr::defer(set_admiral_options(subject_keys = subject_keys))
-
-  # one study, so `STUDYID` distinguishes nothing and is left out of the
-  # reported record structure
-  one_study <- tibble::tribble(
-    ~STUDYID, ~USUBJID, ~SUBJID, ~PARAMCD, ~AVAL,
-    "A",      "A-1",    "1",     "SYSBP",    121,
-    "A",      "A-2",    "2",     "SYSBP",    130
-  )
-  expect_identical(infer_admiral_keys(one_study), c("USUBJID", "PARAMCD"))
-
-  # the subject part of the key follows the option, as the ADSL structure check
-  # does
-  set_admiral_options(subject_keys = exprs(SUBJID))
-  expect_identical(infer_admiral_keys(one_study), c("SUBJID", "PARAMCD"))
-
-  # `SUBJID` repeats across the two studies and neither variable identifies a
-  # subject on its own, so both are doing real work here and both are kept
-  pooled <- tibble::tribble(
-    ~STUDYID, ~SUBJID, ~PARAMCD, ~AVAL,
-    "A",      "1",     "SYSBP",    121,
-    "A",      "2",     "SYSBP",    130,
-    "B",      "1",     "SYSBP",    118,
-    "B",      "2",     "SYSBP",    125
-  )
-  set_admiral_options(subject_keys = exprs(STUDYID, SUBJID))
-  expect_identical(
-    infer_admiral_keys(pooled),
-    c("STUDYID", "SUBJID", "PARAMCD")
-  )
-})
-
-## Test 31: a grouped dataset is keyed on its records overall ----
-test_that("infer_admiral_keys Test 31: a grouped dataset is keyed on its records overall", {
+# get_dataset_class ----
+## Test 24: the declared class takes precedence over the inferred one ----
+test_that("get_dataset_class Test 24: the declared class takes precedence over the inferred one", {
   input <- tibble::tribble(
-    ~STUDYID, ~USUBJID, ~PARAMCD, ~AVISITN, ~AVAL,
-    "P",      "1",      "SYSBP",         2,   121,
-    "P",      "1",      "SYSBP",         4,   130
+    ~STUDYID, ~USUBJID, ~SPDEVID, ~AEDECOD,
+    "P",      "1",      "D-1",    "DEVICE SITE PAIN"
   )
 
-  # without `ungroup()` the uniqueness test would run within group, so the key
-  # would stop at USUBJID + PARAMCD and the visit structure would be lost
+  # without a declared class, the class is inferred: `SPDEVID` is populated for
+  # every record, so this is inferred as device data
+  expect_identical(get_dataset_class(input), "MDOCCDS")
+
+  # a declared class is returned as is, even where the inferred class differs --
+  # here an adverse event dataset restricted to device-related events
   expect_identical(
-    infer_admiral_keys(group_by(input, AVISITN)),
-    c("USUBJID", "PARAMCD", "AVISITN")
+    get_dataset_class(admiral_df(input, dataset_class = "OCCDS")),
+    "OCCDS"
   )
 })
 
-## Test 32: population PK needs both the nominal and the actual relative time ----
-test_that("infer_admiral_keys Test 32: population PK needs both the nominal and the actual relative time", { # nolint
-  # a draw taken off schedule shares its nominal time with the scheduled draw
-  # and its actual time with a different nominal one, so neither variable keys
-  # the dataset alone. Reproduces the record structure of `pharmaverseadam::adppk`.
+# get_dataset_keys ----
+## Test 25: the stored keys are returned as symbols ----
+test_that("get_dataset_keys Test 25: the stored keys are returned as symbols", {
   input <- tibble::tribble(
-    ~STUDYID, ~USUBJID, ~PARAMCD, ~NFRLT, ~AFRLT, ~AVAL,
-    "P",      "1",      "XAN",         3,      6, 25.77,
-    "P",      "1",      "XAN",         6,      6,  1.86,
-    "P",      "1",      "XAN",        36,     36,  0.31,
-    "P",      "1",      "XAN",        36,     37,  0.27
+    ~USUBJID, ~PARAMCD, ~AVAL,
+    "1",      "DIABP",     51
   )
 
+  # keys which have not been set are not inferred
+  expect_null(get_dataset_keys(input))
+  expect_null(get_dataset_keys(admiral_df(input, dataset_name = "ADVS")))
+
+  # the keys come back in the form `admiral_df()` takes them, so they can be
+  # passed straight to a `by_vars` argument
+  keyed <- admiral_df(input, dataset_keys = exprs(USUBJID, PARAMCD))
+  expect_equal(get_dataset_keys(keyed), exprs(USUBJID, PARAMCD), ignore_attr = TRUE)
   expect_identical(
-    infer_admiral_keys(input),
-    c("USUBJID", "PARAMCD", "NFRLT", "AFRLT")
+    get_dataset_keys(admiral_df(input, dataset_keys = get_dataset_keys(keyed))),
+    get_dataset_keys(keyed)
   )
+
+  # empty keys are returned as an empty list, distinct from `NULL`
+  expect_identical(get_dataset_keys(admiral_df(input, dataset_keys = exprs())), list())
+
+  expect_error(get_dataset_keys("ADVS"), class = "assert_data_frame")
 })
 
-## Test 33: visit, timepoint and DTYPE are all needed at once ----
-test_that("infer_admiral_keys Test 33: visit, timepoint and DTYPE are all needed at once", { # nolint
-  # visit, timepoint *and* `DTYPE` are all needed, while the relative time and
-  # the analysis date carry no information the first two do not -- so uniqueness
-  # is only reached at the end of the candidate list and the redundant
-  # candidates picked up on the way have to be dropped again. Reproduces the
-  # record structure of `pharmaverseadam::adpc`.
+# get_dataset_name ----
+## Test 26: the stored name is returned ----
+test_that("get_dataset_name Test 26: the stored name is returned", {
   input <- tibble::tribble(
-    ~STUDYID, ~USUBJID, ~PARAMCD, ~AVISITN, ~ATPTN, ~NFRLT, ~ADT, ~DTYPE, ~AVAL,
-    "P", "1", "XAN", 2, 24, 24, as.Date("2024-01-02"), NA, 0.0107,
-    "P", "1", "XAN", 2, 36, 36, as.Date("2024-01-02"), NA, NA,
-    "P", "1", "XAN", 2, 36, 36, as.Date("2024-01-02"), "HALFLLOQ", 0.005,
-    "P", "1", "XAN", 3, 24, 24, as.Date("2024-01-09"), NA, 0.0098
+    ~USUBJID, ~AVAL,
+    "1",      10
   )
 
-  expect_identical(
-    infer_admiral_keys(input),
-    c("USUBJID", "PARAMCD", "AVISITN", "ATPTN", "DTYPE")
-  )
+  expect_null(get_dataset_name(input))
+  expect_identical(get_dataset_name(admiral_df(input, dataset_name = "ADVS")), "ADVS")
+
+  expect_error(get_dataset_name("ADVS"), class = "assert_data_frame")
 })
 
 # print.admiral_df ----
-## Test 34: the name, type and keys are printed in a header ----
-test_that("print.admiral_df Test 34: the name, type and keys are printed in a header", {
+## Test 27: the name, class and keys are printed in a header ----
+test_that("print.admiral_df Test 27: the name, class and keys are printed in a header", {
   input <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~PARAMCD, ~AVISIT,    ~AVAL,
     "P",      "1",      "DIABP",  "BASELINE",    51,
@@ -786,31 +699,43 @@ test_that("print.admiral_df Test 34: the name, type and keys are printed in a he
   )
 
   expect_snapshot(
-    print(set_admiral_keys(input, keys = exprs(USUBJID, PARAMCD, AVISIT), dataset_name = "ADVS"))
+    print(admiral_df(
+      input,
+      dataset_keys = exprs(USUBJID, PARAMCD, AVISIT),
+      dataset_name = "ADVS",
+      dataset_class = "BDS"
+    ))
   )
 
-  # either attribute is shown on its own
-  expect_snapshot(print(set_admiral_keys(input, keys = exprs(USUBJID, PARAMCD, AVISIT))))
+  # each attribute is shown on its own; without a declared class, the inferred
+  # class is shown and marked as such
+  expect_snapshot(print(admiral_df(input, dataset_keys = exprs(USUBJID, PARAMCD, AVISIT))))
+  expect_snapshot(print(admiral_df(input, dataset_class = "BDS")))
 
-  # empty keys record that no keys are defined, so they are shown as such
-  expect_snapshot(print(set_admiral_keys(input, keys = exprs(), dataset_name = "ADVS")))
+  # a declared class is shown instead of the inferred class, even where they differ
+  expect_snapshot(print(admiral_df(input, dataset_keys = exprs(USUBJID), dataset_class = "TTE")))
 
-  # a plain data frame prints with its own method below the header
-  expect_snapshot(
-    print(set_admiral_keys(as.data.frame(input), keys = exprs(USUBJID), dataset_name = "ADVS"))
-  )
-
-  # a type which cannot be determined is left out rather than shown as
-  # "other": without the subject keys this is not subject data
+  # an inferred class which is not an ADaM dataset class is left out rather than
+  # shown as "other": without the subject keys this is not subject data
   lookup <- tibble::tribble(
     ~PARAMCD, ~PARAM,
     "DIABP",  "Diastolic Blood Pressure (mmHg)"
   )
-  expect_snapshot(print(set_admiral_keys(lookup, keys = exprs(PARAMCD), dataset_name = "PARAMS")))
+  expect_snapshot(
+    print(admiral_df(lookup, dataset_keys = exprs(PARAMCD), dataset_name = "PARAMS"))
+  )
+
+  # empty keys record that no keys are defined, so they are shown as such
+  expect_snapshot(print(admiral_df(input, dataset_keys = exprs(), dataset_name = "ADVS")))
+
+  # a plain data frame prints with its own method below the header
+  expect_snapshot(
+    print(admiral_df(as.data.frame(input), dataset_keys = exprs(USUBJID), dataset_name = "ADVS"))
+  )
 })
 
-## Test 35: a dataset with only the class prints as before ----
-test_that("print.admiral_df Test 35: a dataset with only the class prints as before", {
+## Test 28: a dataset with only the class prints as before ----
+test_that("print.admiral_df Test 28: a dataset with only the class prints as before", {
   input <- tibble::tribble(
     ~USUBJID, ~AVAL,
     "1",      10
@@ -819,28 +744,28 @@ test_that("print.admiral_df Test 35: a dataset with only the class prints as bef
   # every derivation tags its output with the class, so a header without
   # anything to show would change how every admiral dataset prints
   expect_identical(
-    capture.output(print(as_admiral_df(input))),
+    capture.output(print(new_admiral_df(input))),
     capture.output(print(input))
   )
-  expect_invisible(print(as_admiral_df(input)))
+  expect_invisible(print(new_admiral_df(input)))
 })
 
 # summary.admiral_df ----
-## Test 36: the common facts and the declared record structure are reported ----
-test_that("summary.admiral_df Test 36: the common facts and the declared record structure are reported", { # nolint
+## Test 29: the common facts and the declared record structure are reported ----
+test_that("summary.admiral_df Test 29: the common facts and the declared record structure are reported", { # nolint
   input <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~PARAMCD, ~AVISIT,    ~AVAL,
     "P",      "1",      "DIABP",  "BASELINE",    51,
     "P",      "1",      "SYSBP",  "BASELINE",   121,
     "P",      "2",      "DIABP",  "BASELINE",    79
   ) %>%
-    set_admiral_keys(keys = exprs(USUBJID, PARAMCD, AVISIT), dataset_name = "ADVS")
+    admiral_df(dataset_keys = exprs(USUBJID, PARAMCD, AVISIT), dataset_name = "ADVS")
 
   actual <- summary(input)
 
   expect_s3_class(actual, "summary_admiral_df")
   expect_identical(actual$name, "ADVS")
-  expect_identical(actual$type, "BDS")
+  expect_identical(actual$dataset_class, "BDS")
   expect_identical(actual$n_subjects, 2L)
   expect_identical(actual$n_obs, 3L)
   expect_identical(actual$n_vars, 5L)
@@ -848,33 +773,33 @@ test_that("summary.admiral_df Test 36: the common facts and the declared record 
     actual$structure,
     list(
       keys = c("USUBJID", "PARAMCD", "AVISIT"),
-      source = "declared",
       missing_keys = character(0),
       n_duplicates = 0L
     )
   )
 })
 
-## Test 37: the keys are inferred if none were declared ----
-test_that("summary.admiral_df Test 37: the keys are inferred if none were declared", {
+## Test 30: the structure is not checked if no keys were set ----
+test_that("summary.admiral_df Test 30: the structure is not checked if no keys were set", {
   input <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~PARAMCD, ~AVISIT,    ~AVAL,
     "P",      "1",      "SYSBP",  "BASELINE",   121,
     "P",      "1",      "SYSBP",  "WEEK 2",     118,
     "P",      "2",      "SYSBP",  "BASELINE",   130
   ) %>%
-    as_admiral_df()
+    admiral_df()
 
   actual <- summary(input)
 
   expect_identical(actual$name, "input")
-  expect_identical(actual$structure$keys, c("USUBJID", "PARAMCD", "AVISIT"))
-  expect_identical(actual$structure$source, "inferred")
-  expect_identical(actual$structure$n_duplicates, 0L)
+  # keys are never inferred
+  expect_null(actual$structure$keys)
+  expect_identical(actual$structure$n_duplicates, NA_integer_)
+  expect_snapshot(print(actual))
 })
 
-## Test 38: duplicate, missing and empty declared keys ----
-test_that("summary.admiral_df Test 38: duplicate, missing and empty declared keys", {
+## Test 31: duplicate, missing and empty declared keys ----
+test_that("summary.admiral_df Test 31: duplicate, missing and empty declared keys", {
   input <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~PARAMCD, ~AVISIT,    ~AVAL,
     "P",      "1",      "SYSBP",  "BASELINE",   121,
@@ -882,18 +807,17 @@ test_that("summary.admiral_df Test 38: duplicate, missing and empty declared key
     "P",      "2",      "SYSBP",  "BASELINE",   130
   )
 
-  duplicated <- summary(set_admiral_keys(input, keys = exprs(USUBJID, PARAMCD)))
+  duplicated <- summary(admiral_df(input, dataset_keys = exprs(USUBJID, PARAMCD)))
   expect_identical(duplicated$structure$n_duplicates, 1L)
 
   # a renamed key cannot be checked, rather than being checked on part of the key
-  renamed <- set_admiral_keys(input, keys = exprs(USUBJID, PARAMCD, AVISIT)) %>%
+  renamed <- admiral_df(input, dataset_keys = exprs(USUBJID, PARAMCD, AVISIT)) %>%
     dplyr::rename(VISIT = AVISIT)
   expect_identical(summary(renamed)$structure$missing_keys, "AVISIT")
   expect_identical(summary(renamed)$structure$n_duplicates, NA_integer_)
 
-  no_keys <- summary(set_admiral_keys(input, keys = exprs()))
+  no_keys <- summary(admiral_df(input, dataset_keys = exprs()))
   expect_identical(no_keys$structure$keys, character(0))
-  expect_identical(no_keys$structure$source, "declared")
 
   # each outcome of the check is printed as its own kind of bullet
   expect_snapshot(print(duplicated))
@@ -901,15 +825,17 @@ test_that("summary.admiral_df Test 38: duplicate, missing and empty declared key
   expect_snapshot(print(no_keys))
 })
 
-## Test 39: the ADSL summary ----
-test_that("summary.admiral_df Test 39: the ADSL summary", {
+## Test 32: the ADSL summary ----
+test_that("summary.admiral_df Test 32: the ADSL summary", {
   input <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~TRT01P,   ~SAFFL, ~ITTFL,
     "P",      "1",      "Placebo", "Y",    "Y",
     "P",      "2",      "Drug A",  "Y",    "Y",
     "P",      "3",      "Drug A",  "N",    "Y"
   ) %>%
-    set_admiral_keys(keys = exprs(USUBJID), dataset_name = "ADSL")
+    # the class is declared, as duplicated subject records would otherwise make
+    # the inferred class "other"
+    admiral_df(dataset_keys = exprs(USUBJID), dataset_name = "ADSL", dataset_class = "ADSL")
 
   actual <- summary(input)
 
@@ -920,15 +846,15 @@ test_that("summary.admiral_df Test 39: the ADSL summary", {
 
   # duplicated subject records are reported without losing the ADSL details
   duplicated <- summary(dplyr::bind_rows(input, input[1, ]))
-  expect_identical(duplicated$type, "ADSL")
+  expect_identical(duplicated$dataset_class, "ADSL")
   expect_identical(duplicated$structure$n_duplicates, 1L)
   expect_identical(duplicated$details$trt$subjects, c(2L, 1L))
   # the population flags count subjects, not the duplicated records
   expect_identical(duplicated$details$pops, c(SAFFL = 2L, ITTFL = 3L))
 })
 
-## Test 40: the BDS summary ----
-test_that("summary.admiral_df Test 40: the BDS summary", {
+## Test 33: the BDS summary ----
+test_that("summary.admiral_df Test 33: the BDS summary", {
   input <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~PARAMCD, ~AVISIT,    ~AVISITN, ~AVAL,
     "P",      "1",      "SYSBP",  "WEEK 2",          2,   118,
@@ -936,7 +862,7 @@ test_that("summary.admiral_df Test 40: the BDS summary", {
     "P",      "1",      "DIABP",  "BASELINE",        0,    79,
     "P",      "2",      "SYSBP",  "BASELINE",        0,   130
   ) %>%
-    as_admiral_df()
+    admiral_df()
 
   actual <- summary(input)
 
@@ -951,21 +877,21 @@ test_that("summary.admiral_df Test 40: the BDS summary", {
   many_params <- tibble::tibble(
     STUDYID = "P", USUBJID = "1", PARAMCD = sprintf("P%02d", 1:12), AVAL = 1
   ) %>%
-    as_admiral_df()
+    admiral_df()
   many_summary <- summary(many_params)
   expect_identical(nrow(many_summary$details$params), 12L)
   expect_snapshot(print(many_summary))
 })
 
-## Test 41: the OCCDS summary ----
-test_that("summary.admiral_df Test 41: the OCCDS summary", {
+## Test 34: the OCCDS summary ----
+test_that("summary.admiral_df Test 34: the OCCDS summary", {
   input <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~AESEQ, ~AEBODSYS,                ~AEDECOD,   ~TRTEMFL,
     "P",      "1",           1, "NERVOUS SYSTEM",         "HEADACHE", "Y",
     "P",      "1",           2, "GASTROINTESTINAL",       "NAUSEA",   NA,
     "P",      "2",           1, "NERVOUS SYSTEM",         "HEADACHE", "Y"
   ) %>%
-    as_admiral_df()
+    admiral_df()
 
   actual <- summary(input)
 
@@ -974,15 +900,15 @@ test_that("summary.admiral_df Test 41: the OCCDS summary", {
   expect_snapshot(print(actual))
 })
 
-## Test 42: the TTE summary ----
-test_that("summary.admiral_df Test 42: the TTE summary", {
+## Test 35: the TTE summary ----
+test_that("summary.admiral_df Test 35: the TTE summary", {
   input <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~PARAMCD, ~STARTDT, ~CNSR, ~AVAL,
     "P", "1", "OS", lubridate::ymd("2020-01-01"), 0, 10,
     "P", "2", "OS", lubridate::ymd("2020-01-01"), 1, 12,
     "P", "1", "PFS", lubridate::ymd("2020-01-01"), 1, 3
   ) %>%
-    as_admiral_df()
+    admiral_df()
 
   actual <- summary(input)
 
@@ -992,26 +918,26 @@ test_that("summary.admiral_df Test 42: the TTE summary", {
   expect_snapshot(print(actual))
 })
 
-## Test 43: datasets with little to report do not error ----
-test_that("summary.admiral_df Test 43: datasets with little to report do not error", {
+## Test 36: datasets with little to report do not error ----
+test_that("summary.admiral_df Test 36: datasets with little to report do not error", {
   # not subject data: no subject count and no record structure
-  lookup <- as_admiral_df(tibble::tibble(PARAMCD = c("DIABP", "SYSBP")))
+  lookup <- admiral_df(tibble::tibble(PARAMCD = c("DIABP", "SYSBP")))
   expect_snapshot(print(summary(lookup)))
 
-  # no records: the type cannot be determined
-  empty <- as_admiral_df(tibble::tibble(STUDYID = character(), USUBJID = character()))
-  expect_identical(summary(empty)$type, NA_character_)
+  # no records: the class cannot be determined
+  empty <- admiral_df(tibble::tibble(STUDYID = character(), USUBJID = character()))
+  expect_identical(summary(empty)$dataset_class, NA_character_)
   expect_identical(summary(empty)$details, list())
   expect_snapshot(print(summary(empty)))
 
   # a work-in-progress ADSL without treatment or population flags
-  adsl <- as_admiral_df(tibble::tibble(STUDYID = "P", USUBJID = c("1", "2"), TRT01P = NA))
+  adsl <- admiral_df(tibble::tibble(STUDYID = "P", USUBJID = c("1", "2"), TRT01P = NA))
   expect_identical(summary(adsl)$details, list())
 })
 
-## Test 44: print.summary_admiral_df returns its input invisibly ----
-test_that("print.summary_admiral_df Test 44: returns its input invisibly", {
-  input <- as_admiral_df(tibble::tibble(STUDYID = "P", USUBJID = "1"))
+## Test 37: print.summary_admiral_df returns its input invisibly ----
+test_that("print.summary_admiral_df Test 37: returns its input invisibly", {
+  input <- admiral_df(tibble::tibble(STUDYID = "P", USUBJID = "1"))
   actual <- summary(input)
 
   # cli prints through messages
@@ -1022,8 +948,8 @@ test_that("print.summary_admiral_df Test 44: returns its input invisibly", {
 })
 
 # print_summary_table ----
-## Test 45: tables are aligned, counts are not rounded, NA is shown as `.` ----
-test_that("print_summary_table Test 45: tables are aligned, counts are not rounded, NA is shown as `.`", { # nolint
+## Test 38: tables are aligned, counts are not rounded, NA is shown as `.` ----
+test_that("print_summary_table Test 38: tables are aligned, counts are not rounded, NA is shown as `.`", { # nolint
   tbl <- tibble::tibble(
     PARAMCD = c("DIABP", "SYSBP", NA),
     records = c(11509L, 7L, 1L),
@@ -1035,8 +961,8 @@ test_that("print_summary_table Test 45: tables are aligned, counts are not round
   expect_snapshot(print_summary_table(tbl, max_rows = 1, what = "parameter"))
 })
 
-## Test 46: the ADSL subject flow, outcome and demographics ----
-test_that("summary.admiral_df Test 46: the ADSL subject flow, outcome and demographics", { # nolint
+## Test 39: the ADSL subject flow, outcome and demographics ----
+test_that("summary.admiral_df Test 39: the ADSL subject flow, outcome and demographics", { # nolint
   input <- tibble::tibble(
     STUDYID = "P",
     USUBJID = c("1", "2", "3", "4"),
@@ -1049,7 +975,9 @@ test_that("summary.admiral_df Test 46: the ADSL subject flow, outcome and demogr
     AGE = c(63, 71, 55, 40),
     SEX = c("F", "M", "F", "M")
   ) %>%
-    set_admiral_keys(keys = exprs(USUBJID), dataset_name = "ADSL")
+    # the class is declared, as duplicated subject records would otherwise make
+    # the inferred class "other"
+    admiral_df(dataset_keys = exprs(USUBJID), dataset_name = "ADSL", dataset_class = "ADSL")
 
   actual <- summary(input)$details
 
@@ -1074,7 +1002,7 @@ test_that("summary.admiral_df Test 46: the ADSL subject flow, outcome and demogr
     STUDYID = "P", USUBJID = c("1", "2"), RANDFL = c("Y", NA),
     TRTSDTM = lubridate::ymd_hms("2020-01-01 10:00:00", NA), DTHFL = NA, AGE = NA_real_
   ) %>%
-    as_admiral_df()
+    admiral_df()
   fallback_details <- summary(fallback)$details
   expect_identical(fallback_details$flow, c(randomized = 1L, treated = 1L))
   expect_null(fallback_details$n_deaths)
@@ -1082,8 +1010,8 @@ test_that("summary.admiral_df Test 46: the ADSL subject flow, outcome and demogr
   expect_null(fallback_details$sex)
 })
 
-## Test 47: the BDS per-parameter statistics and derived records ----
-test_that("summary.admiral_df Test 47: the BDS per-parameter statistics and derived records", { # nolint
+## Test 40: the BDS per-parameter statistics and derived records ----
+test_that("summary.admiral_df Test 40: the BDS per-parameter statistics and derived records", { # nolint
   input <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~PARAMCD, ~PARAM,                  ~AVISIT,    ~AVAL, ~DTYPE,
     "P",      "1",      "SYSBP",  "Systolic BP (mmHg)",    "BASELINE",   120, NA,
@@ -1092,7 +1020,7 @@ test_that("summary.admiral_df Test 47: the BDS per-parameter statistics and deri
     "P",      "2",      "SYSBP",  "Systolic BP (mm Hg)",   "BASELINE",  130.5, NA,
     "P",      "2",      "DIABP",  "Diastolic BP (mmHg)",   NA,            NA, NA
   ) %>%
-    as_admiral_df()
+    admiral_df()
 
   actual <- summary(input)$details
 
@@ -1116,7 +1044,7 @@ test_that("summary.admiral_df Test 47: the BDS per-parameter statistics and deri
   expect_snapshot(print(summary(input)))
 
   # without `AVAL`, `AVISIT`, `PARAM`, or `DTYPE` only the counts are reported
-  minimal <- summary(as_admiral_df(tibble::tibble(
+  minimal <- summary(admiral_df(tibble::tibble(
     STUDYID = "P", USUBJID = "1", PARAMCD = "A", AVALC = "X"
   )))$details
   expect_named(minimal$params, c("PARAMCD", "records", "subjects"))

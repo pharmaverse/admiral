@@ -2,35 +2,49 @@
 
 ## New Features
 
-- Added function `as_admiral_df()`. Tags a data frame with the `admiral_df` S3
-class, preserving its existing classes. All `{admiral}` dataset functions now tag their
-output datasets with this class. (#3160)
+- Added the `admiral_df` S3 class. All `{admiral}` dataset functions now tag their
+output datasets with this class, preserving their existing classes. (#3160)
 
-- Added function `set_admiral_keys()`. Stores the key variables of a dataset --
-the variables which uniquely identify its records -- in its `"admiral_keys"`
-attribute. See the function documentation for details. (#3198)
+- Added function `admiral_df()`. Tags a data frame with the `admiral_df` class and
+stores its metadata: the key variables -- the variables which uniquely identify its
+records -- the dataset name, and the ADaM dataset class. See the function
+documentation for details. (#3198)
+
+- Added functions `get_dataset_keys()`, `get_dataset_name()`, and
+`get_dataset_class()` to read the metadata stored by `admiral_df()`. If no class has
+been stored, `get_dataset_class()` infers it from the dataset. (#3198)
 
 - Calling `summary()` on an `admiral_df` dataset now prints a short report: the
-dataset name and type, the number of subjects, observations and variables, and
-whether the dataset has one record per key. Depending on the dataset type
-(`ADSL`, `BDS`, `OCCDS`, `TTE`) it also reports e.g. the subjects per treatment
+dataset name and ADaM class, the number of subjects, observations and variables,
+and whether the dataset has one record per key (if the keys were set with
+`admiral_df()`). Depending on the dataset class (`ADSL`, `BDS`, `OCCDS`, `TTE`,
+or their medical device counterparts) it also reports e.g. the subjects per treatment
 arm, the records and subjects per parameter, or the events and censored per
 parameter. (#3209)
 
 ## Updates of Existing Functions
 
-- The `min_dates_strict` and `max_dates_strict` arguments were added to
-`derive_vars_dt()`, `derive_vars_dtm()`, `convert_dtc_to_dt()`,
-`convert_dtc_to_dtm()`, `impute_dtc_dt()`, `impute_dtc_dtm()`. The new arguments
-can be used to avoid invalid imputed dates. E.g., if `AESTDTC` is imputed with
-`min_dates = exprs(TRTSDTM)`, `max_dates_strict = exprs(AENDTM)` can be
-specified to ensure the imputed event start date is not after the event end
-date (the `ADAE` template and the "Creating an OCCDS ADaM" vignette were updated
-accordingly).
+- Various enhancements were made to the `derive_vars_dt()`, `derive_vars_dtm()`, 
+`convert_dtc_to_dt()`, `convert_dtc_to_dtm()`, `impute_dtc_dt()` and `impute_dtc_dtm()` 
+functions: 
 
-    See the `derive_vars_dt()` documentation and the "Avoid Imputed Dates Before
-    a Particular Date" section of the "Date and Time Imputation" vignette
-    (`vignette("imputation")`) for details and examples. (#2708)
+  - The `min_dates_strict` and `max_dates_strict` arguments were added. The new arguments
+    can be used to avoid invalid imputed dates. E.g., if `AESTDTC` is imputed with
+    `min_dates = exprs(TRTSDTM)`, `max_dates_strict = exprs(AENDTM)` can be
+    specified to ensure the imputed event start date is not after the event end
+    date (the `ADAE` template and the "Creating an OCCDS ADaM" vignette were updated
+    accordingly).
+
+      See the `derive_vars_dt()` documentation and the "Avoid Imputed Dates Before
+      a Particular Date" section of the "Date and Time Imputation" vignette
+      (`vignette("imputation")`) for details and examples. (#2708)
+  
+  - The `check_date_type` and `check_datetime_type` arguments were added to the
+    date/datetime functions respectively. These allow users to control whether a message,
+    warning or error is issued (or nothing at all) when a date/datetime is invalid, either 
+    as a result of a raw data issue or following imputation. When not throwing an error,
+    the functions continue executing and return `NA` for any invalid dates/datetimes. 
+    The informative note was also improved and aligned across the functions. (#3204)
     
 - `derive_vars_merged_lookup()` was enhanced with a new `check_not_mapped_type` argument
 which allows users to control whether a message, warning, error, or no message at all
@@ -41,7 +55,17 @@ argument will thus be deprecated. (#3188)
 `atoxgr_criteria_ctcv5_uscv`, `atoxgr_criteria_ctcv6`, `atoxgr_criteria_ctcv6_uscv`)
 were updated to add the term `"Eosinophilia"` (#3191).
 
+- `compute_duration()` now issues an error if either of `start_date` or `end_date` is a
+datetime without time zone, or if their time zones differ. The documentation
+of `compute_duration()`, `derive_vars_dtm()`, and `convert_dtc_to_dtm()` was
+updated to state that `{admiral}` creates date-times in UTC. (#2763)
+
 ## Breaking Changes
+
+- `impute_dtc_dt()` and `impute_dtc_dtm()` now return `NA_character_` rather than an 
+  invalid date/datetime string, in line with the updates made to date/datetime functions
+  to introduce the `check_date_type` and `check_datetime_type` arguments (see entries under
+  "Updates of Existing Functions"). (#3204)
 
 - The following functions are entering the next phase of the [deprecation process](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html#deprecation):
 
@@ -71,6 +95,9 @@ were updated to add the term `"Eosinophilia"` (#3191).
   - `call_user_fun()` has been removed.
 
 ## Documentation
+
+- The OCCDS vignette was updated to add a section describing how to derive SMQ variables for
+  algorithmic queries. (#3184)
 
 - Corrected the `ADLB` template label for `PARAMCD = "CK"` from `"Creatinine Kinase"` to `"Creatine Kinase"` (#3170).
 

@@ -1245,7 +1245,7 @@ derive_param_tte <- function(dataset = NULL,
 
   # add new parameter to input dataset
   bind_rows(dataset, new_param) %>%
-    as_admiral_df()
+    new_admiral_df()
 }
 
 #' Select the First or Last Date from Several Sources

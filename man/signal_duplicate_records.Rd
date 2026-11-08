@@ -71,12 +71,22 @@ signal_duplicate_records(adsl, exprs(USUBJID), cnd_type = "message")
 \seealso{
 Other internal:
 \code{\link{admiral-package}},
+\code{\link[=count_values]{count_values()}},
 \code{\link[=extract_duplicate_records]{extract_duplicate_records()}},
 \code{\link[=format.basket_select]{format.basket_select()}},
-\code{\link[=get_admiral_df_type]{get_admiral_df_type()}},
-\code{\link[=infer_admiral_keys]{infer_admiral_keys()}},
-\code{\link[=minimal_unique_key]{minimal_unique_key()}},
-\code{\link[=occds_seq_var]{occds_seq_var()}}
+\code{\link[=format_counts]{format_counts()}},
+\code{\link[=format_distribution]{format_distribution()}},
+\code{\link[=format_number]{format_number()}},
+\code{\link[=infer_class_by_structure]{infer_class_by_structure()}},
+\code{\link[=infer_dataset_class]{infer_dataset_class()}},
+\code{\link[=new_admiral_df]{new_admiral_df()}},
+\code{\link[=print_adsl_details]{print_adsl_details()}},
+\code{\link[=print_summary_structure]{print_summary_structure()}},
+\code{\link[=print_summary_table]{print_summary_table()}},
+\code{\link[=summarize_adsl]{summarize_adsl()}},
+\code{\link[=summarize_distribution]{summarize_distribution()}},
+\code{\link[=summarize_structure]{summarize_structure()}},
+\code{\link[=summarize_subject_flow]{summarize_subject_flow()}}
 }
 \concept{internal}
 \keyword{internal}

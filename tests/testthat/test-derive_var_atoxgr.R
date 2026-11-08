@@ -23,7 +23,7 @@ test_that("derive_var_atoxgr Test 1: ATOXGR cannot be graded", {
 
   expect_equal(
     actual_output,
-    as_admiral_df(exp_out_1)
+    new_admiral_df(exp_out_1)
   )
   expect_s3_class(actual_output, "admiral_df")
 })
@@ -46,7 +46,7 @@ test_that("derive_var_atoxgr Test 2: ATOXGR = 0 (normal)", {
       lotox_description_var = ATOXDSCL,
       hitox_description_var = ATOXDSCH
     ),
-    as_admiral_df(exp_out_2)
+    new_admiral_df(exp_out_2)
   )
 })
 
@@ -68,7 +68,7 @@ test_that("derive_var_atoxgr Test 3: ATOXGR > 0 (HYPER)", {
       lotox_description_var = ATOXDSCL,
       hitox_description_var = ATOXDSCH
     ),
-    as_admiral_df(exp_out_3)
+    new_admiral_df(exp_out_3)
   )
 })
 
@@ -90,7 +90,7 @@ test_that("derive_var_atoxgr Test 4: ATOXGR < 0 (HYPO)", {
       lotox_description_var = ATOXDSCL,
       hitox_description_var = ATOXDSCH
     ),
-    as_admiral_df(exp_out_4)
+    new_admiral_df(exp_out_4)
   )
 })
 
