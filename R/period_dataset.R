@@ -220,7 +220,7 @@ create_period_dataset <- function(dataset,
       )
     }
   }
-  as_admiral_df(period_ref_final)
+  new_admiral_df(period_ref_final)
 }
 
 #' Add Subperiod, Period, or Phase Variables to ADSL
@@ -449,5 +449,5 @@ derive_vars_period <- function(dataset,
     by_vars = subject_keys
   ) %>%
     rename(all_of(rename_arg)) %>%
-    as_admiral_df()
+    new_admiral_df()
 }

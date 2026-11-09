@@ -819,5 +819,5 @@ derive_extreme_event <- function(dataset = NULL,
 
   # Create output dataset
   bind_rows(dataset, new_obs) %>%
-    as_admiral_df()
+    new_admiral_df()
 }

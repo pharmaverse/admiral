@@ -83,5 +83,5 @@ derive_var_analysis_ratio <- function(dataset,
         !!numer_var / !!denom_var
       )
     )
-  as_admiral_df(dataset)
+  new_admiral_df(dataset)
 }
