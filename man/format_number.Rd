@@ -15,7 +15,8 @@ format_number(x)
 }
 \value{
 A character scalar: a whole number in full (rounding a count would
-misreport it), any other number to 4 significant digits, and \code{NA} as \code{.}.
+misreport it), any other number to 4 significant digits, \code{Inf} and \code{-Inf}
+as such, and \code{NA} (or \code{NaN}) as \code{.}.
 }
 \description{
 Format a Number for a Summary

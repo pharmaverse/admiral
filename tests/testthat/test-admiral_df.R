@@ -819,9 +819,14 @@ test_that("summary.admiral_df Test 31: duplicate, missing and empty declared key
   no_keys <- summary(admiral_df(input, dataset_keys = exprs()))
   expect_identical(no_keys$structure$keys, character(0))
 
+  # several missing keys take the plural
+  renamed_two <- admiral_df(input, dataset_keys = exprs(USUBJID, PARAMCD, AVISIT)) %>%
+    dplyr::rename(PARAM = PARAMCD, VISIT = AVISIT)
+
   # each outcome of the check is printed as its own kind of bullet
   expect_snapshot(print(duplicated))
   expect_snapshot(print(summary(renamed)))
+  expect_snapshot(print(summary(renamed_two)))
   expect_snapshot(print(no_keys))
 })
 
@@ -959,6 +964,10 @@ test_that("print_summary_table Test 38: tables are aligned, counts are not round
 
   expect_snapshot(print_summary_table(tbl))
   expect_snapshot(print_summary_table(tbl, max_rows = 1, what = "parameter"))
+
+  # a derivation can give an infinite value, e.g. `log(0)`
+  expect_identical(format_number(Inf), "Inf")
+  expect_identical(format_number(-Inf), "-Inf")
 })
 
 ## Test 39: the ADSL subject flow, outcome and demographics ----
@@ -1454,4 +1463,37 @@ test_that("summary.admiral_df Test 51: the subject keys only count subjects if a
   actual <- summary(study_only)
   expect_identical(actual$n_subjects, NA_integer_)
   expect_identical(actual$subject_vars, character(0))
+})
+
+## Test 52: records without a subject are no treatment-emergent subject ----
+test_that("summary.admiral_df Test 52: records without a subject are no treatment-emergent subject", { # nolint
+  adsl <- tibble::tibble(STUDYID = "P", USUBJID = c("1", "2"), SAFFL = "Y")
+  adae <- tibble::tibble(
+    STUDYID = "P",
+    USUBJID = c("1", NA, ""),
+    AEDECOD = "NAUSEA",
+    TRTEMFL = "Y"
+  ) %>%
+    admiral_df()
+
+  expect_identical(
+    summary(adae, adsl = adsl)$vs_adsl$incidence,
+    c(subjects = 1L, total = 2L)
+  )
+})
+
+## Test 53: unused factor levels are not counted ----
+test_that("summary.admiral_df Test 53: unused factor levels are not counted", {
+  adsl <- tibble::tibble(
+    STUDYID = "P",
+    USUBJID = c("1", "2", "3"),
+    SEX = factor(c("F", "F", "F"), levels = c("F", "M", "U")),
+    DTHFL = "Y",
+    DTHCAUS = factor(c("A", "A", NA), levels = c("A", "B"))
+  ) %>%
+    admiral_df(dataset_class = "ADSL")
+
+  actual <- summary(adsl)$details
+  expect_identical(actual$sex, c(F = 3L))
+  expect_identical(actual$dthcaus, c(A = 2L, "NA" = 1L))
 })

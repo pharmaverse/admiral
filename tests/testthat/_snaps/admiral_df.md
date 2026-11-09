@@ -150,6 +150,16 @@
 ---
 
     Code
+      print(summary(renamed_two))
+    Message
+      -- renamed_two: Dataset summary ------------------------------------------------
+      Subjects (USUBJID): 2
+      Observations: 3 | Variables: 5
+      ! Structure: not checked, keys PARAMCD, AVISIT are not in the dataset
+
+---
+
+    Code
       print(no_keys)
     Message
       -- BDS summary -----------------------------------------------------------------

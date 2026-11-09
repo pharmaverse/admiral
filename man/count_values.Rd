@@ -15,7 +15,7 @@ count_values(x)
 }
 \value{
 A named integer vector of counts per value, in value order with \code{NA}
-(named \code{"NA"}) last.
+(named \code{"NA"}) last. Unused levels of a factor are left out.
 }
 \description{
 Count the Values of a Vector

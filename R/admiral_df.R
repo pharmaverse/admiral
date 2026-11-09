@@ -999,10 +999,13 @@ count_incidence <- function(dataset, adsl, subject_vars, saffl) {
   # dataset cannot provide the denominator, as the subjects without any
   # occurrence are not in it
   denom <- if (!is.null(saffl)) filter(adsl, SAFFL %in% "Y") else adsl
+  # records of no subject are no subject's occurrence, and a missing subject in
+  # `adsl` is no subject either, so `NA` never matches `NA`
   emergent <- semi_join(
     denom,
-    filter(dataset, TRTEMFL %in% "Y"),
-    by = subject_vars
+    filter(filter_unit_records(dataset, subject_vars), TRTEMFL %in% "Y"),
+    by = subject_vars,
+    na_matches = "never"
   )
   list(
     incidence = c(subjects = nrow(emergent), total = nrow(denom)),
@@ -1323,11 +1326,15 @@ summarize_distribution <- function(x) {
 #' @param x A vector
 #'
 #' @return A named integer vector of counts per value, in value order with `NA`
-#'   (named `"NA"`) last.
+#'   (named `"NA"`) last. Unused levels of a factor are left out.
 #'
 #' @keywords internal
 #' @family internal
 count_values <- function(x) {
+  # a level no value has is not worth a count of zero
+  if (is.factor(x)) {
+    x <- droplevels(x)
+  }
   counts <- table(x, useNA = "ifany")
   set_names(as.integer(counts), coalesce(names(counts), "NA"))
 }
@@ -1513,7 +1520,8 @@ print.summary_admiral_df <- function(x, ...) {
   if (!is.null(x$name) && !identical(x$name, x$dataset_class)) {
     title <- paste0(x$name, ": ", title)
   }
-  cli_rule(left = title)
+  # passed as a value, as a name with `{` would otherwise be evaluated
+  cli_rule(left = "{title}")
 
   if (!is.null(x$n_devices)) {
     device_vars <- paste(x$device_vars, collapse = ", ")
@@ -1819,7 +1827,7 @@ print_summary_structure <- function(structure) {
     missing_keys <- paste(structure$missing_keys, collapse = ", ")
     cli_bullets(c("!" = "Structure: not checked,
        {qty(length(structure$missing_keys))}key{?s} {missing_keys}
-       {?is/are} not in the dataset"))
+       {qty(length(structure$missing_keys))}{?is/are} not in the dataset"))
   } else if (is.null(structure$keys)) {
     # keys are never inferred, so without stored keys there is nothing to check
     cli_bullets(c(i = "Structure: not checked, no keys set (see {.fun admiral_df})"))
@@ -1842,13 +1850,17 @@ print_summary_structure <- function(structure) {
 #' @param x A numeric scalar
 #'
 #' @return A character scalar: a whole number in full (rounding a count would
-#'   misreport it), any other number to 4 significant digits, and `NA` as `.`.
+#'   misreport it), any other number to 4 significant digits, `Inf` and `-Inf`
+#'   as such, and `NA` (or `NaN`) as `.`.
 #'
 #' @keywords internal
 #' @family internal
 format_number <- function(x) {
   if (is.na(x)) {
     "."
+  } else if (!is.finite(x)) {
+    # `Inf %% 1` is `NaN`, which the whole-number test cannot take
+    format(x)
   } else {
     format(if (x %% 1 == 0) x else signif(x, 4), scientific = FALSE)
   }
