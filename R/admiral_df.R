@@ -50,6 +50,9 @@ admiral_dataset_classes <- c(
   "ADSL", "BDS", "OCCDS", "TTE", "ADDL", "MDBDS", "MDTTE", "MDOCCDS"
 )
 
+# the medical device classes, whose records belong to a device
+device_classes <- c("ADDL", "MDBDS", "MDTTE", "MDOCCDS")
+
 #' Create an `admiral_df` Dataset
 #'
 #' @description
@@ -602,4 +605,1355 @@ infer_class_by_structure <- function(dataset, id_vars, classes) {
   }
 
   "other"
+}
+
+#' Summarize an `admiral_df` Dataset
+#'
+#' Reports what a dataset contains and whether it has one record per key
+#' variable combination. This is useful after a derivation, e.g. to check that
+#' [derive_param_computed()] added the records that were expected.
+#'
+#' The summary always shows the dataset name and ADaM class, the number of
+#' subjects, observations and variables, and the record structure. It then adds
+#' the information for the dataset class (see [get_dataset_class()]):
+#'
+#' * `ADSL`: subjects per treatment arm, the population flag counts, the subject
+#'   flow (randomized, treated, completed), the treatment duration, the end of
+#'   study status, the deaths and their causes, and the age and sex of the
+#'   subjects.
+#' * `BDS`/`MDBDS`: records, subjects, visits, and the distribution of `AVAL`
+#'   per parameter, the analysis visits, the derived records per `DTYPE`, and a
+#'   check for more than one baseline record (`ABLFL`) per subject and
+#'   parameter.
+#' * `OCCDS`/`MDOCCDS`: the number of distinct terms, the treatment-emergent,
+#'   and the serious vs total records, the records per severity or toxicity
+#'   grade, and a check for more than one `"Y"` per group in the occurrence
+#'   flags (`AOCCFL`, `AOCCSFL`, `AOCCPFL`, ...).
+#' * `TTE`/`MDTTE`: events and censored per parameter.
+#'
+#' If `adsl` is supplied, the summary also compares the dataset with it, see
+#' the `adsl` argument.
+#'
+#' @param object An `admiral_df` object
+#'
+#' @param adsl The subject-level dataset to compare `object` with
+#'
+#'   ADSL holds every subject of the study, so it shows what `object` cannot
+#'   show by itself: the subjects without any records, and the subjects in
+#'   `object` which should not be there. If it is supplied, the summary also
+#'   reports how many of the ADSL subjects have records, overall, within the
+#'   safety population (`SAFFL`), and per treatment arm; checks that every
+#'   subject of `object` is in ADSL; and, for an `OCCDS` dataset, reports the
+#'   subjects with a treatment-emergent record (`TRTEMFL`) out of the safety
+#'   population, or out of ADSL if there is no `SAFFL`.
+#'
+#'   Subjects are matched by the variables they are counted by (see Details),
+#'   which must be in `adsl`, and `adsl` must have one record per subject.
+#'   `adsl` is ignored, with a warning, for a dataset of class `"ADSL"` and for a
+#'   dataset without any of these variables.
+#'
+#' @permitted a data frame or `NULL`
+#'
+#' @param ... Not used
+#'
+#' @details
+#'   The summary reports facts only, apart from the record structure check and
+#'   the checks for the dataset class, which report problems without signaling
+#'   them.
+#'   Each item is only reported when the variables it needs are in the dataset,
+#'   so a dataset which is still being derived gives a shorter summary rather
+#'   than an error.
+#'
+#'   The record structure is checked against the keys stored by [admiral_df()].
+#'   Keys are never inferred, so if none were stored the structure is not
+#'   checked.
+#'
+#'   Subjects are counted by `USUBJID` if it is present, as the other subject
+#'   keys (e.g. `STUDYID`) may not be populated on records added by a
+#'   derivation. Otherwise the subject keys
+#'   (`get_admiral_option("subject_keys")`) are used if all of them are in the
+#'   dataset, as only together do they identify a subject. A record with any of
+#'   these missing (`NA` or `""`) belongs to no subject, so it is not counted
+#'   as one.
+#'
+#'   The records of a medical device dataset (`ADDL`, `MDBDS`, `MDTTE`,
+#'   `MDOCCDS`) belong to a device rather than a subject, so devices are counted
+#'   by `SPDEVID`, and the per-parameter counts and the checks are per device.
+#'   `USUBJID` is optional in these datasets; if it is present the subjects
+#'   are counted as well, and it is what `adsl` is matched by.
+#'
+#'   The dataset name is the one stored by [admiral_df()] or, failing that, the
+#'   name of the variable `summary()` was called on.
+#'
+#' @return An object of class `summary_admiral_df`, a named list which is
+#'   printed by [print.summary_admiral_df()].
+#'
+#' @keywords utils_ds_chk
+#' @family utils_ds_chk
+#'
+#' @export
+#'
+#' @examplesx
+#'
+#' @caption Summarizing a BDS dataset after a derivation
+#'
+#' @code
+#' library(tibble)
+#' library(dplyr, warn.conflicts = FALSE)
+#'
+#' advs <- tribble(
+#'   ~USUBJID,      ~PARAMCD, ~AVAL, ~AVISIT,
+#'   "01-701-1015", "DIABP",     51, "BASELINE",
+#'   "01-701-1015", "SYSBP",    121, "BASELINE",
+#'   "01-701-1028", "DIABP",     79, "BASELINE",
+#'   "01-701-1028", "SYSBP",    130, "BASELINE"
+#' ) %>%
+#'   mutate(STUDYID = "PILOT01")
+#'
+#' advs <- derive_param_computed(
+#'   advs,
+#'   by_vars = exprs(STUDYID, USUBJID, AVISIT),
+#'   parameters = c("SYSBP", "DIABP"),
+#'   set_values_to = exprs(
+#'     AVAL = (AVAL.SYSBP + 2 * AVAL.DIABP) / 3,
+#'     PARAMCD = "MAP"
+#'   )
+#' )
+#'
+#' summary(advs)
+#'
+#' @caption Checking against declared keys
+#'
+#' @info The record structure is only checked once the keys have been stored
+#'   with [admiral_df()].
+#'
+#' @code
+#' advs <- admiral_df(
+#'   advs,
+#'   dataset_keys = exprs(USUBJID, PARAMCD, AVISIT),
+#'   dataset_name = "ADVS"
+#' )
+#'
+#' summary(advs)
+#'
+#' @caption Comparing with ADSL
+#'
+#' @info Supplying the ADSL shows the subjects without records, and checks that
+#'   every subject of the dataset is in the ADSL.
+#'
+#' @code
+#' adsl <- tribble(
+#'   ~STUDYID,  ~USUBJID,      ~SAFFL, ~TRT01A,
+#'   "PILOT01", "01-701-1015", "Y",    "Placebo",
+#'   "PILOT01", "01-701-1028", "Y",    "Xanomeline High Dose",
+#'   "PILOT01", "01-701-1034", "N",    NA
+#' )
+#'
+#' summary(advs, adsl = adsl)
+summary.admiral_df <- function(object, adsl = NULL, ...) {
+  name <- attr(object, "admiral_dataset_name")
+  if (is.null(name)) {
+    # the variable `summary()` was called on, unless it is a pipe placeholder
+    # or a more complex expression than a name
+    obj_expr <- substitute(object)
+    if (is.name(obj_expr) && !as.character(obj_expr) %in% c(".", "_")) {
+      name <- as.character(obj_expr)
+    }
+  }
+  dataset_keys <- attr(object, "admiral_dataset_keys")
+  # read before `ungroup()`, which need not keep the attributes
+  dataset_class <- get_dataset_class(object)
+
+  # a plain, ungrouped data frame, so that the tables derived from it do not
+  # carry the class
+  class(object) <- setdiff(class(object), "admiral_df")
+  dataset <- ungroup(object)
+  cols <- colnames(dataset)
+
+  subject_keys <- vars2chr(get_admiral_option("subject_keys"))
+  subject_vars <- if ("USUBJID" %in% cols) {
+    "USUBJID"
+  } else if (all(subject_keys %in% cols)) {
+    # only together do the subject keys identify a subject: `STUDYID` alone
+    # would count the whole study as one
+    subject_keys
+  } else {
+    character(0)
+  }
+
+  # the records of a device dataset belong to a device; `SPDEVID` alone, as
+  # `USUBJID` alone for subjects, since `STUDYID` may not be populated on
+  # records added by a derivation
+  device_vars <- if (dataset_class %in% device_classes && "SPDEVID" %in% cols) {
+    "SPDEVID"
+  }
+  # what the per-parameter counts and the checks are per
+  if (is.null(device_vars)) {
+    unit_vars <- subject_vars
+    unit <- "subjects"
+  } else {
+    unit_vars <- device_vars
+    unit <- "devices"
+  }
+
+  out <- list(
+    name = name,
+    dataset_class = dataset_class,
+    n_devices = if (!is.null(device_vars)) count_units(dataset, device_vars),
+    device_vars = device_vars,
+    n_subjects = count_units(dataset, subject_vars),
+    n_obs = nrow(dataset),
+    n_vars = ncol(dataset),
+    subject_vars = subject_vars,
+    structure = summarize_structure(dataset, dataset_keys)
+  )
+
+  # the class is `NA` for a dataset with no records whose variables do not
+  # decide it, which has nothing class-specific to report. The medical device
+  # classes share the content of their subject counterparts, per device
+  out$details <- switch(coalesce(dataset_class, "other"),
+    ADSL = summarize_adsl(dataset, subject_vars),
+    BDS = ,
+    MDBDS = summarize_bds(dataset, unit_vars, unit),
+    OCCDS = ,
+    MDOCCDS = summarize_occds(dataset, unit_vars),
+    TTE = ,
+    MDTTE = summarize_tte(dataset),
+    list()
+  )
+
+  if (!is.null(adsl)) {
+    out$vs_adsl <- summarize_vs_adsl(dataset, adsl, subject_vars, dataset_class)
+  }
+
+  class(out) <- c("summary_admiral_df", "list")
+  out
+}
+
+#' Keep the Records which Belong to a Subject or Device
+#'
+#' @param dataset A data frame
+#' @param unit_vars The variables subjects, or devices, are identified by
+#'
+#' @details
+#'   A record belongs to a subject (or device) if none of `unit_vars` is
+#'   missing. A blank (`""`) counts as missing, as data read from SAS has `""`
+#'   rather than `NA`. Such records are typically added by a derivation which
+#'   does not populate these variables, and counting them would add a subject
+#'   which does not exist.
+#'
+#' @return The records of `dataset` which belong to a subject (or device).
+#'
+#' @keywords internal
+#' @family internal
+filter_unit_records <- function(dataset, unit_vars) {
+  has_unit <- map(unit_vars, ~ !is.na(dataset[[.x]]) & dataset[[.x]] != "")
+  dataset[reduce(has_unit, `&`, .init = rep(TRUE, nrow(dataset))), , drop = FALSE]
+}
+
+#' Count the Subjects or Devices of a Dataset
+#'
+#' @param dataset A data frame
+#' @param unit_vars The variables subjects, or devices, are identified by
+#'
+#' @return The number of distinct combinations of `unit_vars` among the records
+#'   which belong to a subject or device (see [filter_unit_records()]), or `NA`
+#'   if `unit_vars` is empty.
+#'
+#' @keywords internal
+#' @family internal
+count_units <- function(dataset, unit_vars) {
+  if (length(unit_vars) == 0) {
+    return(NA_integer_)
+  }
+  n_distinct(filter_unit_records(dataset[unit_vars], unit_vars))
+}
+
+#' Compare a Dataset with its ADSL
+#'
+#' Collect the information [summary.admiral_df()] reports when its `adsl`
+#' argument is supplied.
+#'
+#' @param dataset A data frame
+#' @param adsl The `adsl` argument of [summary.admiral_df()]
+#' @param subject_vars The variables subjects are counted and matched by
+#' @param dataset_class The ADaM class of `dataset`
+#'
+#' @details
+#'   An `adsl` which cannot be compared with -- one without `subject_vars`, or
+#'   with more than one record per subject -- is an error, as any comparison
+#'   would be wrong. A `dataset` which cannot be compared, by contrast, only
+#'   gives a warning, as the rest of the summary is still valid.
+#'
+#'   Records of `dataset` with a missing subject variable are left out, as they
+#'   belong to no subject (see [filter_unit_records()]).
+#'
+#'   The treatment arm is the first populated of `TRT01A`, `TRT01P`, and `ARM`
+#'   in `adsl`: the actual treatment ahead of the planned one, as the subjects
+#'   with records are most often the treated ones.
+#'
+#' @return `NULL` (with a warning) if the comparison is not possible, otherwise
+#'   a named list with the elements `n_adsl` and `n_common` (the subjects in
+#'   `adsl`, and those of them with records), `orphans` (the subjects with
+#'   records which are not in `adsl`, as a data frame of `subject_vars`),
+#'   `n_orphans` (their number), and depending on the variables:
+#'
+#'   * `saffl`: the subjects with records within the safety population, and the
+#'     subjects in it (`covered` and `total`),
+#'   * `arm_var` and `arm`: the treatment arm variable, and per arm the subjects
+#'     with records and the subjects in it,
+#'   * `incidence` and `incidence_denom`: for an `OCCDS` dataset, the subjects
+#'     with a treatment-emergent record and the subjects they are counted out
+#'     of (`subjects` and `total`), and which subjects these are
+#'     (`"in the safety population"` or `"in ADSL"`).
+#'
+#' @keywords internal
+#' @family internal
+summarize_vs_adsl <- function(dataset, adsl, subject_vars, dataset_class) {
+  # a malformed `adsl` is an error in the call of `summary()`
+  call <- parent.frame()
+  if (dataset_class %in% "ADSL") {
+    cli_warn(
+      "{.arg adsl} is ignored for a dataset of class {.val ADSL}, as it is meant
+       for comparing another dataset with its ADSL."
+    )
+    return(NULL)
+  }
+  if (length(subject_vars) == 0) {
+    cli_warn(
+      "{.arg adsl} is ignored, as the dataset has no variables to match
+       subjects by."
+    )
+    return(NULL)
+  }
+  assert_data_frame(
+    adsl,
+    required_vars = syms(subject_vars),
+    check_is_grouped = FALSE,
+    check_is_rowwise = FALSE,
+    call = call
+  )
+  adsl <- ungroup(adsl)
+  n_dup <- nrow(adsl) - n_distinct(adsl[subject_vars])
+  if (n_dup > 0) {
+    cli_abort(c(
+      "{.arg adsl} must have one record per subject ({.var {subject_vars}}).",
+      i = "Found {n_dup} extra subject record{?s}."
+    ), call = call)
+  }
+
+  ds_subjects <- distinct(filter_unit_records(dataset[subject_vars], subject_vars))
+  adsl_with_records <- semi_join(adsl, ds_subjects, by = subject_vars)
+  orphans <- anti_join(ds_subjects, adsl, by = subject_vars)
+
+  out <- list(
+    n_adsl = nrow(adsl),
+    n_common = nrow(adsl_with_records),
+    n_orphans = nrow(orphans),
+    orphans = orphans
+  )
+
+  # the denominator of most outputs from a record-level dataset
+  if ("SAFFL" %in% colnames(adsl) && any(!is.na(adsl$SAFFL))) {
+    out$saffl <- c(
+      covered = sum(adsl_with_records$SAFFL %in% "Y"),
+      total = sum(adsl$SAFFL %in% "Y")
+    )
+  }
+
+  arm_var <- intersect(c("TRT01A", "TRT01P", "ARM"), colnames(adsl))
+  arm_var <- keep(arm_var, ~ any(!is.na(adsl[[.x]])))
+  if (length(arm_var) > 0) {
+    out$arm_var <- arm_var[1]
+    out$arm <- count(adsl, !!sym(arm_var[1]), name = "total") %>%
+      left_join(
+        count(adsl_with_records, !!sym(arm_var[1]), name = "subjects"),
+        by = arm_var[1]
+      ) %>%
+      mutate(subjects = coalesce(subjects, 0L)) %>%
+      select(!!sym(arm_var[1]), subjects, total)
+  }
+
+  if (dataset_class %in% c("OCCDS", "MDOCCDS") && "TRTEMFL" %in% colnames(dataset)) {
+    out <- c(out, count_incidence(dataset, adsl, subject_vars, out$saffl))
+  }
+
+  out
+}
+
+#' Count the Subjects with a Treatment-Emergent Record
+#'
+#' @param dataset A data frame with a `TRTEMFL` variable
+#' @param adsl A data frame with one record per subject
+#' @param subject_vars The variables subjects are matched by
+#' @param saffl The `saffl` element of [summarize_vs_adsl()], or `NULL` if
+#'   `adsl` has no safety population
+#'
+#' @return A named list with the elements `incidence` and `incidence_denom`,
+#'   see [summarize_vs_adsl()].
+#'
+#' @keywords internal
+#' @family internal
+count_incidence <- function(dataset, adsl, subject_vars, saffl) {
+  # the safety population if there is one, as the incidence tables use it; the
+  # dataset cannot provide the denominator, as the subjects without any
+  # occurrence are not in it
+  denom <- if (!is.null(saffl)) filter(adsl, SAFFL %in% "Y") else adsl
+  # records of no subject are no subject's occurrence, and a missing subject in
+  # `adsl` is no subject either, so `NA` never matches `NA`
+  emergent <- semi_join(
+    denom,
+    filter(filter_unit_records(dataset, subject_vars), TRTEMFL %in% "Y"),
+    by = subject_vars,
+    na_matches = "never"
+  )
+  list(
+    incidence = c(subjects = nrow(emergent), total = nrow(denom)),
+    incidence_denom = if (!is.null(saffl)) "in the safety population" else "in ADSL"
+  )
+}
+
+#' Check the Record Structure of a Dataset
+#'
+#' @param dataset A data frame
+#' @param keys The keys stored by [admiral_df()], as a character vector, or
+#'   `NULL` if none were stored
+#'
+#' @return A list with the elements `keys`, `missing_keys` (keys which are not
+#'   in `dataset`), and `n_duplicates` (the number of records beyond one per
+#'   key, `NA` if the structure was not checked).
+#'
+#' @keywords internal
+#' @family internal
+summarize_structure <- function(dataset, keys) {
+  # stored keys are plain names, so a `rename()` or `select()` since they
+  # were set can leave them pointing at nothing; the check is skipped rather
+  # than run on part of the key
+  missing_keys <- setdiff(keys, colnames(dataset))
+  n_duplicates <- if (length(keys) > 0 && length(missing_keys) == 0) {
+    nrow(dataset) - n_distinct(dataset[keys])
+  } else {
+    NA_integer_
+  }
+
+  list(
+    keys = keys,
+    missing_keys = missing_keys,
+    n_duplicates = n_duplicates
+  )
+}
+
+#' Summarize the Type-Specific Content of a Dataset
+#'
+#' Collect the information [summary.admiral_df()] reports for a dataset of
+#' class `ADSL`, `BDS`, `OCCDS`, or `TTE` (or their medical device
+#' counterparts). An element is only returned when the variables it needs are in
+#' the dataset. This matters because a class set with [admiral_df()] is not
+#' checked against the variables, so e.g. a dataset declared as `"TTE"` need
+#' not have `CNSR`.
+#'
+#' @param dataset A data frame
+#' @param subject_vars The variables subjects are counted by
+#' @param unit_vars The variables the per-parameter counts and the checks are
+#'   per: `subject_vars`, or for a medical device dataset the variables devices
+#'   are identified by
+#' @param unit The name of the per-parameter count column, `"subjects"` or
+#'   `"devices"`
+#'
+#' @details
+#'   The ADSL items other than the treatment arms and population flags are
+#'   taken from the first record of each subject, so that duplicated subject
+#'   records -- which the record structure check reports -- do not inflate them.
+#'   Every ADSL item counts subjects, so none is returned for a dataset without
+#'   any of the variables subjects are counted by.
+#'
+#'   The OCCDS severity is the first populated of `ASEV`, `--SEV`, `ATOXGR`,
+#'   and `--TOXGR`, and the seriousness the first populated `--SER`. See
+#'   [check_occurrence_flags()] for the occurrence flag check.
+#'
+#'   A BDS dataset is expected to have at most one baseline record
+#'   (`ABLFL == "Y"`) per subject and parameter, and per `BASETYPE`, `ATPT`, and
+#'   `APERIOD` where these are in the dataset: a baseline per timepoint or per
+#'   period (e.g. in a crossover study) is correct, not a duplicate. More than
+#'   one silently corrupts `BASE`, `CHG`, and `PCHG`, and the record structure
+#'   check cannot see it, as the records differ in their visit. Fewer than one
+#'   is legitimate, as not every parameter has a baseline. Records which belong
+#'   to no subject (see [filter_unit_records()]) are not checked.
+#'
+#' @return A named list:
+#'
+#'   * `summarize_adsl()`: `trt_var` and `trt` (subjects per treatment arm),
+#'     `pops` (named count of subjects with `"Y"` per population flag), `flow`
+#'     (subjects randomized, treated, and completed), `trtdur` (median, minimum,
+#'     and maximum of `TRTDURD`), `eosstt` (subjects per end of study status),
+#'     `n_deaths` and `dthcaus` (subjects who died, and per cause of death),
+#'     `age` (median, minimum, and maximum of `AGE`), `sex` (subjects per
+#'     `SEX`).
+#'   * `summarize_bds()`: `params` (per `PARAMCD`: the `PARAM` values, the
+#'     records, subjects (or devices), and analysis visits, and the missing values, minimum,
+#'     median, and maximum of a numeric `AVAL`), `visits` (the analysis visits,
+#'     in `AVISITN` order if available), `dtype` (records per `DTYPE`),
+#'     `baseline_by` and `multiple_baselines` (the variables a baseline is
+#'     unique within, and the number of their combinations with more than one
+#'     `ABLFL == "Y"` record).
+#'   * `summarize_occds()`: `terms` (named count of distinct values per coding
+#'     variable), `trtem` (treatment-emergent and total records), `sev_var`
+#'     and `sev` (the severity or toxicity grade variable, and the records per
+#'     value), `ser_var` and `serious` (the seriousness variable, and the
+#'     serious and total records), `occ_flag_by` (per occurrence flag checked,
+#'     the variables it is unique within), `occ_flag_dups` (per occurrence flag
+#'     checked, the number of combinations of those with more than one `"Y"`),
+#'     `occ_flags_unchecked` (the occurrence flags whose level is not known).
+#'   * `summarize_tte()`: `events` (events and censored per `PARAMCD`).
+#'
+#' @keywords internal
+#' @family internal
+#' @rdname summarize_admiral_df_type
+summarize_adsl <- function(dataset, subject_vars) {
+  out <- list()
+
+  # every item counts subjects, which cannot be identified without these
+  if (length(subject_vars) == 0) {
+    return(out)
+  }
+  dataset <- filter_unit_records(dataset, subject_vars)
+
+  # planned treatment first, falling back to actual treatment and `ARM`; a
+  # variable which is entirely `NA` has not been derived yet
+  trt_var <- intersect(c("TRT01P", "TRT01A", "ARM"), colnames(dataset))
+  trt_var <- keep(trt_var, ~ any(!is.na(dataset[[.x]])))
+  if (length(trt_var) > 0) {
+    out$trt_var <- trt_var[1]
+    out$trt <- dataset %>%
+      distinct(!!sym(trt_var[1]), !!!syms(subject_vars)) %>%
+      count(!!sym(trt_var[1]), name = "subjects")
+  }
+
+  pop_vars <- intersect(
+    c("RANDFL", "ENRLFL", "SAFFL", "ITTFL", "FASFL", "EFFFL", "PPROTFL", "COMPLFL"),
+    colnames(dataset)
+  )
+  # subjects rather than records are counted, as the treatment arms are, so
+  # that duplicated subject records do not inflate the counts
+  if (length(pop_vars) > 0) {
+    out$pops <- vapply(
+      set_names(pop_vars),
+      function(v) n_distinct(dataset[dataset[[v]] %in% "Y", subject_vars]),
+      integer(1)
+    )
+  }
+
+  # one record per subject for the remaining items, so that each counts
+  # subjects, and so that a subject's age or duration is only counted once
+  subjects <- distinct(dataset, !!!syms(subject_vars), .keep_all = TRUE)
+  cols <- colnames(subjects)
+
+  out$flow <- summarize_subject_flow(subjects)
+
+  if ("TRTDURD" %in% cols) {
+    out$trtdur <- summarize_distribution(subjects$TRTDURD)
+  }
+  if ("EOSSTT" %in% cols && any(!is.na(subjects$EOSSTT))) {
+    out$eosstt <- count_values(subjects$EOSSTT)
+  }
+
+  # the causes only among the deaths, so that the subjects alive do not show up
+  # as a missing cause
+  if ("DTHFL" %in% cols && any(!is.na(subjects$DTHFL))) {
+    deaths <- filter(subjects, DTHFL %in% "Y")
+    out$n_deaths <- nrow(deaths)
+    if ("DTHCAUS" %in% cols && nrow(deaths) > 0) {
+      out$dthcaus <- count_values(deaths$DTHCAUS)
+    }
+  }
+
+  if ("AGE" %in% cols) {
+    out$age <- summarize_distribution(subjects$AGE)
+  }
+  if ("SEX" %in% cols && any(!is.na(subjects$SEX))) {
+    out$sex <- count_values(subjects$SEX)
+  }
+
+  out
+}
+
+#' @rdname summarize_admiral_df_type
+summarize_bds <- function(dataset, unit_vars, unit = "subjects") {
+  out <- list()
+  cols <- colnames(dataset)
+
+  # per parameter, as that is where most BDS defects show: a parameter with too
+  # few subjects or visits, values which were not derived, implausible values
+  if ("PARAMCD" %in% cols && nrow(dataset) > 0) {
+    out$params <- summarize_bds_params(dataset, unit_vars, unit)
+  }
+
+  if ("AVISIT" %in% cols && any(!is.na(dataset$AVISIT))) {
+    visits <- filter(dataset, !is.na(AVISIT))
+    visits <- if ("AVISITN" %in% cols) {
+      arrange(distinct(visits, AVISITN, AVISIT), AVISITN, AVISIT)
+    } else {
+      arrange(distinct(visits, AVISIT), AVISIT)
+    }
+    out$visits <- unique(visits$AVISIT)
+  }
+
+  # what the derivations added, by type (`AVERAGE`, `LOCF`, ...)
+  if ("DTYPE" %in% cols && any(!is.na(dataset$DTYPE))) {
+    out$dtype <- count_values(dataset$DTYPE[!is.na(dataset$DTYPE)])
+  }
+
+  if (length(unit_vars) > 0 && all(c("PARAMCD", "ABLFL") %in% cols)) {
+    out$baseline_by <- c(
+      unit_vars, "PARAMCD", intersect(c("BASETYPE", "ATPT", "APERIOD"), cols)
+    )
+    # records of no subject are no subject's baseline
+    out$multiple_baselines <- count_multiple_baselines(
+      filter_unit_records(dataset, unit_vars),
+      out$baseline_by
+    )
+  }
+
+  out
+}
+
+#' Summarize the Parameters of a BDS Dataset
+#'
+#' @param dataset A data frame with a `PARAMCD` variable
+#' @param unit_vars The variables subjects, or devices, are identified by
+#' @param unit The name of the column they are counted in, `"subjects"` or
+#'   `"devices"`
+#'
+#' @return The `params` element described in [summarize_bds()]: a data frame
+#'   with one row per `PARAMCD`.
+#'
+#' @keywords internal
+#' @family internal
+summarize_bds_params <- function(dataset, unit_vars, unit = "subjects") {
+  cols <- colnames(dataset)
+  stats <- exprs(records = n())
+  if ("PARAM" %in% cols) {
+    # all values rather than the first, so that a `PARAMCD` with more than one
+    # `PARAM` is visible
+    stats$PARAM <- expr(paste(unique(PARAM[!is.na(PARAM)]), collapse = " / "))
+  }
+  if (length(unit_vars) > 0) {
+    stats[[unit]] <- expr(
+      n_distinct(filter_unit_records(pick(all_of(!!unit_vars)), !!unit_vars))
+    )
+  }
+  if ("AVISIT" %in% cols) {
+    stats$visits <- expr(n_distinct(AVISIT, na.rm = TRUE))
+  }
+  if ("AVAL" %in% cols && is.numeric(dataset$AVAL)) {
+    stats$missing <- expr(sum(is.na(AVAL)))
+    stats$min <- expr(if (all(is.na(AVAL))) NA_real_ else min(AVAL, na.rm = TRUE))
+    stats$median <- expr(median(AVAL, na.rm = TRUE))
+    stats$max <- expr(if (all(is.na(AVAL))) NA_real_ else max(AVAL, na.rm = TRUE))
+  }
+  dataset %>%
+    group_by(PARAMCD) %>%
+    summarise(!!!stats, .groups = "drop") %>%
+    select(PARAMCD, any_of("PARAM"), everything())
+}
+
+#' Count the Groups with More than One Baseline Record
+#'
+#' @param dataset A data frame with an `ABLFL` variable
+#' @param by The variables a baseline record is unique within
+#'
+#' @return The number of combinations of `by` with more than one
+#'   `ABLFL == "Y"` record, each counted once however many it has.
+#'
+#' @keywords internal
+#' @family internal
+count_multiple_baselines <- function(dataset, by) {
+  baselines <- dataset[dataset$ABLFL %in% "Y", by, drop = FALSE]
+  n_distinct(baselines[duplicated(baselines), ])
+}
+
+#' Count the Subjects Randomized, Treated, and Completed
+#'
+#' @param subjects A data frame with one record per subject
+#'
+#' @return A named integer vector with any of the elements `randomized` (from
+#'   `RANDDT`, or `RANDFL` if not available), `treated` (from `TRTSDT`, or
+#'   `TRTSDTM`), and `completed` (from `EOSSTT`), depending on the variables in
+#'   `subjects`; `NULL` if there are none.
+#'
+#' @keywords internal
+#' @family internal
+summarize_subject_flow <- function(subjects) {
+  cols <- colnames(subjects)
+  # how far subjects got: the differences to the subject count are the screen
+  # failures, the subjects randomized but not treated, and the dropouts
+  c(
+    if ("RANDDT" %in% cols) {
+      c(randomized = sum(!is.na(subjects$RANDDT)))
+    } else if ("RANDFL" %in% cols) {
+      c(randomized = sum(subjects$RANDFL %in% "Y"))
+    },
+    if ("TRTSDT" %in% cols) {
+      c(treated = sum(!is.na(subjects$TRTSDT)))
+    } else if ("TRTSDTM" %in% cols) {
+      c(treated = sum(!is.na(subjects$TRTSDTM)))
+    },
+    if ("EOSSTT" %in% cols) {
+      c(completed = sum(subjects$EOSSTT %in% "COMPLETED"))
+    }
+  )
+}
+
+#' Summarize the Distribution of a Numeric Variable
+#'
+#' @param x A numeric vector
+#'
+#' @return A named numeric vector with the elements `median`, `min`, and `max`,
+#'   or `NULL` if `x` has no non-missing values.
+#'
+#' @keywords internal
+#' @family internal
+summarize_distribution <- function(x) {
+  x <- x[!is.na(x)]
+  if (length(x) == 0) {
+    return(NULL)
+  }
+  c(median = median(x), min = min(x), max = max(x))
+}
+
+#' Count the Values of a Vector
+#'
+#' @param x A vector
+#'
+#' @return A named integer vector of counts per value, in value order with `NA`
+#'   (named `"NA"`) last. Unused levels of a factor are left out.
+#'
+#' @keywords internal
+#' @family internal
+count_values <- function(x) {
+  # a level no value has is not worth a count of zero
+  if (is.factor(x)) {
+    x <- droplevels(x)
+  }
+  counts <- table(x, useNA = "ifany")
+  set_names(as.integer(counts), coalesce(names(counts), "NA"))
+}
+
+#' @rdname summarize_admiral_df_type
+summarize_occds <- function(dataset, unit_vars) {
+  out <- list()
+  cols <- colnames(dataset)
+
+  # the same `--BODSYS`/`--DECOD`/`--TERM` naming `infer_dataset_class()` relies
+  # on, from the highest coding level to the reported term
+  term_vars <- c(
+    str_subset(cols, "^[A-Z]{2}BODSYS$"),
+    str_subset(cols, "^[A-Z]{2}DECOD$"),
+    str_subset(cols, "^[A-Z]{2}TERM$")
+  )
+  if (length(term_vars) > 0) {
+    out$terms <- vapply(
+      set_names(term_vars),
+      function(v) n_distinct(dataset[[v]], na.rm = TRUE),
+      integer(1)
+    )
+  }
+
+  if ("TRTEMFL" %in% cols) {
+    out$trtem <- c(
+      emergent = sum(dataset$TRTEMFL == "Y", na.rm = TRUE),
+      total = nrow(dataset)
+    )
+  }
+
+  # the analysis version ahead of the SDTM one, and severity ahead of toxicity
+  # grade; a variable which is entirely `NA` has not been derived yet
+  sev_var <- c(
+    intersect("ASEV", cols), str_subset(cols, "^[A-Z]{2}SEV$"),
+    intersect("ATOXGR", cols), str_subset(cols, "^[A-Z]{2}TOXGR$")
+  )
+  sev_var <- keep(sev_var, ~ any(!is.na(dataset[[.x]])))
+  if (length(sev_var) > 0) {
+    out$sev_var <- sev_var[1]
+    out$sev <- count_values(dataset[[sev_var[1]]])
+  }
+
+  ser_var <- keep(str_subset(cols, "^[A-Z]{2}SER$"), ~ any(!is.na(dataset[[.x]])))
+  if (length(ser_var) > 0) {
+    out$ser_var <- ser_var[1]
+    out$serious <- c(
+      serious = sum(dataset[[ser_var[1]]] %in% "Y"),
+      total = nrow(dataset)
+    )
+  }
+
+  c(out, check_occurrence_flags(dataset, unit_vars))
+}
+
+#' Check the Occurrence Flags of an OCCDS Dataset
+#'
+#' Counts, for each occurrence flag (`AOCC...FL`), the groups with more than
+#' one `"Y"` record. An occurrence flag marks the first occurrence per subject,
+#' or per subject and body system or dictionary term, so more than one `"Y"`
+#' per group counts a subject twice in every "n (%) of subjects" table built
+#' from it -- which the record structure check cannot see, as the records
+#' differ in other variables. In a medical device dataset, the flags are per
+#' device instead.
+#'
+#' @param dataset A data frame
+#' @param unit_vars The variables subjects, or devices, are identified by
+#'
+#' @details
+#'   The group a flag is unique within is taken from its name, following the
+#'   ADaMIG for OCCDS: `AOCCFL` per subject, `AOCCSFL` per subject and body
+#'   system (`--BODSYS`), and `AOCCPFL` per subject and dictionary term
+#'   (`--DECOD`). The maximum intensity versions (`AOCCIFL`, `AOCCSIFL`,
+#'   `AOCCPIFL`) are unique within the same groups. `APERIOD` is added to every
+#'   group if it is populated, as multi-period designs (e.g. vaccine studies)
+#'   flag the first occurrence per period.
+#'
+#'   Any other flag, e.g. a sponsor-defined `AOCC01FL`, is not checked, as its
+#'   group cannot be told from its name; neither is a flag whose body system or
+#'   dictionary term variable is not in the dataset. Fewer than one `"Y"` per
+#'   group is not a defect, as the flags are often restricted to a subset of
+#'   the records, such as the treatment-emergent ones. Records which belong to
+#'   no subject or device (see [filter_unit_records()]) are not checked.
+#'
+#' @return A named list with the elements `occ_flag_by`, `occ_flag_dups`, and
+#'   `occ_flags_unchecked`, see [summarize_occds()]; each only if not empty.
+#'
+#' @keywords internal
+#' @family internal
+check_occurrence_flags <- function(dataset, unit_vars) {
+  cols <- colnames(dataset)
+  flags <- str_subset(cols, "^AOCC[0-9A-Z]*FL$")
+  if (length(flags) == 0 || length(unit_vars) == 0) {
+    return(list())
+  }
+  # records of no subject are no subject's first occurrence
+  dataset <- filter_unit_records(dataset, unit_vars)
+
+  base_by <- c(
+    unit_vars,
+    if ("APERIOD" %in% cols && any(!is.na(dataset$APERIOD))) "APERIOD"
+  )
+  level_vars <- list(
+    AOCCFL = character(0),
+    AOCCSFL = str_subset(cols, "^[A-Z]{2}BODSYS$")[1],
+    AOCCPFL = str_subset(cols, "^[A-Z]{2}DECOD$")[1]
+  )
+  # the maximum intensity flags are unique within the same groups
+  level_vars <- c(level_vars, set_names(level_vars, c("AOCCIFL", "AOCCSIFL", "AOCCPIFL")))
+
+  # a flag whose level variable is not in the dataset cannot be checked either
+  checked <- keep(flags, ~ .x %in% names(level_vars) && !anyNA(level_vars[[.x]]))
+  unchecked <- setdiff(flags, checked)
+
+  out <- list()
+  if (length(checked) > 0) {
+    out$occ_flag_by <- map(set_names(checked), ~ c(base_by, level_vars[[.x]]))
+    out$occ_flag_dups <- vapply(
+      checked,
+      function(flag) {
+        flagged <- dataset[dataset[[flag]] %in% "Y", out$occ_flag_by[[flag]], drop = FALSE]
+        # the groups with a second "Y", each counted once
+        n_distinct(flagged[duplicated(flagged), ])
+      },
+      integer(1)
+    )
+  }
+  if (length(unchecked) > 0) {
+    out$occ_flags_unchecked <- unchecked
+  }
+  out
+}
+
+#' @rdname summarize_admiral_df_type
+summarize_tte <- function(dataset) {
+  out <- list()
+
+  # each parameter is a separate endpoint, so a single total would mislead
+  if (all(c("PARAMCD", "CNSR") %in% colnames(dataset)) && nrow(dataset) > 0) {
+    out$events <- dataset %>%
+      group_by(PARAMCD) %>%
+      summarise(
+        events = sum(CNSR == 0, na.rm = TRUE),
+        censored = sum(CNSR != 0, na.rm = TRUE)
+      )
+  }
+
+  out
+}
+
+#' Print a Summary of an `admiral_df` Dataset
+#'
+#' @param x A `summary_admiral_df` object created by [summary.admiral_df()]
+#' @param ... Not used
+#'
+#' @return `x`, invisibly
+#'
+#' @keywords internal
+#' @family utils_print
+#'
+#' @export
+#'
+#' @examples
+#' library(tibble)
+#'
+#' adsl <- tribble(
+#'   ~STUDYID, ~USUBJID, ~TRT01P,   ~SAFFL,
+#'   "P",      "P-1",    "Placebo", "Y",
+#'   "P",      "P-2",    "Drug A",  "Y",
+#'   "P",      "P-3",    "Drug A",  "N"
+#' )
+#'
+#' print(summary(admiral_df(adsl, dataset_keys = exprs(USUBJID), dataset_name = "ADSL")))
+print.summary_admiral_df <- function(x, ...) {
+  # the class is what tailors the summary, so it heads the title; "other" and an
+  # unknown class would read oddly there ("other summary"), hence the fallback
+  title <- if (x$dataset_class %in% admiral_dataset_classes) {
+    paste(x$dataset_class, "summary")
+  } else {
+    "Dataset summary"
+  }
+  # a name which only repeats the class ("ADSL: ADSL summary") is left out
+  if (!is.null(x$name) && !identical(x$name, x$dataset_class)) {
+    title <- paste0(x$name, ": ", title)
+  }
+  # passed as a value, as a name with `{` would otherwise be evaluated
+  cli_rule(left = "{title}")
+
+  if (!is.null(x$n_devices)) {
+    device_vars <- paste(x$device_vars, collapse = ", ")
+    cli_text("Devices ({device_vars}): {x$n_devices}")
+  }
+  if (!is.na(x$n_subjects)) {
+    subject_vars <- paste(x$subject_vars, collapse = ", ")
+    cli_text("Subjects ({subject_vars}): {x$n_subjects}")
+  }
+  cli_text("Observations: {x$n_obs} | Variables: {x$n_vars}")
+  print_summary_structure(x$structure)
+
+  d <- x$details
+  print_adsl_details(d)
+  print_bds_details(d)
+  print_occds_details(d)
+  if (!is.null(d[["events"]])) {
+    cli_text("Events and censored per parameter (CNSR):")
+    print_summary_table(d[["events"]])
+  }
+
+  if (!is.null(x$vs_adsl)) {
+    print_vs_adsl(x$vs_adsl)
+  }
+
+  invisible(x)
+}
+
+#' Print the ADSL Comparison of a Summary
+#'
+#' @param v The `vs_adsl` element of a `summary_admiral_df` object, see
+#'   [summarize_vs_adsl()]
+#'
+#' @details
+#'   Only the first and last few of the subjects which are not in ADSL
+#'   are printed; all of them are in the summary object.
+#'
+#' @return No return value, called for side effects
+#'
+#' @keywords internal
+#' @family internal
+print_vs_adsl <- function(v) {
+  saf <- if (!is.null(v$saffl)) {
+    paste0(
+      " | safety population ", v$saffl[["covered"]], " of ", v$saffl[["total"]],
+      format_percent(v$saffl[["covered"]], v$saffl[["total"]])
+    )
+  } else {
+    ""
+  }
+  overall <- format_percent(v$n_common, v$n_adsl)
+  cli_text("Subjects with records out of ADSL: {v$n_common} of {v$n_adsl}{overall}{saf}")
+
+  if (!is.null(v$arm)) {
+    arm <- paste0(
+      coalesce(as.character(v$arm[[v$arm_var]]), "NA"), ": ",
+      v$arm$subjects, " of ", v$arm$total,
+      collapse = " | "
+    )
+    cli_text("Subjects with records per arm ({v$arm_var}): {arm}")
+  }
+
+  if (!is.null(v$incidence)) {
+    n_em <- v$incidence[["subjects"]]
+    total_em <- v$incidence[["total"]]
+    pct_em <- format_percent(n_em, total_em)
+    cli_text(
+      "Subjects with a treatment-emergent record (TRTEMFL): {n_em} of
+       {total_em} subjects {v$incidence_denom}{pct_em}"
+    )
+  }
+
+  # the subject variables of each subject, e.g. "01-701-1015", of which cli
+  # prints only the first and last few
+  orphans <- cli_vec(
+    do.call(paste, c(as.list(v$orphans), sep = "/")),
+    style = list("vec-trunc" = 3)
+  )
+  print_summary_checks(v, checks = list(
+    n_orphans = list(
+      failed = "{v$n_orphans} subject{?s} with records {?is/are} not in ADSL:
+                {.val {orphans}}",
+      passed = "all subjects with records are in ADSL"
+    )
+  ))
+
+  invisible(NULL)
+}
+
+#' Format a Percentage for a Summary
+#'
+#' @param n The count
+#' @param total The count it is a part of
+#'
+#' @return A character scalar, e.g. `" (66.7%)"`, or `""` if `total` is zero.
+#'
+#' @keywords internal
+#' @family internal
+format_percent <- function(n, total) {
+  if (total == 0) {
+    return("")
+  }
+  paste0(" (", formatC(100 * n / total, format = "f", digits = 1), "%)")
+}
+
+#' Print the Type-Specific Part of a Summary
+#'
+#' Print the lines of [print.summary_admiral_df()] for the class-specific items
+#' collected by [summarize_adsl()] and [summarize_bds()]. Each line is only
+#' printed if its item is present.
+#'
+#' @param d The `details` element of a `summary_admiral_df` object
+#'
+#' @return No return value, called for side effects
+#'
+#' @keywords internal
+#' @family internal
+#' @rdname print_admiral_df_details
+print_adsl_details <- function(d) {
+  if (!is.null(d[["trt"]])) {
+    trt <- format_counts(set_names(d[["trt"]]$subjects, d[["trt"]][[d[["trt_var"]]]]), ": ")
+    cli_text("Subjects per treatment arm ({d[['trt_var']]}): {trt}")
+  }
+  if (!is.null(d[["pops"]])) {
+    pops <- format_counts(d[["pops"]])
+    cli_text("Populations: {pops}")
+  }
+  if (!is.null(d[["flow"]])) {
+    flow <- format_counts(d[["flow"]])
+    cli_text("Subject flow: {flow}")
+  }
+  if (!is.null(d[["trtdur"]])) {
+    trtdur <- format_distribution(d[["trtdur"]])
+    cli_text("Treatment duration (TRTDURD, days): {trtdur}")
+  }
+  if (!is.null(d[["eosstt"]])) {
+    eosstt <- format_counts(d[["eosstt"]], ": ")
+    cli_text("End of study (EOSSTT): {eosstt}")
+  }
+  if (!is.null(d[["n_deaths"]])) {
+    dthcaus <- if (!is.null(d[["dthcaus"]])) {
+      paste0(" (", format_counts(d[["dthcaus"]], ": "), ")")
+    } else {
+      ""
+    }
+    cli_text("Deaths (DTHFL): {d[['n_deaths']]}{dthcaus}")
+  }
+  if (!is.null(d[["age"]]) || !is.null(d[["sex"]])) {
+    demographics <- paste(
+      c(
+        if (!is.null(d[["age"]])) paste("AGE", format_distribution(d[["age"]])),
+        if (!is.null(d[["sex"]])) paste("SEX", format_counts(d[["sex"]], ": "))
+      ),
+      collapse = " | "
+    )
+    cli_text("Demographics: {demographics}")
+  }
+
+  invisible(NULL)
+}
+
+#' @rdname print_admiral_df_details
+print_bds_details <- function(d) {
+  if (!is.null(d[["params"]])) {
+    cli_text("Parameters ({nrow(d[['params']])}):")
+    # `PARAM` is left out as it would make the table too wide for the console;
+    # it is in the summary object
+    print_summary_table(
+      select(d[["params"]], -any_of("PARAM")),
+      max_rows = 10,
+      what = "parameter"
+    )
+  }
+  if (!is.null(d[["visits"]])) {
+    visits <- paste(d[["visits"]], collapse = ", ")
+    cli_text("Analysis visits (AVISIT): {visits}")
+  }
+  if (!is.null(d[["dtype"]])) {
+    dtype <- format_counts(d[["dtype"]], ": ")
+    cli_text("Derived records (DTYPE): {dtype}")
+  }
+
+  baseline_by <- paste(d[["baseline_by"]], collapse = ", ")
+  print_summary_checks(d, checks = list(
+    multiple_baselines = list(
+      failed = "{d[['multiple_baselines']]} combination{?s} of {baseline_by}
+                {qty(d[['multiple_baselines']])}{?has/have} more than one
+                baseline record ({.var ABLFL})",
+      passed = paste("at most one baseline record per", baseline_by)
+    )
+  ))
+
+  invisible(NULL)
+}
+
+#' @rdname print_admiral_df_details
+print_occds_details <- function(d) {
+  if (!is.null(d[["terms"]])) {
+    terms <- format_counts(d[["terms"]])
+    cli_text("Distinct terms: {terms}")
+  }
+  if (!is.null(d[["trtem"]])) {
+    cli_text(
+      "Treatment emergent (TRTEMFL): {d[['trtem']][['emergent']]} of
+       {d[['trtem']][['total']]} records"
+    )
+  }
+  if (!is.null(d[["sev"]])) {
+    sev <- format_counts(d[["sev"]], ": ")
+    cli_text("Records per severity ({d[['sev_var']]}): {sev}")
+  }
+  if (!is.null(d[["serious"]])) {
+    cli_text(
+      "Serious ({d[['ser_var']]}): {d[['serious']][['serious']]} of
+       {d[['serious']][['total']]} records"
+    )
+  }
+
+  dups <- d[["occ_flag_dups"]]
+  failed <- names(dups)[dups > 0]
+  print_summary_checks(
+    list(occ_flag_dups = if (!is.null(dups)) length(failed)),
+    checks = list(
+      occ_flag_dups = list(
+        failed = "{length(failed)} occurrence flag{?s} {?has/have} more than one
+                  {.val Y} per group:",
+        passed = paste(
+          "at most one \"Y\" per group in", paste(names(dups), collapse = ", ")
+        )
+      )
+    )
+  )
+  # one line per flag below the bullet, e.g. "AOCCPFL per USUBJID, AEDECOD: 2
+  # groups"
+  if (length(failed) > 0) {
+    lines <- paste0(
+      failed, " per ", map_chr(d[["occ_flag_by"]][failed], paste, collapse = ", "),
+      ": ", dups[failed], if_else(dups[failed] == 1, " group", " groups")
+    )
+    cli_bullets(set_names(lines, rep(" ", length(lines))))
+  }
+  if (!is.null(d[["occ_flags_unchecked"]])) {
+    unchecked <- d[["occ_flags_unchecked"]]
+    cli_bullets(c(i = "Not checked, as their level is not known: {.var {unchecked}}"))
+  }
+
+  invisible(NULL)
+}
+
+#' Print the Checks of a Summary
+#'
+#' Prints each failed check as its own bullet, and the passed checks together
+#' as a single bullet. A check whose element is not in `d` -- because the
+#' variables it needs are not in the dataset -- was not run and is not
+#' mentioned.
+#'
+#' @param d The `details` element of a `summary_admiral_df` object. Each check
+#'   is read from `d[[name]]`, the number of failures, and fails if it is
+#'   greater than zero.
+#' @param checks A named list with an element per check, named as in `d`. Each
+#'   element is a list with `failed`, a cli message evaluated in the calling
+#'   function, and `passed`, a plain character scalar.
+#'
+#' @return No return value, called for side effects
+#'
+#' @keywords internal
+#' @family internal
+print_summary_checks <- function(d, checks) {
+  # the messages are written in, and refer to the variables of, the caller
+  caller_env <- parent.frame()
+  ran <- keep(names(checks), ~ !is.null(d[[.x]]))
+  failed <- keep(ran, ~ d[[.x]] > 0)
+  passed <- setdiff(ran, failed)
+
+  for (check in failed) {
+    cli_bullets(c(x = checks[[check]]$failed), .envir = caller_env)
+  }
+  if (length(passed) > 0) {
+    passed <- paste(map_chr(checks[passed], "passed"), collapse = "; ")
+    cli_bullets(c(v = "Checks passed: {passed}"))
+  }
+
+  invisible(NULL)
+}
+
+#' Print the Record Structure of a Summary
+#'
+#' Prints the record structure check as a bullet: a tick if the dataset has one
+#' record per key, a cross with the number of extra records if it does not, and
+#' a warning sign if the check could not be run.
+#'
+#' @param structure The `structure` element of a `summary_admiral_df` object,
+#'   see [summarize_structure()]
+#'
+#' @return No return value, called for side effects
+#'
+#' @keywords internal
+#' @family internal
+print_summary_structure <- function(structure) {
+  keys <- paste(structure$keys, collapse = ", ")
+  n_extra <- structure$n_duplicates
+  if (length(structure$missing_keys) > 0) {
+    missing_keys <- paste(structure$missing_keys, collapse = ", ")
+    cli_bullets(c("!" = "Structure: not checked,
+       {qty(length(structure$missing_keys))}key{?s} {missing_keys}
+       {qty(length(structure$missing_keys))}{?is/are} not in the dataset"))
+  } else if (is.null(structure$keys)) {
+    # keys are never inferred, so without stored keys there is nothing to check
+    cli_bullets(c(i = "Structure: not checked, no keys set (see {.fun admiral_df})"))
+  } else if (length(structure$keys) == 0) {
+    # empty keys record that no keys are defined, which is not the same as
+    # never having set them
+    cli_bullets(c(i = "Structure: no key variables defined"))
+  } else if (n_extra == 0) {
+    cli_bullets(c(v = "Structure: one record per {keys}"))
+  } else {
+    cli_bullets(c(x = "Structure: expected one record per {keys}, found
+       {n_extra} extra record{?s}"))
+  }
+
+  invisible(NULL)
+}
+
+#' Format a Number for a Summary
+#'
+#' @param x A numeric scalar
+#'
+#' @return A character scalar: a whole number in full (rounding a count would
+#'   misreport it), any other number to 4 significant digits, `Inf` and `-Inf`
+#'   as such, and `NA` (or `NaN`) as `.`.
+#'
+#' @keywords internal
+#' @family internal
+format_number <- function(x) {
+  if (is.na(x)) {
+    "."
+  } else if (!is.finite(x)) {
+    # `Inf %% 1` is `NaN`, which the whole-number test cannot take
+    format(x)
+  } else {
+    format(if (x %% 1 == 0) x else signif(x, 4), scientific = FALSE)
+  }
+}
+
+#' Format a Distribution as `median m (range min-max)`
+#'
+#' @param stats A named numeric vector created by [summarize_distribution()]
+#'
+#' @return A character scalar
+#'
+#' @keywords internal
+#' @family internal
+format_distribution <- function(stats) {
+  paste0(
+    "median ", format_number(stats[["median"]]),
+    " (range ", format_number(stats[["min"]]), "-", format_number(stats[["max"]]), ")"
+  )
+}
+
+#' Format Named Counts as `name n | name n`
+#'
+#' @param counts A named numeric vector
+#' @param sep The separator between a name and its count
+#'
+#' @return A character scalar
+#'
+#' @keywords internal
+#' @family internal
+format_counts <- function(counts, sep = " ") {
+  paste0(names(counts), sep, counts, collapse = " | ")
+}
+
+#' Print a Table of a Summary as Aligned Text
+#'
+#' Prints a header line and one line per row, indented, with character columns
+#' left-aligned and numeric columns right-aligned. Fractional numbers are
+#' shown to 4 significant digits, whole numbers in full, and missing values as
+#' `.`.
+#'
+#' @param tbl A data frame
+#' @param max_rows The maximum number of rows to print. The number of rows left
+#'   out is reported below the table.
+#' @param what What a row is, used to report the rows left out
+#'
+#' @return No return value, called for side effects
+#'
+#' @keywords internal
+#' @family internal
+print_summary_table <- function(tbl, max_rows = Inf, what = "row") {
+  n_more <- nrow(tbl) - max_rows
+  tbl <- tbl[seq_len(min(nrow(tbl), max_rows)), , drop = FALSE]
+
+  # formatted per value rather than per column, as `format()` on a column pads
+  # every value to the decimals of the most precise one
+  cells <- lapply(tbl, function(col) {
+    out <- if (is.numeric(col)) {
+      # whole numbers (the counts) are shown in full: rounding them would
+      # misreport them
+      vapply(col, format_number, character(1))
+    } else {
+      as.character(col)
+    }
+    out[is.na(col)] <- "."
+    out
+  })
+  right <- vapply(tbl, is.numeric, logical(1))
+  widths <- vapply(
+    names(cells),
+    function(nm) max(nchar(c(nm, cells[[nm]]), type = "width")),
+    integer(1)
+  )
+  line <- function(txt_by_col) {
+    # `formatC()` takes a single width for character input, so one column at a
+    # time
+    padded <- vapply(
+      seq_along(txt_by_col),
+      function(j) formatC(txt_by_col[[j]], width = if (right[[j]]) widths[[j]] else -widths[[j]]),
+      character(1)
+    )
+    paste0("  ", paste(padded, collapse = "  "))
+  }
+
+  # `cli_verbatim()` because `cli_text()` collapses the alignment spaces
+  cli_verbatim(line(names(cells)))
+  for (i in seq_len(nrow(tbl))) {
+    cli_verbatim(line(vapply(cells, `[[`, character(1), i)))
+  }
+  if (n_more > 0) {
+    # the plural is built here as cli would take the quantity from `what`
+    what <- if (n_more > 1) paste0(what, "s") else what
+    cli_text("... and {n_more} more {what}")
+  }
+
+  invisible(NULL)
 }

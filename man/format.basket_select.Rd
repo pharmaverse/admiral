@@ -35,11 +35,32 @@ format(basket_select(id = 42, scope = "NARROW", type = "smq"))
 
 Other internal:
 \code{\link{admiral-package}},
+\code{\link[=check_occurrence_flags]{check_occurrence_flags()}},
+\code{\link[=count_incidence]{count_incidence()}},
+\code{\link[=count_multiple_baselines]{count_multiple_baselines()}},
+\code{\link[=count_units]{count_units()}},
+\code{\link[=count_values]{count_values()}},
 \code{\link[=extract_duplicate_records]{extract_duplicate_records()}},
+\code{\link[=filter_unit_records]{filter_unit_records()}},
+\code{\link[=format_counts]{format_counts()}},
+\code{\link[=format_distribution]{format_distribution()}},
+\code{\link[=format_number]{format_number()}},
+\code{\link[=format_percent]{format_percent()}},
 \code{\link[=infer_class_by_structure]{infer_class_by_structure()}},
 \code{\link[=infer_dataset_class]{infer_dataset_class()}},
 \code{\link[=new_admiral_df]{new_admiral_df()}},
-\code{\link[=signal_duplicate_records]{signal_duplicate_records()}}
+\code{\link[=print_adsl_details]{print_adsl_details()}},
+\code{\link[=print_summary_checks]{print_summary_checks()}},
+\code{\link[=print_summary_structure]{print_summary_structure()}},
+\code{\link[=print_summary_table]{print_summary_table()}},
+\code{\link[=print_vs_adsl]{print_vs_adsl()}},
+\code{\link[=signal_duplicate_records]{signal_duplicate_records()}},
+\code{\link[=summarize_adsl]{summarize_adsl()}},
+\code{\link[=summarize_bds_params]{summarize_bds_params()}},
+\code{\link[=summarize_distribution]{summarize_distribution()}},
+\code{\link[=summarize_structure]{summarize_structure()}},
+\code{\link[=summarize_subject_flow]{summarize_subject_flow()}},
+\code{\link[=summarize_vs_adsl]{summarize_vs_adsl()}}
 }
 \concept{internal}
 \keyword{internal}
