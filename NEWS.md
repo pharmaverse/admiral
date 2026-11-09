@@ -101,6 +101,10 @@ updated to state that `{admiral}` creates date-times in UTC. (#2763)
 
 ## Documentation
 
+- Expanded the `derive_vars_extreme_event()` examples using the custom roclet,
+including source selection, date ties, subjects without matching records,
+duplicate checks, and confirmation across records with `event_joined()`. (#3165)
+
 - The OCCDS vignette was updated to add a section describing how to derive SMQ variables for
   algorithmic queries. (#3184)
 
