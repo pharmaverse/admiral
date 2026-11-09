@@ -133,6 +133,14 @@
 
 ### Documentation
 
+- Expanded the
+  [`derive_vars_extreme_event()`](https:/pharmaverse.github.io/admiral/main/reference/derive_vars_extreme_event.md)
+  examples using the custom roclet, including source selection, date
+  ties, subjects without matching records, duplicate checks, and
+  confirmation across records with
+  [`event_joined()`](https:/pharmaverse.github.io/admiral/main/reference/event_joined.md).
+  ([\#3165](https://github.com/pharmaverse/admiral/issues/3165))
+
 - The OCCDS vignette was updated to add a section describing how to
   derive SMQ variables for algorithmic queries.
   ([\#3184](https://github.com/pharmaverse/admiral/issues/3184))
