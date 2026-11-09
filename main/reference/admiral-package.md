@@ -21,6 +21,9 @@ Useful links:
 Other internal:
 [`extract_duplicate_records()`](https:/pharmaverse.github.io/admiral/main/reference/extract_duplicate_records.md),
 [`format.basket_select()`](https:/pharmaverse.github.io/admiral/main/reference/format.basket_select.md),
+[`infer_class_by_structure()`](https:/pharmaverse.github.io/admiral/main/reference/infer_class_by_structure.md),
+[`infer_dataset_class()`](https:/pharmaverse.github.io/admiral/main/reference/infer_dataset_class.md),
+[`new_admiral_df()`](https:/pharmaverse.github.io/admiral/main/reference/new_admiral_df.md),
 [`signal_duplicate_records()`](https:/pharmaverse.github.io/admiral/main/reference/signal_duplicate_records.md)
 
 ## Author

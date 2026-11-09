@@ -667,13 +667,22 @@ to produce additional datasets
 
 ### Utilities used within Derivation Functions
 
-- [`as_admiral_df()`](https:/pharmaverse.github.io/admiral/main/reference/as_admiral_df.md)
-  :
+- [`admiral_df()`](https:/pharmaverse.github.io/admiral/main/reference/admiral_df.md)
+  **\[experimental\]** :
 
-  Tag a Dataset with the `admiral_df` Class
+  Create an `admiral_df` Dataset
 
 - [`extract_unit()`](https:/pharmaverse.github.io/admiral/main/reference/extract_unit.md)
   : Extract Unit From Parameter Description
+
+- [`get_dataset_class()`](https:/pharmaverse.github.io/admiral/main/reference/get_dataset_class.md)
+  **\[experimental\]** : Get the ADaM Dataset Class
+
+- [`get_dataset_keys()`](https:/pharmaverse.github.io/admiral/main/reference/get_dataset_keys.md)
+  **\[experimental\]** : Get the Key Variables of a Dataset
+
+- [`get_dataset_name()`](https:/pharmaverse.github.io/admiral/main/reference/get_dataset_name.md)
+  **\[experimental\]** : Get the Name of a Dataset
 
 - [`get_flagged_records()`](https:/pharmaverse.github.io/admiral/main/reference/get_flagged_records.md)
   : Create an Existence Flag

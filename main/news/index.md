@@ -4,13 +4,31 @@
 
 ### New Features
 
-- Added function
-  [`as_admiral_df()`](https:/pharmaverse.github.io/admiral/main/reference/as_admiral_df.md).
-  Tags a data frame with the `admiral_df` S3 class, preserving its
-  existing classes. All
+- Added the `admiral_df` S3 class. All
   [admiral](https://pharmaverse.github.io/admiral/) dataset functions
-  now tag their output datasets with this class.
+  now tag their output datasets with this class, preserving their
+  existing classes.
   ([\#3160](https://github.com/pharmaverse/admiral/issues/3160))
+
+- Added function
+  [`admiral_df()`](https:/pharmaverse.github.io/admiral/main/reference/admiral_df.md).
+  Tags a data frame with the `admiral_df` class and stores its metadata:
+  the key variables – the variables which uniquely identify its records
+  – the dataset name, and the ADaM dataset class. See the function
+  documentation for details.
+  ([\#3198](https://github.com/pharmaverse/admiral/issues/3198))
+
+- Added functions
+  [`get_dataset_keys()`](https:/pharmaverse.github.io/admiral/main/reference/get_dataset_keys.md),
+  [`get_dataset_name()`](https:/pharmaverse.github.io/admiral/main/reference/get_dataset_name.md),
+  and
+  [`get_dataset_class()`](https:/pharmaverse.github.io/admiral/main/reference/get_dataset_class.md)
+  to read the metadata stored by
+  [`admiral_df()`](https:/pharmaverse.github.io/admiral/main/reference/admiral_df.md).
+  If no class has been stored,
+  [`get_dataset_class()`](https:/pharmaverse.github.io/admiral/main/reference/get_dataset_class.md)
+  infers it from the dataset.
+  ([\#3198](https://github.com/pharmaverse/admiral/issues/3198))
 
 ### Updates of Existing Functions
 

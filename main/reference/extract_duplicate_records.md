@@ -51,6 +51,9 @@ A `data.frame` of duplicate records within `dataset`
 Other internal:
 [`admiral-package`](https:/pharmaverse.github.io/admiral/main/reference/admiral-package.md),
 [`format.basket_select()`](https:/pharmaverse.github.io/admiral/main/reference/format.basket_select.md),
+[`infer_class_by_structure()`](https:/pharmaverse.github.io/admiral/main/reference/infer_class_by_structure.md),
+[`infer_dataset_class()`](https:/pharmaverse.github.io/admiral/main/reference/infer_dataset_class.md),
+[`new_admiral_df()`](https:/pharmaverse.github.io/admiral/main/reference/new_admiral_df.md),
 [`signal_duplicate_records()`](https:/pharmaverse.github.io/admiral/main/reference/signal_duplicate_records.md)
 
 ## Examples

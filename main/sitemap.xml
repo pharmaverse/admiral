@@ -38,6 +38,7 @@
 <url><loc>https:/pharmaverse.github.io/admiral/main/reference/admiral-package.html</loc></url>
 <url><loc>https:/pharmaverse.github.io/admiral/main/reference/admiral_adlb.html</loc></url>
 <url><loc>https:/pharmaverse.github.io/admiral/main/reference/admiral_adsl.html</loc></url>
+<url><loc>https:/pharmaverse.github.io/admiral/main/reference/admiral_df.html</loc></url>
 <url><loc>https:/pharmaverse.github.io/admiral/main/reference/admiral_labels_attrs_section.html</loc></url>
 <url><loc>https:/pharmaverse.github.io/admiral/main/reference/as_admiral_df.html</loc></url>
 <url><loc>https:/pharmaverse.github.io/admiral/main/reference/assert_date_imputation.html</loc></url>
@@ -173,6 +174,9 @@
 <url><loc>https:/pharmaverse.github.io/admiral/main/reference/format.basket_select.html</loc></url>
 <url><loc>https:/pharmaverse.github.io/admiral/main/reference/format_imputed_dtc.html</loc></url>
 <url><loc>https:/pharmaverse.github.io/admiral/main/reference/get_admiral_option.html</loc></url>
+<url><loc>https:/pharmaverse.github.io/admiral/main/reference/get_dataset_class.html</loc></url>
+<url><loc>https:/pharmaverse.github.io/admiral/main/reference/get_dataset_keys.html</loc></url>
+<url><loc>https:/pharmaverse.github.io/admiral/main/reference/get_dataset_name.html</loc></url>
 <url><loc>https:/pharmaverse.github.io/admiral/main/reference/get_dt_dtm_range.html</loc></url>
 <url><loc>https:/pharmaverse.github.io/admiral/main/reference/get_duplicates_dataset.html</loc></url>
 <url><loc>https:/pharmaverse.github.io/admiral/main/reference/get_flagged_records.html</loc></url>
@@ -194,15 +198,19 @@
 <url><loc>https:/pharmaverse.github.io/admiral/main/reference/impute_dtc_dt.html</loc></url>
 <url><loc>https:/pharmaverse.github.io/admiral/main/reference/impute_dtc_dtm.html</loc></url>
 <url><loc>https:/pharmaverse.github.io/admiral/main/reference/index.html</loc></url>
+<url><loc>https:/pharmaverse.github.io/admiral/main/reference/infer_class_by_structure.html</loc></url>
+<url><loc>https:/pharmaverse.github.io/admiral/main/reference/infer_dataset_class.html</loc></url>
 <url><loc>https:/pharmaverse.github.io/admiral/main/reference/is_partial_datetime.html</loc></url>
 <url><loc>https:/pharmaverse.github.io/admiral/main/reference/list_all_templates.html</loc></url>
 <url><loc>https:/pharmaverse.github.io/admiral/main/reference/list_tte_source_objects.html</loc></url>
 <url><loc>https:/pharmaverse.github.io/admiral/main/reference/max_cond.html</loc></url>
 <url><loc>https:/pharmaverse.github.io/admiral/main/reference/min_cond.html</loc></url>
 <url><loc>https:/pharmaverse.github.io/admiral/main/reference/negate_vars.html</loc></url>
+<url><loc>https:/pharmaverse.github.io/admiral/main/reference/new_admiral_df.html</loc></url>
 <url><loc>https:/pharmaverse.github.io/admiral/main/reference/params.html</loc></url>
 <url><loc>https:/pharmaverse.github.io/admiral/main/reference/pipe.html</loc></url>
 <url><loc>https:/pharmaverse.github.io/admiral/main/reference/print.adam_templates.html</loc></url>
+<url><loc>https:/pharmaverse.github.io/admiral/main/reference/print.admiral_df.html</loc></url>
 <url><loc>https:/pharmaverse.github.io/admiral/main/reference/print.duplicates.html</loc></url>
 <url><loc>https:/pharmaverse.github.io/admiral/main/reference/print.source.html</loc></url>
 <url><loc>https:/pharmaverse.github.io/admiral/main/reference/print_named_list.html</loc></url>

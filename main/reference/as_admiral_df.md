@@ -16,7 +16,7 @@ as_admiral_df(dataset)
 
 ## Arguments
 
-- dataset:
+- dataset :
 
   A data frame (or `NULL`)
 
