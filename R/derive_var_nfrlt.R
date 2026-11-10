@@ -73,13 +73,26 @@
 #'
 #' @permitted Character scalar ("midpoint", "start", or "end")
 #'
-#' @param set_values_to_na An optional condition that marks derived NFRLT
-#'   values as `NA`. For example, `set_values_to_na = VISIT == "UNSCHEDULED"`
-#'   will set NFRLT to `NA` for all unscheduled visits. Can use any variables
-#'   in the dataset. When `new_var_unit` is specified, the unit variable will
-#'   also be set to `NA` for these records.
+#' @param special_values Special values to assign
 #'
-#' @permitted Condition (optional)
+#'   A list of `nfrlt_special()` objects. For records where the `condition` of
+#'   an object is `TRUE`, the new variable is set to the `value` of the object
+#'   instead of the derived nominal time, e.g., `99998` for unscheduled visits.
+#'   No visit day, timepoint, treatment duration, or unit conversion is applied
+#'   to these values. If a record fulfills the conditions of more than one
+#'   object, the first object in the list is used. To set the new variable to
+#'   `NA` for certain records, use `value = NA_real_`.
+#'
+#' @permitted [nfrlt_special]
+#'
+#' @param keep_unit_for_special Populate the unit variable for special values?
+#'
+#'   If set to `TRUE`, the unit variable (`new_var_unit`) is set to `out_unit`
+#'   for records which got a special value (see `special_values`). If set to
+#'   `FALSE`, it is set to `NA` for these records. The argument is ignored if
+#'   `new_var_unit` or `special_values` is not specified.
+#'
+#' @permitted [boolean]
 #'
 #' @details
 #' The nominal relative time is calculated as:
@@ -145,8 +158,8 @@
 #'   hours (scalar) or as a variable name containing duration per record
 #' * **Exposure records (EX)**: Can be called without `tpt_var` to derive
 #'   NFRLT based only on visit day
-#' * **Unscheduled visits**: Use `set_values_to_na` to set NFRLT to `NA` for
-#'   unscheduled or early discontinuation visits
+#' * **Unscheduled visits**: Use `special_values` to set NFRLT to `NA` or
+#'   to a special value for unscheduled or early discontinuation visits
 #' * **Variable treatment durations**: Use a variable name (e.g., `EXDUR`)
 #'   when different subjects or visits have different treatment durations
 #' * **Hours output**: Use `out_unit = "hours"` (default) for variables like
@@ -174,13 +187,15 @@
 #'   have `visit_day = 4`.
 #' * For crossover studies, consider deriving NFRLT separately per period
 #' * `NA` values in `visit_day` will automatically result in `NA` for NFRLT
-#'   (no need to use `set_values_to_na` for this case)
+#'   (no need to use `special_values` for this case)
 #' * `NA` values in `tpt_var` will result in `NA` for NFRLT
 #' * `NA` values in the `treatment_duration` variable (if using a variable)
 #'   will result in `NA` for NFRLT for those records
-#' * Use `set_values_to_na` when you need to set NFRLT to `NA` based on other
-#'   variables (e.g., `VISIT == "UNSCHEDULED"`), especially when `visit_day`
-#'   is populated but should not be used for the NFRLT calculation
+#' * Use `special_values` with `value = NA_real_` when you need to set NFRLT to
+#'   `NA` based on other variables (e.g., `VISIT == "UNSCHEDULED"`),
+#'   especially when `visit_day` is populated but should not be used for the
+#'   NFRLT calculation. Set `keep_unit_for_special = FALSE` to also set the
+#'   unit variable to `NA` for these records.
 #' * If `tpt_var` is not provided or doesn't exist in the dataset, timepoint
 #'   contribution is assumed to be 0 hours
 #' * When using non-hour units, timepoint contributions are still calculated
@@ -192,17 +207,22 @@
 #' **Setting Special Values:**
 #'
 #' If you need to set NFRLT to a specific value (e.g., 99999) for certain
-#' visits instead of `NA`, use `set_values_to_na` first to set them to `NA`,
-#' then use a subsequent `mutate()` call to replace those `NA` values:
+#' visits instead of the derived nominal time, use `special_values`:
 #'
 #' ```r
 #' dataset %>%
 #'   derive_var_nfrlt(
 #'     ...,
-#'     set_values_to_na = VISIT == "UNSCHEDULED"
-#'   ) %>%
-#'   mutate(NFRLT = if_else(is.na(NFRLT) & VISIT == "UNSCHEDULED", 99999, NFRLT))
+#'     special_values = list(
+#'       nfrlt_special(condition = VISIT == "UNSCHEDULED", value = 99998),
+#'       nfrlt_special(condition = VISIT == "END OF STUDY", value = 99999)
+#'     )
+#'   )
 #' ```
+#'
+#' The special values are used as provided, i.e., they are not converted to
+#' `out_unit`. Whether the unit variable is populated for these records is
+#' controlled by `keep_unit_for_special`.
 #'
 #' @return The input dataset with the new nominal relative time variable added,
 #'   and optionally the unit variable if `new_var_unit` is specified.
@@ -210,7 +230,8 @@
 #' @keywords der_bds_findings experimental
 #' @family der_bds_findings
 #'
-#' @seealso [convert_xxtpt_to_hours()], [derive_vars_duration()]
+#' @seealso [convert_xxtpt_to_hours()], [derive_vars_duration()],
+#'   [nfrlt_special()]
 #'
 #' @export
 #'
@@ -471,15 +492,16 @@
 #'     visit_day = VISITDY
 #'   )
 #'
-#' @caption Unscheduled visits
-#' @info Setting NFRLT to NA for unscheduled visits
+#' @caption Unscheduled and early discontinuation visits
+#' @info Setting NFRLT and the unit variable to NA for unscheduled and study
+#'   drug early discontinuation visits
 #' @code
 #' adpc_unsched <- tribble(
-#'   ~USUBJID, ~VISITDY, ~VISIT,        ~PCTPT,
-#'   "001",    1,        "VISIT 1",     "Pre-dose",
-#'   "001",    1,        "VISIT 1",     "2H Post-dose",
-#'   "001",    NA_real_, "UNSCHEDULED", "Pre-dose",
-#'   "001",    NA_real_, "UNSCHEDULED", "2H Post-dose"
+#'   ~USUBJID, ~VISITDY, ~VISIT,                             ~PCTPT,
+#'   "001",    1,        "VISIT 1",                          "Pre-dose",
+#'   "001",    1,        "VISIT 1",                          "2H Post-dose",
+#'   "001",    999,      "UNSCHEDULED",                      "Pre-dose",
+#'   "001",    998,      "STUDY DRUG EARLY DISCONTINUATION", "Pre-dose"
 #' )
 #'
 #' derive_var_nfrlt(
@@ -488,73 +510,55 @@
 #'   new_var_unit = FRLTU,
 #'   tpt_var = PCTPT,
 #'   visit_day = VISITDY,
-#'   set_values_to_na = VISIT == "UNSCHEDULED"
+#'   special_values = list(
+#'     nfrlt_special(
+#'       condition = VISIT %in% c("UNSCHEDULED", "STUDY DRUG EARLY DISCONTINUATION"),
+#'       value = NA_real_
+#'     )
+#'   ),
+#'   keep_unit_for_special = FALSE
 #' )
 #'
-#' @caption Early discontinuation visits
-#' @info Handling study drug early discontinuation
+#' @caption Setting special values
+#' @info Using `special_values` to set NFRLT to 99998 for unscheduled visits
+#'   and to 99999 for end of study visits. The timepoint is not considered for
+#'   these records.
 #' @code
-#' adpc_disc <- tribble(
-#'   ~USUBJID, ~VISITDY, ~VISIT,                              ~PCTPT,
-#'   "001",    1,        "VISIT 1",                           "Pre-dose",
-#'   "001",    1,        "VISIT 1",                           "2H Post-dose",
-#'   "001",    NA_real_, "STUDY DRUG EARLY DISCONTINUATION",  "Pre-dose"
+#' adpc_special <- tribble(
+#'   ~USUBJID, ~VISITDY, ~VISIT,          ~PCTPT,
+#'   "001",    1,        "CYCLE 1 DAY 1", "Pre-dose",
+#'   "001",    1,        "CYCLE 1 DAY 1", "2H Post-dose",
+#'   "001",    999,      "UNSCHEDULED",   "Post-dose",
+#'   "001",    998,      "END OF STUDY",  "Post-dose"
 #' )
 #'
 #' derive_var_nfrlt(
-#'   adpc_disc,
+#'   adpc_special,
 #'   new_var = NFRLT,
 #'   new_var_unit = FRLTU,
 #'   tpt_var = PCTPT,
 #'   visit_day = VISITDY,
-#'   set_values_to_na = VISIT == "STUDY DRUG EARLY DISCONTINUATION"
+#'   special_values = list(
+#'     nfrlt_special(condition = VISIT == "UNSCHEDULED", value = 99998),
+#'     nfrlt_special(condition = VISIT == "END OF STUDY", value = 99999)
+#'   )
 #' )
 #'
-#' @caption Multiple exclusion criteria
-#' @info Excluding multiple visit types
+#' @caption Special values without unit
+#' @info Setting the unit variable to `NA` for special values
 #' @code
-#' adpc_multi <- tribble(
-#'   ~USUBJID, ~VISITDY, ~VISIT,                              ~PCTPT,
-#'   "001",    1,        "VISIT 1",                           "Pre-dose",
-#'   "001",    NA_real_, "UNSCHEDULED",                       "Pre-dose",
-#'   "001",    NA_real_, "STUDY DRUG EARLY DISCONTINUATION",  "Pre-dose"
-#' )
-#'
 #' derive_var_nfrlt(
-#'   adpc_multi,
+#'   adpc_special,
 #'   new_var = NFRLT,
 #'   new_var_unit = FRLTU,
 #'   tpt_var = PCTPT,
 #'   visit_day = VISITDY,
-#'   set_values_to_na = VISIT %in% c(
-#'     "UNSCHEDULED",
-#'     "STUDY DRUG EARLY DISCONTINUATION"
-#'   )
+#'   special_values = list(
+#'     nfrlt_special(condition = VISIT == "UNSCHEDULED", value = 99998),
+#'     nfrlt_special(condition = VISIT == "END OF STUDY", value = 99999)
+#'   ),
+#'   keep_unit_for_special = FALSE
 #' )
-#'
-#' @caption Setting special values instead of NA
-#' @info Using mutate to set NFRLT to 99999 for unscheduled visits
-#' @code
-#' adpc_unsched_value <- tribble(
-#'   ~USUBJID, ~VISITDY, ~VISIT,        ~PCTPT,
-#'   "001",    1,        "VISIT 1",     "Pre-dose",
-#'   "001",    1,        "VISIT 1",     "2H Post-dose",
-#'   "001",    NA_real_, "UNSCHEDULED", "Pre-dose",
-#'   "001",    NA_real_, "UNSCHEDULED", "2H Post-dose"
-#' )
-#'
-#' adpc_unsched_value %>%
-#'   derive_var_nfrlt(
-#'     new_var = NFRLT,
-#'     new_var_unit = FRLTU,
-#'     tpt_var = PCTPT,
-#'     visit_day = VISITDY,
-#'     set_values_to_na = VISIT == "UNSCHEDULED"
-#'   ) %>%
-#'   mutate(
-#'     NFRLT = if_else(is.na(NFRLT) & VISIT == "UNSCHEDULED", 99999, NFRLT),
-#'     FRLTU = if_else(is.na(FRLTU) & VISIT == "UNSCHEDULED", NA_character_, FRLTU)
-#'   )
 #'
 #' @caption Custom range method
 #' @info Using end of range instead of midpoint
@@ -624,12 +628,14 @@ derive_var_nfrlt <- function(dataset,
                              first_dose_day = 1,
                              treatment_duration = 0,
                              range_method = "midpoint",
-                             set_values_to_na = NULL) {
+                             special_values = NULL,
+                             keep_unit_for_special = TRUE) {
   new_var <- assert_symbol(enexpr(new_var))
   new_var_unit <- assert_symbol(enexpr(new_var_unit), optional = TRUE)
   tpt_var <- assert_symbol(enexpr(tpt_var), optional = TRUE)
   visit_day <- assert_symbol(enexpr(visit_day))
-  set_values_to_na <- assert_filter_cond(enexpr(set_values_to_na), optional = TRUE)
+  assert_list_of(special_values, "nfrlt_special", optional = TRUE)
+  assert_logical_scalar(keep_unit_for_special)
 
   # Store original out_unit before validation (for unit variable)
   original_out_unit <- out_unit
@@ -749,24 +755,22 @@ derive_var_nfrlt <- function(dataset,
       )
   }
 
-  # Set values to NA based on condition
-  if (!is.null(set_values_to_na)) {
+  # Assign special values (the first matching condition is used)
+  if (!is.null(special_values)) {
+    special_value_exprs <- map(special_values, ~ expr(!!.x$condition ~ !!.x$value))
+
     result <- result %>%
       mutate(
-        !!new_var := if_else(
-          !!set_values_to_na,
-          NA_real_,
-          !!new_var
-        )
+        !!new_var := case_when(!!!c(special_value_exprs, exprs(TRUE ~ !!new_var)))
       )
 
-    # Also set unit variable to NA if it exists
     if (!is.null(new_var_unit)) {
+      special_unit <- if (keep_unit_for_special) original_out_unit else NA_character_
       result <- result %>%
         mutate(
           !!new_var_unit := if_else(
-            !!set_values_to_na,
-            NA_character_,
+            when_any(!!!map(special_values, ~ .x$condition)),
+            special_unit,
             !!new_var_unit
           )
         )
@@ -774,4 +778,48 @@ derive_var_nfrlt <- function(dataset,
   }
 
   new_admiral_df(result)
+}
+
+#' Create a `nfrlt_special` Object
+#'
+#' @description
+#' `r lifecycle::badge("experimental")`
+#'
+#' The `nfrlt_special` object is used to define special values as input for
+#' the `special_values` argument of `derive_var_nfrlt()`, e.g., to set the
+#' nominal relative time to `99998` for unscheduled visits.
+#'
+#' @param condition Condition
+#'
+#'   The condition is evaluated at the input dataset of `derive_var_nfrlt()`.
+#'   For all records where it evaluates to `TRUE`, the new variable is set to
+#'   `value`.
+#'
+#' @permitted [condition]
+#'
+#' @param value Special value
+#'
+#'   The value is assigned as provided, i.e., it is not converted to the
+#'   `out_unit` of `derive_var_nfrlt()`.
+#'
+#' @permitted A numeric scalar, e.g., `99998`
+#'
+#' @returns An object of class `nfrlt_special`
+#'
+#' @seealso [derive_var_nfrlt()]
+#'
+#' @family source_specifications
+#' @keywords source_specifications
+#'
+#' @export
+#'
+#' @examples
+#' nfrlt_special(condition = VISIT == "UNSCHEDULED", value = 99998)
+nfrlt_special <- function(condition, value) {
+  out <- list(
+    condition = assert_filter_cond(enexpr(condition)),
+    value = assert_numeric_vector(value, length = 1)
+  )
+  class(out) <- c("nfrlt_special", "source", "list")
+  out
 }
