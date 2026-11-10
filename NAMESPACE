@@ -220,7 +220,8 @@ importFrom(dplyr,
   tibble,
   tribble,
   ungroup,
-  union
+  union,
+  when_any
 )
 importFrom(hms,as_hms)
 importFrom(lifecycle,
