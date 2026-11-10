@@ -59,6 +59,12 @@ visits, instead of the derived nominal relative time. (#3168)
 
 ## Breaking Changes
 
+- The `set_values_to_na` argument of the experimental function `derive_var_nfrlt()`
+was removed without a deprecation cycle because its functionality is covered by the new
+`special_values` argument. Use `special_values = list(nfrlt_special(condition = <condition>,
+value = NA_real_))` instead, together with `keep_unit_for_special = FALSE` to also set
+the unit variable to `NA`. (#3168)
+
 - `impute_dtc_dt()` and `impute_dtc_dtm()` now return `NA_character_` rather than an 
   invalid date/datetime string, in line with the updates made to date/datetime functions
   to introduce the `check_date_type` and `check_datetime_type` arguments (see entries under
