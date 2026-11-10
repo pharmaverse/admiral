@@ -806,12 +806,7 @@ derive_var_nfrlt <- function(dataset,
 
     result <- result %>%
       mutate(
-        !!tmp_special_fl := case_when(!!!special_fl_exprs, .default = FALSE),
-        !!new_var := if_else(
-          !!tmp_special_fl,
-          case_when(!!!special_value_exprs, .default = NA_real_),
-          !!new_var
-        )
+        !!new_var := case_when(!!!c(special_value_exprs, exprs(TRUE ~ !!new_var)))
       )
 
     if (!is.null(new_var_unit)) {
