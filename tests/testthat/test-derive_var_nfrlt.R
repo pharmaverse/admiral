@@ -1520,28 +1520,8 @@ test_that("derive_var_nfrlt Test 55: set_values_to_na takes precedence over spec
   expect_equal(actual$FRLTU, c("HOURS", NA, "HOURS"))
 })
 
-## Test 56: no temporary variables are left in the output ----
-test_that("derive_var_nfrlt Test 56: no temporary variables are left in the output", {
-  input <- tibble::tribble(
-    ~VISITDY, ~VISIT,
-    1,        "DAY 1",
-    999,      "UNSCHEDULED"
-  )
-
-  actual <- derive_var_nfrlt(
-    input,
-    new_var = NFRLT,
-    visit_day = VISITDY,
-    special_values = list(
-      nfrlt_special(condition = VISIT == "UNSCHEDULED", value = 99998)
-    )
-  )
-
-  expect_named(actual, c("VISITDY", "VISIT", "NFRLT"))
-})
-
-## Test 57: error if special_values is not a list of nfrlt_special objects ----
-test_that("derive_var_nfrlt Test 57: error if special_values is invalid", {
+## Test 56: error if special_values is not a list of nfrlt_special objects ----
+test_that("derive_var_nfrlt Test 56: error if special_values is invalid", {
   input <- tibble::tribble(
     ~VISITDY, ~VISIT,
     1,        "DAY 1"
@@ -1560,8 +1540,8 @@ test_that("derive_var_nfrlt Test 57: error if special_values is invalid", {
 
 # nfrlt_special ----
 
-## Test 58: nfrlt_special object is created ----
-test_that("nfrlt_special Test 58: nfrlt_special object is created", {
+## Test 57: nfrlt_special object is created ----
+test_that("nfrlt_special Test 57: nfrlt_special object is created", {
   actual <- nfrlt_special(condition = VISIT == "UNSCHEDULED", value = 99998)
 
   expect_s3_class(actual, "nfrlt_special")
@@ -1569,8 +1549,8 @@ test_that("nfrlt_special Test 58: nfrlt_special object is created", {
   expect_equal(actual$value, 99998)
 })
 
-## Test 59: error if value is not a numeric scalar ----
-test_that("nfrlt_special Test 59: error if value is not a numeric scalar", {
+## Test 58: error if value is not a numeric scalar ----
+test_that("nfrlt_special Test 58: error if value is not a numeric scalar", {
   expect_error(
     nfrlt_special(condition = VISIT == "UNSCHEDULED", value = "99998"),
     class = "assert_numeric_vector"

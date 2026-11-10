@@ -800,8 +800,6 @@ derive_var_nfrlt <- function(dataset,
 
   # Assign special values (the first matching condition is used)
   if (!is.null(special_values)) {
-    tmp_special_fl <- get_new_tmp_var(result, prefix = "tmp_special_fl")
-    special_fl_exprs <- map(special_values, ~ expr(!!.x$condition ~ TRUE))
     special_value_exprs <- map(special_values, ~ expr(!!.x$condition ~ !!.x$value))
 
     result <- result %>%
@@ -814,14 +812,12 @@ derive_var_nfrlt <- function(dataset,
       result <- result %>%
         mutate(
           !!new_var_unit := if_else(
-            !!tmp_special_fl,
+            when_any(!!!map(special_values, ~ .x$condition)),
             special_unit,
             !!new_var_unit
           )
         )
     }
-
-    result <- select(result, -!!tmp_special_fl)
   }
 
   # Set values to NA based on condition

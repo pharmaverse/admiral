@@ -10,7 +10,7 @@
 #'   full_join group_by group_by_at group_split if_else inner_join lag
 #'   left_join mutate n n_distinct na_if pull recode_values reframe rename
 #'   rename_with replace_when row_number select semi_join slice starts_with
-#'   summarise summarise_all tibble tribble ungroup union
+#'   summarise summarise_all tibble tribble ungroup union when_any
 #'
 #' @importFrom hms as_hms
 #'
