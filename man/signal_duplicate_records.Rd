@@ -72,7 +72,10 @@ signal_duplicate_records(adsl, exprs(USUBJID), cnd_type = "message")
 Other internal:
 \code{\link{admiral-package}},
 \code{\link[=extract_duplicate_records]{extract_duplicate_records()}},
-\code{\link[=format.basket_select]{format.basket_select()}}
+\code{\link[=format.basket_select]{format.basket_select()}},
+\code{\link[=infer_class_by_structure]{infer_class_by_structure()}},
+\code{\link[=infer_dataset_class]{infer_dataset_class()}},
+\code{\link[=new_admiral_df]{new_admiral_df()}}
 }
 \concept{internal}
 \keyword{internal}

@@ -27,7 +27,7 @@ test_that("filter_exist Test 1: filter_exist() works as expected", {
     filter_add = AEDECOD == "FATIGUE"
   )
 
-  expect_equal(actual_output, as_admiral_df(expected_output))
+  expect_equal(actual_output, new_admiral_df(expected_output))
   expect_s3_class(actual_output, "admiral_df")
 })
 
@@ -60,6 +60,6 @@ test_that("filter_not_exist Test 2: filter_not_exist() works as expected", {
     filter_add = AEDECOD == "FATIGUE"
   )
 
-  expect_equal(actual_output, as_admiral_df(expected_output))
+  expect_equal(actual_output, new_admiral_df(expected_output))
   expect_s3_class(actual_output, "admiral_df")
 })
