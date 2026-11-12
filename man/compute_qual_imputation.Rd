@@ -19,12 +19,14 @@ with a qualifier, for example, \code{c("<40", ">=40.1", "3")}.
 \item{Default value}{none}
 }}
 
-\item{imputation_type}{Method used to derive numeric results:
+\item{imputation_type}{How to convert the character results:
 \itemize{
 \item \code{"strip"}: Remove qualifiers and use \code{offset} as the additive offset for
 strict inequalities.
 \item \code{"shift"}: Remove qualifiers and use the decimal precision of each original
 character result as the additive offset. See Details.
+\item \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} \code{1} - equivalent to \code{"strip"}.
+\item \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} \code{2} - equivalent to \code{"shift"}.
 }
 
 \describe{
@@ -33,8 +35,6 @@ character result as the additive offset. See Details.
 }}
 
 \item{factor}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Deprecated alias for \code{offset}.
-Use \code{offset} instead. Supplying
-both arguments is an error. This argument retains its position for compatibility.
 
 \describe{
 \item{Default value}{\code{NULL}}
@@ -52,8 +52,8 @@ for results with \code{<}. It is ignored when \code{imputation_type = "shift"}.
 A numeric vector of imputed results.
 }
 \description{
-Converts character results to numeric values and optionally shifts results
-with strict inequality qualifiers.
+Converts character results to numeric values, with an optional shift for
+strict inequality qualifiers.
 }
 \details{
 Qualified results must match \verb{^[<>]=?[0-9]+[.]?[0-9]*$}, for example,
@@ -61,11 +61,11 @@ Qualified results must match \verb{^[<>]=?[0-9]+[.]?[0-9]*$}, for example,
 signed, are also accepted, including \code{"-3"}, \code{"+3"}, and \code{".5"}. Whitespace,
 scientific notation, signed qualified values, and malformed qualifiers are
 not accepted. Invalid strings and missing values return \code{NA_real_} without
-a warning. The order and length of the input are preserved.
+a warning. Results keep the input order and length.
 
-For results with a strict \code{>} qualifier, the offset is added; for results with
-a strict \code{<} qualifier, it is subtracted. Results with \code{>=} or \code{<=}, and results
-without an inequality qualifier, are converted without a shift.
+For a strict \code{>} qualifier, add the offset; for a strict \code{<} qualifier,
+subtract it. Results with \code{>=} or \code{<=}, or without an inequality qualifier,
+are converted without a shift.
 
 With \code{imputation_type = "shift"}, the offset is \eqn{10^{-d}}, where \eqn{d} is
 the number of decimal places in the original character result, including
@@ -73,10 +73,10 @@ trailing zeros. For integer results, the offset is 1. For example, \code{"<40"}
 becomes 39, \code{">40.1"} becomes 40.2, and \code{">40.10"} becomes 40.11.
 
 Numeric methods \code{1} and \code{2} are deprecated aliases for \code{"strip"} and \code{"shift"},
-respectively. They continue to work with a deprecation message.
+respectively. Both still work and produce a deprecation message.
 
-The appropriate imputation rule depends on the analysis specification.
-A shift can cross zero; results are not restricted to nonnegative values.
+Choose an imputation rule that matches the analysis specification.
+A shift can cross zero, so results can be negative.
 }
 \examples{
 values <- c("<40", ">40.1", "<=40", ">=40.1", "3")

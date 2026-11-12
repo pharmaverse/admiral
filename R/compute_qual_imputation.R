@@ -37,24 +37,24 @@ compute_qual_imputation_dec <- function(character_value_decimal) {
 
 #' Impute Numeric Values from Character Results with Qualifiers
 #'
-#' Converts character results to numeric values and optionally shifts results
-#' with strict inequality qualifiers.
+#' Converts character results to numeric values, with an optional shift for
+#' strict inequality qualifiers.
 #'
 #' @param character_value Character vector of numeric results, optionally prefixed
 #' with a qualifier, for example, `c("<40", ">=40.1", "3")`.
 #'
-#' @param imputation_type Method used to derive numeric results:
+#' @param imputation_type How to convert the character results:
 #'
 #' - `"strip"`: Remove qualifiers and use `offset` as the additive offset for
 #'   strict inequalities.
 #' - `"shift"`: Remove qualifiers and use the decimal precision of each original
 #'   character result as the additive offset. See Details.
+#' - `r lifecycle::badge("deprecated")` `1` - equivalent to `"strip"`.
+#' - `r lifecycle::badge("deprecated")` `2` - equivalent to `"shift"`.
 #'
 #' @permitted `"strip"`, `"shift"`
 #'
 #' @param factor `r lifecycle::badge("deprecated")` Deprecated alias for `offset`.
-#' Use `offset` instead. Supplying
-#' both arguments is an error. This argument retains its position for compatibility.
 #'
 #' @param offset Finite, nonnegative numeric scalar used when
 #' `imputation_type = "strip"`. It is added for results with `>` and subtracted
@@ -66,11 +66,11 @@ compute_qual_imputation_dec <- function(character_value_decimal) {
 #' signed, are also accepted, including `"-3"`, `"+3"`, and `".5"`. Whitespace,
 #' scientific notation, signed qualified values, and malformed qualifiers are
 #' not accepted. Invalid strings and missing values return `NA_real_` without
-#' a warning. The order and length of the input are preserved.
+#' a warning. Results keep the input order and length.
 #'
-#' For results with a strict `>` qualifier, the offset is added; for results with
-#' a strict `<` qualifier, it is subtracted. Results with `>=` or `<=`, and results
-#' without an inequality qualifier, are converted without a shift.
+#' For a strict `>` qualifier, add the offset; for a strict `<` qualifier,
+#' subtract it. Results with `>=` or `<=`, or without an inequality qualifier,
+#' are converted without a shift.
 #'
 #' With `imputation_type = "shift"`, the offset is \eqn{10^{-d}}, where \eqn{d} is
 #' the number of decimal places in the original character result, including
@@ -78,10 +78,10 @@ compute_qual_imputation_dec <- function(character_value_decimal) {
 #' becomes 39, `">40.1"` becomes 40.2, and `">40.10"` becomes 40.11.
 #'
 #' Numeric methods `1` and `2` are deprecated aliases for `"strip"` and `"shift"`,
-#' respectively. They continue to work with a deprecation message.
+#' respectively. Both still work and produce a deprecation message.
 #'
-#' The appropriate imputation rule depends on the analysis specification.
-#' A shift can cross zero; results are not restricted to nonnegative values.
+#' Choose an imputation rule that matches the analysis specification.
+#' A shift can cross zero, so results can be negative.
 #'
 #' @return A numeric vector of imputed results.
 #'
@@ -111,7 +111,7 @@ compute_qual_imputation <- function(character_value,
     if (length(imputation_type) != 1L || is.na(imputation_type) ||
       !imputation_type %in% c(1, 2)) {
       cli::cli_abort(
-        "Numeric {.arg imputation_type} must be 1 or 2.",
+        'Argument {.arg imputation_type} must be "strip" or "shift".',
         class = "compute_qual_imputation_method"
       )
     }

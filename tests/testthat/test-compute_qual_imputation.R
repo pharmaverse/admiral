@@ -1,148 +1,149 @@
-## Test 33: inform about deprecated arguments ----
-test_that("compute_qual_imputation Test 33: inform about deprecated arguments", {
-  withr::local_options(lifecycle_verbosity = "warning")
-  expect_snapshot({
-    compute_qual_imputation("<40", imputation_type = 1)
-    compute_qual_imputation("<40", imputation_type = 2)
-    compute_qual_imputation("<40", factor = 0.5)
-  })
+## Test 1: strip, > decimal qualifier ----
+test_that("compute_qual_imputation Test 1: strip, > decimal qualifier", {
+  expect_equal(compute_qual_imputation(c(">40.1", ">40.10", "3"), "strip"), c(40.1, 40.1, 3))
 })
 
-test_that("compute_qual_imputation Test 1:  Method 1 , > Qualifier Test", {
-  expect_equal(compute_qual_imputation(">40.1", imputation_type = "strip"), 40.1)
+## Test 2: strip, >= decimal qualifier ----
+test_that("compute_qual_imputation Test 2: strip, >= decimal qualifier", {
+  expect_equal(compute_qual_imputation(c(">=40.1", ">=40.10", "3"), "strip"), c(40.1, 40.1, 3))
 })
 
-test_that("compute_qual_imputation Test 2: Method 1, >= Qualifier", {
-  expect_equal(compute_qual_imputation(">=40.1", imputation_type = "strip"), 40.1)
+## Test 3: strip, > integer qualifier ----
+test_that("compute_qual_imputation Test 3: strip, > integer qualifier", {
+  expect_equal(compute_qual_imputation(c(">40", ">0", "3"), "strip"), c(40, 0, 3))
 })
 
-test_that("compute_qual_imputation Test 3: Method 1, > Qualifier", {
-  expect_equal(compute_qual_imputation(">40", imputation_type = "strip"), 40)
+## Test 4: strip, >= integer qualifier ----
+test_that("compute_qual_imputation Test 4: strip, >= integer qualifier", {
+  expect_equal(compute_qual_imputation(c(">=40", ">=0", "3"), "strip"), c(40, 0, 3))
 })
 
-test_that("compute_qual_imputation Test 4: Method 1, >= Qualifier", {
-  expect_equal(compute_qual_imputation(">=40", imputation_type = "strip"), 40)
+## Test 5: strip, < decimal qualifier ----
+test_that("compute_qual_imputation Test 5: strip, < decimal qualifier", {
+  expect_equal(compute_qual_imputation(c("<40.1", "<0.01", "3"), "strip"), c(40.1, 0.01, 3))
 })
 
-test_that("compute_qual_imputation Test 5: Method 1, < Qualifier", {
-  expect_equal(compute_qual_imputation("<40.1", imputation_type = "strip"), 40.1)
+## Test 6: strip, <= decimal qualifier ----
+test_that("compute_qual_imputation Test 6: strip, <= decimal qualifier", {
+  expect_equal(compute_qual_imputation(c("<=40.1", "<=0.01", "3"), "strip"), c(40.1, 0.01, 3))
 })
 
-test_that("compute_qual_imputation Test 6: Method 1, <= Qualifier", {
-  expect_equal(compute_qual_imputation("<=40.1", imputation_type = "strip"), 40.1)
+## Test 7: strip, < integer qualifier ----
+test_that("compute_qual_imputation Test 7: strip, < integer qualifier", {
+  expect_equal(compute_qual_imputation(c("<40", "<1", "3"), "strip"), c(40, 1, 3))
 })
 
-test_that("compute_qual_imputation Test 7: Method 1, < Qualifier", {
-  expect_equal(compute_qual_imputation("<40", imputation_type = "strip"), 40)
+## Test 8: strip, <= integer qualifier ----
+test_that("compute_qual_imputation Test 8: strip, <= integer qualifier", {
+  expect_equal(compute_qual_imputation(c("<=40", "<=1", "3"), "strip"), c(40, 1, 3))
 })
 
-test_that("compute_qual_imputation Test 8: Method 1, <= Qualifier", {
-  expect_equal(compute_qual_imputation("<=40", imputation_type = "strip"), 40)
-})
-
-###############
-
-test_that("compute_qual_imputation Test 9: Method 1, > Qualifier, Factor=10", {
-  expect_equal(compute_qual_imputation(">40.1", imputation_type = "strip", offset = 10), 50.1)
-})
-
-test_that("compute_qual_imputation Test 10: Method 1, >= Qualifier, Factor=10", {
-  expect_equal(compute_qual_imputation(">=40.1", imputation_type = "strip", offset = 10), 40.1)
-})
-
-test_that("compute_qual_imputation Test 11: Method 1, > Qualifier, Factor=10", {
-  expect_equal(compute_qual_imputation(">40", imputation_type = "strip", offset = 10), 50)
-})
-
-test_that("compute_qual_imputation Test 12: Method 1, >= Qualifier, Factor=10", {
-  expect_equal(compute_qual_imputation(">=40", imputation_type = "strip", offset = 10), 40)
-})
-
-test_that("compute_qual_imputation Test 13: Method 1, < Qualifier, Factor=10", {
-  expect_equal(compute_qual_imputation("<40.1", imputation_type = "strip", offset = 10), 30.1)
-})
-
-test_that("compute_qual_imputation Test 14: Method 1, <= Qualifier, Factor=10", {
-  expect_equal(compute_qual_imputation("<=40.1", imputation_type = "strip", offset = 10), 40.1)
-})
-
-test_that("compute_qual_imputation Test 15: Method 1, < Qualifier, Factor=10", {
-  expect_equal(compute_qual_imputation("<40", imputation_type = "strip", offset = 10), 30)
-})
-
-test_that("compute_qual_imputation Test 16: Method 1, <= Qualifier, Factor=10", {
-  expect_equal(compute_qual_imputation("<=40", imputation_type = "strip", offset = 10), 40)
-})
-
-###############
-
-test_that("compute_qual_imputation Test 17: Method 2, > Qualifier", {
-  expect_equal(compute_qual_imputation(">40.1", imputation_type = "shift"), 40.2)
-})
-
-test_that("compute_qual_imputation Test 18: Method 2, >= Qualifier", {
-  expect_equal(compute_qual_imputation(">=40.1", imputation_type = "shift"), 40.1)
-})
-
-test_that("compute_qual_imputation Test 19: Method 2, > Qualifier", {
-  expect_equal(compute_qual_imputation(">40", imputation_type = "shift"), 41)
-})
-
-test_that("compute_qual_imputation Test 20: Method 2, >= Qualifier", {
-  expect_equal(compute_qual_imputation(">=40", imputation_type = "shift"), 40)
-})
-
-test_that("compute_qual_imputation Test 21: Method 2, < Qualifier", {
-  expect_equal(compute_qual_imputation("<40.1", imputation_type = "shift"), 40.0)
-})
-
-test_that("compute_qual_imputation Test 22: Method 2, <= Qualifier", {
-  expect_equal(compute_qual_imputation("<=40.1", imputation_type = "shift"), 40.1)
-})
-
-test_that("compute_qual_imputation Test 23: Method 2, < Qualifier", {
-  expect_equal(compute_qual_imputation("<40", imputation_type = "shift"), 39)
-})
-
-test_that("compute_qual_imputation Test 24: Method 2, <= Qualifier", {
-  expect_equal(compute_qual_imputation("<=40", imputation_type = "shift"), 40)
-})
-
-## Test 24a: documented vector examples ----
-test_that("compute_qual_imputation Test 24a: documented vector examples", {
-  values <- c("<40", ">40.1", "<=40", ">=40.1", "3")
-
-  expect_equal(compute_qual_imputation(values), c(40, 40.1, 40, 40.1, 3))
+## Test 9: strip, > decimal qualifier, offset = 10 ----
+test_that("compute_qual_imputation Test 9: strip, > decimal qualifier, offset = 10", {
   expect_equal(
-    compute_qual_imputation(values, offset = 0.5),
-    c(39.5, 40.6, 40, 40.1, 3)
+    compute_qual_imputation(c(">40.1", ">40.10", "3"), "strip", offset = 10),
+    c(50.1, 50.1, 3)
   )
+  expect_equal(compute_qual_imputation(c(">40.1", "<40", "3"), offset = 0.5), c(40.6, 39.5, 3))
+})
+
+## Test 10: strip, >= decimal qualifier, offset = 10 ----
+test_that("compute_qual_imputation Test 10: strip, >= decimal qualifier, offset = 10", {
   expect_equal(
-    compute_qual_imputation(values, imputation_type = "shift"),
-    c(39, 40.2, 40, 40.1, 3)
-  )
-  expect_equal(
-    compute_qual_imputation(values, imputation_type = "shift", offset = 100),
-    c(39, 40.2, 40, 40.1, 3)
-  )
-  expect_equal(
-    compute_qual_imputation(c(">40.1", ">40.10"), imputation_type = "shift"),
-    c(40.2, 40.11)
+    compute_qual_imputation(c(">=40.1", ">=40.10", "3"), "strip", offset = 10),
+    c(40.1, 40.1, 3)
   )
 })
 
-############
-
-test_that("compute_qual_imputation Test 25: Method 2, No Qualifier", {
-  expect_equal(compute_qual_imputation("40", imputation_type = "shift"), 40)
+## Test 11: strip, > integer qualifier, offset = 10 ----
+test_that("compute_qual_imputation Test 11: strip, > integer qualifier, offset = 10", {
+  expect_equal(compute_qual_imputation(c(">40", ">0", "3"), "strip", offset = 10), c(50, 10, 3))
 })
 
-test_that("compute_qual_imputation Test 26: Method 2, No Qualifier, Character Value", {
-  expect_equal(compute_qual_imputation("AB", imputation_type = "strip"), NA_real_)
+## Test 12: strip, >= integer qualifier, offset = 10 ----
+test_that("compute_qual_imputation Test 12: strip, >= integer qualifier, offset = 10", {
+  expect_equal(compute_qual_imputation(c(">=40", ">=0", "3"), "strip", offset = 10), c(40, 0, 3))
 })
 
-test_that("compute_qual_imputation Test 27: Vector of Values", {
-  expect_equal(compute_qual_imputation(c("3", ">30.2")), c(3.0, 30.2))
+## Test 13: strip, < decimal qualifier, offset = 10 ----
+test_that("compute_qual_imputation Test 13: strip, < decimal qualifier, offset = 10", {
+  expect_equal(
+    compute_qual_imputation(c("<40.1", "<0.01", "3"), "strip", offset = 10),
+    c(30.1, -9.99, 3)
+  )
+})
+
+## Test 14: strip, <= decimal qualifier, offset = 10 ----
+test_that("compute_qual_imputation Test 14: strip, <= decimal qualifier, offset = 10", {
+  expect_equal(
+    compute_qual_imputation(c("<=40.1", "<=0.01", "3"), "strip", offset = 10),
+    c(40.1, 0.01, 3)
+  )
+})
+
+## Test 15: strip, < integer qualifier, offset = 10 ----
+test_that("compute_qual_imputation Test 15: strip, < integer qualifier, offset = 10", {
+  expect_equal(compute_qual_imputation(c("<40", "<1", "3"), "strip", offset = 10), c(30, -9, 3))
+})
+
+## Test 16: strip, <= integer qualifier, offset = 10 ----
+test_that("compute_qual_imputation Test 16: strip, <= integer qualifier, offset = 10", {
+  expect_equal(compute_qual_imputation(c("<=40", "<=1", "3"), "strip", offset = 10), c(40, 1, 3))
+})
+
+## Test 17: shift, > decimal qualifier and trailing zeros ----
+test_that("compute_qual_imputation Test 17: shift, > decimal qualifier and trailing zeros", {
+  expect_equal(compute_qual_imputation(c(">40.1", ">40.10", ">1."), "shift"), c(40.2, 40.11, 2))
+})
+
+## Test 18: shift, >= decimal qualifier ----
+test_that("compute_qual_imputation Test 18: shift, >= decimal qualifier", {
+  expect_equal(compute_qual_imputation(c(">=40.1", ">=40.10", "3"), "shift"), c(40.1, 40.1, 3))
+})
+
+## Test 19: shift, > integer qualifier ----
+test_that("compute_qual_imputation Test 19: shift, > integer qualifier", {
+  expect_equal(compute_qual_imputation(c(">40", ">0", "3"), "shift"), c(41, 1, 3))
+})
+
+## Test 20: shift, >= integer qualifier ----
+test_that("compute_qual_imputation Test 20: shift, >= integer qualifier", {
+  expect_equal(compute_qual_imputation(c(">=40", ">=0", "3"), "shift"), c(40, 0, 3))
+})
+
+## Test 21: shift, < decimal qualifier ----
+test_that("compute_qual_imputation Test 21: shift, < decimal qualifier", {
+  expect_equal(compute_qual_imputation(c("<40.1", "<0.01", "3"), "shift"), c(40, 0, 3))
+})
+
+## Test 22: shift, <= decimal qualifier ----
+test_that("compute_qual_imputation Test 22: shift, <= decimal qualifier", {
+  expect_equal(compute_qual_imputation(c("<=40.1", "<=0.01", "3"), "shift"), c(40.1, 0.01, 3))
+})
+
+## Test 23: shift, < integer qualifier ----
+test_that("compute_qual_imputation Test 23: shift, < integer qualifier", {
+  expect_equal(compute_qual_imputation(c("<40", "<1", "3"), "shift"), c(39, 0, 3))
+})
+
+## Test 24: shift, <= integer qualifier ----
+test_that("compute_qual_imputation Test 24: shift, <= integer qualifier", {
+  expect_equal(compute_qual_imputation(c("<=40", "<=1", "3"), "shift"), c(40, 1, 3))
+})
+
+## Test 25: shift, no qualifier ----
+test_that("compute_qual_imputation Test 25: shift, no qualifier", {
+  expect_equal(compute_qual_imputation(c("40", "-3", ".5"), "shift"), c(40, -3, 0.5))
+})
+
+## Test 26: strip, invalid character value ----
+test_that("compute_qual_imputation Test 26: strip, invalid character value", {
+  expect_equal(compute_qual_imputation(c("AB", NA_character_), "strip"), c(NA_real_, NA_real_))
+})
+
+## Test 27: default method preserves vector order ----
+test_that("compute_qual_imputation Test 27: default method preserves vector order", {
+  expect_equal(compute_qual_imputation(c("3", ">30.2", "<=40")), c(3, 30.2, 40))
 })
 
 ## Test 28: reject malformed qualifiers silently ----
@@ -162,18 +163,8 @@ test_that("compute_qual_imputation Test 28: reject malformed qualifiers silently
   )
 })
 
-## Test 29: preserve valid results and decimal precision ----
-test_that("compute_qual_imputation Test 29: preserve valid results and decimal precision", {
-  values <- c("<40", ">40.1", "<=40", ">=40.1", "3", ">40.10", "<0.01", ">0", ">1.")
-  expect_equal(compute_qual_imputation(values), c(40, 40.1, 40, 40.1, 3, 40.1, 0.01, 0, 1))
-  expect_equal(
-    compute_qual_imputation(values, "strip", offset = 0.5),
-    c(39.5, 40.6, 40, 40.1, 3, 40.6, -0.49, 0.5, 1.5)
-  )
-  expect_equal(
-    compute_qual_imputation(values, "shift"),
-    c(39, 40.2, 40, 40.1, 3, 40.11, 0, 1, 2)
-  )
+## Test 29: preserve unqualified, empty and missing results ----
+test_that("compute_qual_imputation Test 29: preserve unqualified, empty and missing results", {
   expect_equal(compute_qual_imputation(c("-3", "+3", ".5", "-.5", "3.")), c(-3, 3, 0.5, -0.5, 3))
   expect_identical(compute_qual_imputation(character()), numeric())
   expect_identical(compute_qual_imputation(character(), "shift"), numeric())
@@ -194,7 +185,11 @@ test_that("compute_qual_imputation Test 30: validate argument types and method",
     expect_error(compute_qual_imputation("<40", method), class = "assert_character_scalar")
   }
   for (method in list(0, 3, 1.5, NA_real_, numeric(), c(1, 2), Inf)) {
-    expect_error(compute_qual_imputation("<40", method), class = "compute_qual_imputation_method")
+    expect_error(
+      compute_qual_imputation("<40", method),
+      regexp = '"strip" or "shift"',
+      class = "compute_qual_imputation_method"
+    )
   }
   expect_snapshot(
     compute_qual_imputation("<40", imputation_type = 0),
@@ -225,12 +220,16 @@ test_that("compute_qual_imputation Test 31: validate offsets", {
   expect_equal(compute_qual_imputation("<40", "shift", offset = 100), 39)
 })
 
-## Test 32: preserve deprecated calls ----
-test_that("compute_qual_imputation Test 32: preserve deprecated calls", {
-  withr::local_options(lifecycle_verbosity = "quiet")
+## Test 32: preserve deprecated calls and messages ----
+test_that("compute_qual_imputation Test 32: preserve deprecated calls and messages", {
+  withr::local_options(lifecycle_verbosity = "warning")
   values <- c("<40", ">40.1", "<=40", ">=40.1", "3")
-  expect_equal(compute_qual_imputation(values, 1, 0.5), c(39.5, 40.6, 40, 40.1, 3))
-  expect_equal(compute_qual_imputation(values, 2, 100), c(39, 40.2, 40, 40.1, 3))
-  expect_equal(compute_qual_imputation(values, factor = 0.5), c(39.5, 40.6, 40, 40.1, 3))
-  expect_equal(compute_qual_imputation(values, 2L), c(39, 40.2, 40, 40.1, 3))
+  expect_snapshot({
+    expect_equal(compute_qual_imputation(values, imputation_type = 1), c(40, 40.1, 40, 40.1, 3))
+    expect_equal(compute_qual_imputation(values, imputation_type = 2), c(39, 40.2, 40, 40.1, 3))
+    expect_equal(compute_qual_imputation(values, 1, 0.5), c(39.5, 40.6, 40, 40.1, 3))
+    expect_equal(compute_qual_imputation(values, 2, 100), c(39, 40.2, 40, 40.1, 3))
+    expect_equal(compute_qual_imputation(values, factor = 0.5), c(39.5, 40.6, 40, 40.1, 3))
+    expect_equal(compute_qual_imputation(values, 2L), c(39, 40.2, 40, 40.1, 3))
+  })
 })

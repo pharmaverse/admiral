@@ -16,12 +16,6 @@ been stored, `get_dataset_class()` infers it from the dataset. (#3198)
 
 ## Updates of Existing Functions
 
-- Updated `compute_qual_imputation()` with named methods `"strip"` and `"shift"`,
-  an additive `offset` argument, argument validation, and clearer documentation.
-  Malformed qualified results now return missing values without warnings. Numeric
-  methods `1` and `2`, and the `factor` argument, remain supported with deprecation
-  messages. (#2922)
-
 - Various enhancements were made to the `derive_vars_dt()`, `derive_vars_dtm()`, 
 `convert_dtc_to_dt()`, `convert_dtc_to_dtm()`, `impute_dtc_dt()` and `impute_dtc_dtm()` 
 functions: 
@@ -74,6 +68,13 @@ updated to state that `{admiral}` creates date-times in UTC. (#2763)
 - The following functions are entering the next phase of the [deprecation process](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html#deprecation):
 
   **Phase 1 (message)**
+
+  - `compute_qual_imputation(imputation_type = 1)` is deprecated in favor of
+    `compute_qual_imputation(imputation_type = "strip")`. (#2922)
+  - `compute_qual_imputation(imputation_type = 2)` is deprecated in favor of
+    `compute_qual_imputation(imputation_type = "shift")`. (#2922)
+  - `compute_qual_imputation(factor = )` is deprecated in favor of
+    `compute_qual_imputation(offset = )`. (#2922)
 
   - `derive_vars_merged_lookup(print_not_mapped = )` is deprecated in favor of the 
   `check_not_mapped_type` argument.
