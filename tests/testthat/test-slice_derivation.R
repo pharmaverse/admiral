@@ -227,7 +227,7 @@ test_that("slice_derivation Test 6: slice on 0-row dataset", {
   )
 
   expect_identical(
-    as_admiral_df(expected),
+    new_admiral_df(expected),
     actual
   )
 })

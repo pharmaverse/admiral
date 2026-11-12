@@ -22,6 +22,9 @@ Useful links:
 Other internal:
 \code{\link[=extract_duplicate_records]{extract_duplicate_records()}},
 \code{\link[=format.basket_select]{format.basket_select()}},
+\code{\link[=infer_class_by_structure]{infer_class_by_structure()}},
+\code{\link[=infer_dataset_class]{infer_dataset_class()}},
+\code{\link[=new_admiral_df]{new_admiral_df()}},
 \code{\link[=signal_duplicate_records]{signal_duplicate_records()}}
 }
 \author{

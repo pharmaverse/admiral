@@ -119,5 +119,5 @@ consolidate_metadata <- function(datasets,
       check_type = check_type
     ) %>%
     remove_tmp_vars() %>%
-    as_admiral_df()
+    new_admiral_df()
 }

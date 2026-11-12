@@ -36,5 +36,5 @@ derive_var_chg <- function(dataset) {
 
   dataset %>%
     mutate(CHG = AVAL - BASE) %>%
-    as_admiral_df()
+    new_admiral_df()
 }

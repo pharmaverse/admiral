@@ -32,7 +32,7 @@ test_that("Test 1: Test adding absolute records for each by group", {
 
   expect_equal(
     actual_output,
-    as_admiral_df(expected_output)
+    new_admiral_df(expected_output)
   )
   expect_s3_class(actual_output, "admiral_df")
 })
@@ -68,7 +68,7 @@ test_that("Test 2: Test when only one of WBC/differential is present", {
       diff_code = "LYMLE",
       diff_type = "fraction"
     ),
-    as_admiral_df(expected_output)
+    new_admiral_df(expected_output)
   )
 })
 
@@ -105,7 +105,7 @@ test_that("Test 3: Test when absolute record already present in source dataset 1
         diff_code = "LYMLE",
         diff_type = "fraction"
       ),
-      as_admiral_df(expected_output)
+      new_admiral_df(expected_output)
     ),
     "No source records meet condition for calculation, therefore no new records created"
   )
@@ -145,7 +145,7 @@ test_that("Test 4: Test when absolute record already present in source dataset 2
       diff_code = "LYMLE",
       diff_type = "fraction"
     ),
-    as_admiral_df(expected_output)
+    new_admiral_df(expected_output)
   )
 })
 
@@ -184,6 +184,6 @@ test_that("Test 5: Test percent differential type", {
       diff_code = "LYMLE",
       diff_type = "percent"
     ),
-    as_admiral_df(expected_output)
+    new_admiral_df(expected_output)
   )
 })
