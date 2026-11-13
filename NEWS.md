@@ -70,11 +70,13 @@ updated to state that `{admiral}` creates date-times in UTC. (#2763)
   **Phase 1 (message)**
 
   - `compute_qual_imputation(imputation_type = 1)` is deprecated in favor of
-    `compute_qual_imputation(imputation_type = "strip")`. (#2922)
+    `compute_qual_imputation(imputation_type = "strip")`.
+
   - `compute_qual_imputation(imputation_type = 2)` is deprecated in favor of
-    `compute_qual_imputation(imputation_type = "shift")`. (#2922)
+    `compute_qual_imputation(imputation_type = "shift")`.
+
   - `compute_qual_imputation(factor = )` is deprecated in favor of
-    `compute_qual_imputation(offset = )`. (#2922)
+    the `offset` argument.
 
   - `derive_vars_merged_lookup(print_not_mapped = )` is deprecated in favor of the 
   `check_not_mapped_type` argument.
