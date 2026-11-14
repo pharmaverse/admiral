@@ -141,5 +141,5 @@ filter_extreme <- function(dataset,
   data %>%
     ungroup() %>%
     remove_tmp_vars() %>%
-    as_admiral_df()
+    new_admiral_df()
 }

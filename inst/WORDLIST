@@ -36,10 +36,14 @@ AVISITN
 Abercrombie
 Akinyi
 Alanine
+Alcántara
 Alkalosis
 Analyte
+Anaphylactic
 Andrii
+Angioedema
 Ania
+Anticholinergic
 Arianna
 Asha
 Aspartate
@@ -98,6 +102,7 @@ Dinakar
 DuBois
 Duniec
 Durations
+Dyspnoea
 EMA
 EOI
 EOSSTT
@@ -107,6 +112,7 @@ Edoardo
 Ehmann
 Enki
 Eosinophilia
+Espinosa
 Estimand
 Evaluable
 Evt
@@ -152,6 +158,7 @@ Hypokalemia
 Hypomagnesemia
 Hyponatremia
 Hypophosphatemia
+Hypotension
 ICH
 IG
 INR
@@ -167,6 +174,7 @@ Kangjie
 Khatri
 Kirill
 Koeger
+Koji
 Konstantina
 Koukourikou
 Kulkarni
@@ -179,6 +187,7 @@ LLOQ
 LOCF
 Leena
 Leukocytosis
+Liam
 Lipase
 Liu
 MDRD
@@ -192,6 +201,7 @@ MedDRA
 Meds
 Metatools
 Methemoglobin
+Miyazawa
 Modularity
 Morrish
 Mosteller
@@ -330,6 +340,7 @@ aminotransferase
 analyte
 analytes
 analytics
+anaphylactic
 anticoagulation
 aspartate
 atalanta
@@ -370,6 +381,7 @@ framingham
 funder
 glomerular
 groupwise
+hypotension
 intercurrent
 json
 kapa
@@ -383,6 +395,7 @@ mmHg
 mmol
 modularized
 msec
+nonmissing
 occds
 onwards
 parttime
@@ -395,6 +408,7 @@ pre
 predose
 prev
 prm
+pruritus
 quosures
 recoded
 renv
@@ -404,6 +418,7 @@ responder
 responders
 rlang
 roche
+roclet
 roxygen
 scalable
 signif

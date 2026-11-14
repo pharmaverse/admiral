@@ -6,6 +6,6 @@ test_that("TRTDURD is added", {
   expected_output <- mutate(input, TRTDURD = 55)
   actual_output <- derive_var_trtdurd(input)
 
-  expect_equal(actual_output, as_admiral_df(expected_output))
+  expect_equal(actual_output, new_admiral_df(expected_output))
   expect_s3_class(actual_output, "admiral_df")
 })

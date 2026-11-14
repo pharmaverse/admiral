@@ -538,7 +538,7 @@ derive_vars_merged <- function(dataset,
 
   dataset %>%
     remove_tmp_vars() %>%
-    as_admiral_df()
+    new_admiral_df()
 }
 
 
@@ -714,7 +714,7 @@ derive_var_merged_exist_flag <- function(dataset,
     mode = "last"
   ) %>%
     mutate(!!new_var := if_else(!!new_var == 1, true_value, false_value, missing_value)) %>%
-    as_admiral_df()
+    new_admiral_df()
 }
 
 #' Merge Lookup Table with Source Dataset
@@ -898,7 +898,7 @@ derive_vars_merged_lookup <- function(dataset,
 
   res %>%
     remove_tmp_vars() %>%
-    as_admiral_df()
+    new_admiral_df()
 }
 
 #' Get list of records not mapped from the lookup table.
@@ -1239,7 +1239,7 @@ derive_vars_merged_summary <- function(dataset,
       )
     }
   ) %>%
-    as_admiral_df()
+    new_admiral_df()
 }
 
 #' Merge Summary Variables
@@ -1360,5 +1360,5 @@ derive_var_merged_summary <- function(dataset,
     filter_add = !!enexpr(filter_add),
     missing_values = missing_values
   ) %>%
-    as_admiral_df()
+    new_admiral_df()
 }
