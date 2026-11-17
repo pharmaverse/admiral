@@ -454,7 +454,7 @@ test_that("create_single_dose_dataset Test 13: Error if DOSE_WINDOW is unsupport
       input,
       lookup_table = tribble(
         ~Value, ~DOSE_COUNT, ~DOSE_WINDOW, ~CONVERSION_FACTOR,
-        "QD",   1,           NA_character_, 1
+        "QD", 1, NA_character_, 1
       ),
       lookup_column = Value
     ),
