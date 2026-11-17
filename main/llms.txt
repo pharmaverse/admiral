@@ -630,7 +630,7 @@ to produce additional datasets
 - [`compute_qtc()`](https:/pharmaverse.github.io/admiral/main/reference/compute_qtc.md)
   : Compute Corrected QT
 - [`compute_qual_imputation()`](https:/pharmaverse.github.io/admiral/main/reference/compute_qual_imputation.md)
-  : Function to Impute Values When Qualifier Exists in Character Result
+  : Impute Numeric Values from Character Results with Qualifiers
 - [`compute_qual_imputation_dec()`](https:/pharmaverse.github.io/admiral/main/reference/compute_qual_imputation_dec.md)
   : Compute Factor for Value Imputations When Character Value Contains
   \< or \>

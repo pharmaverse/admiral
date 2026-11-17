@@ -95,6 +95,14 @@
 
 ### Breaking Changes
 
+- [`compute_qual_imputation()`](https:/pharmaverse.github.io/admiral/main/reference/compute_qual_imputation.md)
+  now requires qualified results to match `^[<>]=?[0-9]+[.]?[0-9]*$`.
+  Malformed strings previously converted to numbers, such as `"0>1"` and
+  `"-<0.9>"`, now return `NA_real_`. Whitespace and signed qualified
+  results are not accepted. Unqualified signed decimal numbers remain
+  supported. Invalid method and offset arguments now raise errors.
+  ([\#2922](https://github.com/pharmaverse/admiral/issues/2922))
+
 - [`impute_dtc_dt()`](https:/pharmaverse.github.io/admiral/main/reference/impute_dtc_dt.md)
   and
   [`impute_dtc_dtm()`](https:/pharmaverse.github.io/admiral/main/reference/impute_dtc_dtm.md)
@@ -109,6 +117,15 @@
   process](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html#deprecation):
 
   **Phase 1 (message)**
+
+  - `compute_qual_imputation(imputation_type = 1)` is deprecated in
+    favor of `compute_qual_imputation(imputation_type = "strip")`.
+
+  - `compute_qual_imputation(imputation_type = 2)` is deprecated in
+    favor of `compute_qual_imputation(imputation_type = "shift")`.
+
+  - `compute_qual_imputation(factor = )` is deprecated in favor of the
+    `offset` argument.
 
   - `derive_vars_merged_lookup(print_not_mapped = )` is deprecated in
     favor of the `check_not_mapped_type` argument.
