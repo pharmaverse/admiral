@@ -429,3 +429,55 @@ test_that("create_single_dose_dataset Test 12: Error if lookup_column contains d
     )
   )
 })
+
+## Test 13: Error if DOSE_WINDOW contains unsupported values ----
+test_that("create_single_dose_dataset Test 13: Error if DOSE_WINDOW is unsupported or missing", {
+  input <- tribble(
+    ~STUDYID,  ~USUBJID, ~EXDOSFRQ, ~ASTDT,            ~AENDT,
+    "STUDY01", "P01",    "QD",      ymd("2021-01-01"), ymd("2021-01-03")
+  )
+
+  expect_snapshot(
+    create_single_dose_dataset(
+      input,
+      lookup_table = tribble(
+        ~Value, ~DOSE_COUNT, ~DOSE_WINDOW, ~CONVERSION_FACTOR,
+        "QD",   1,           "FORTNIGHT",  1
+      ),
+      lookup_column = Value
+    ),
+    error = TRUE
+  )
+
+  expect_snapshot(
+    create_single_dose_dataset(
+      input,
+      lookup_table = tribble(
+        ~Value, ~DOSE_COUNT, ~DOSE_WINDOW, ~CONVERSION_FACTOR,
+        "QD",   1,           NA_character_, 1
+      ),
+      lookup_column = Value
+    ),
+    error = TRUE
+  )
+})
+
+## Test 14: Unused lookup rows with unsupported DOSE_WINDOW do not cause an error ----
+test_that("create_single_dose_dataset Test 14: Unused unsupported DOSE_WINDOW is ignored", {
+  input <- tribble(
+    ~STUDYID,  ~USUBJID, ~EXDOSFRQ, ~ASTDT,            ~AENDT,
+    "STUDY01", "P01",    "QD",      ymd("2021-01-01"), ymd("2021-01-03")
+  )
+
+  actual_output <- create_single_dose_dataset(
+    input,
+    lookup_table = tribble(
+      ~Value, ~DOSE_COUNT, ~DOSE_WINDOW, ~CONVERSION_FACTOR,
+      "QD",   1,           "DAY",        1,
+      "XX",   1,           "FORTNIGHT",  1
+    ),
+    lookup_column = Value
+  )
+
+  expect_equal(nrow(actual_output), 3L)
+})
