@@ -138,4 +138,4 @@ Dinakar Kulkarni, Pavan Kumar, Pooja Kumari, Shan Lee, Wenyi Liu, Sadchla Mascar
 Kirill Muller, Marco Musca, Thomas Neitmann, Yohann Omnes, Barbara O'Reilly, Dimple Patel, Celine Piraux, Hamza Rahal, Nick Ramirez, Tom Ratford, 
 Sukalpo Saha, Tamara Senior, Sophie Shapcott, Vladyslav Shuliar, Eric Simms, Daniel Sjoberg, Ondrej Slama, Andrew Smith, Daniil Stefonishin,
 Vignesh Thanikachalam, Michael Thorpe, Steven Ting, Ojesh Upadhyay, Franciszek Walkowiak, Enki Wang, Phillip Webster, 
-Annie Yang, Andrii Yurovskyi, Junze Zhang, Kangjie Zhang, Zelos Zhu
+Annie Yang, Andrii Yurovskyi, Junze Zhang, Kangjie Zhang, Zelos Zhu, Gerardo Rodriguez
