@@ -194,27 +194,27 @@ The following principles are key when designing a new function:
 Function names should start with a verb and use snake case, e.g.,
 [`derive_var_base()`](https:/pharmaverse.github.io/admiral/main/reference/derive_var_base.md).
 
-| Function name prefix                                | Description                                                                                         |
-|-----------------------------------------------------|-----------------------------------------------------------------------------------------------------|
-| `assert_` / `warn_` / `is_`                         | Functions that check other functions’ inputs                                                        |
-| `derive_`                                           | Functions that take a dataset as input and return a new dataset with additional rows and/or columns |
-| `derive_var_` (e.g. `derive_var_trtdurd`)           | Functions which add a single variable                                                               |
-| `derive_vars_` (e.g. `derive_vars_dt`)              | Functions which add multiple variables                                                              |
-| `derive_param_` (e.g. `derive_param_os`)            | Functions which add a single parameter                                                              |
-| `derive_*_records` (e.g., `derive_summary_records`) | Functions that add records to the input dataset                                                     |
-| `compute_` / `convert_` / `impute_` / `transform_`  | Functions that take vectors as input and return a vector                                            |
-| `create_` / `consolidate_`                          | Functions that create datasets without keeping the original observations                            |
-| `get_`                                              | Usually utility functions that return very specific objects that get passed through other functions |
-| `filter_`                                           | Functions that filter observations based on conditions associated with common clinical trial syntax |
+| Function name prefix | Description |
+|----|----|
+| `assert_` / `warn_` / `is_` | Functions that check other functions’ inputs |
+| `derive_` | Functions that take a dataset as input and return a new dataset with additional rows and/or columns |
+| `derive_var_` (e.g. `derive_var_trtdurd`) | Functions which add a single variable |
+| `derive_vars_` (e.g. `derive_vars_dt`) | Functions which add multiple variables |
+| `derive_param_` (e.g. `derive_param_os`) | Functions which add a single parameter |
+| `derive_*_records` (e.g., `derive_summary_records`) | Functions that add records to the input dataset |
+| `compute_` / `convert_` / `impute_` / `transform_` | Functions that take vectors as input and return a vector |
+| `create_` / `consolidate_` | Functions that create datasets without keeping the original observations |
+| `get_` | Usually utility functions that return very specific objects that get passed through other functions |
+| `filter_` | Functions that filter observations based on conditions associated with common clinical trial syntax |
 
-| Function Name Suffix                        | Description                                                                                          |
-|---------------------------------------------|------------------------------------------------------------------------------------------------------|
-| `_derivation` (suffix)                      | High order functions that call a user specified derivation                                           |
-| `_date` / `_time` / `_dt` / `_dtc` / `_dtm` | Functions associated with dates, times, datetimes, and their character equivalents.                  |
-| `_source`                                   | Functions that create source datasets that usually will be passed through other `derive_` functions. |
+| Function Name Suffix | Description |
+|----|----|
+| `_derivation` (suffix) | High order functions that call a user specified derivation |
+| `_date` / `_time` / `_dt` / `_dtc` / `_dtm` | Functions associated with dates, times, datetimes, and their character equivalents. |
+| `_source` | Functions that create source datasets that usually will be passed through other `derive_` functions. |
 
-| Other Common Function Name Terms      | Description                                                                                                                       |
-|---------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------|
+| Other Common Function Name Terms | Description |
+|----|----|
 | `_merged_` / `_joined_` / `_extreme_` | Functions that follow the [generic function user-guide](https://pharmaverse.github.io/admiral/cran-release/articles/generic.html) |
 
 Please note that the appropriate *var*/*vars* prefix should be used for
@@ -304,27 +304,27 @@ expressions, etc.) must be a plural version of the word(s), e.g.,
 
 ## List of Common Arguments
 
-| Argument Name      | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
-|--------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `dataset`          | The input dataset. Expects a data.frame or a tibble.                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
-| `dataset_ref`      | The reference dataset, e.g. ADSL. Typically includes just one observation per subject.                                                                                                                                                                                                                                                                                                                                                                                                                           |
-| `dataset_add`      | An additional dataset. Used in some `derive_xx` and `filter_xx` functions to access variables from an additional dataset.                                                                                                                                                                                                                                                                                                                                                                                        |
-| `by_vars`          | Variables to group by.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
-| `order`            | List of expressions for sorting a dataset, e.g., `exprs(PARAMCD, AVISITN, desc(AVAL))`.                                                                                                                                                                                                                                                                                                                                                                                                                          |
-| `new_var`          | Name of a single variable to be added to the dataset.                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
-| `new_vars`         | List of variables to be added to the dataset.                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
-| `new_var_unit`     | Name of the unit variable to be added. It should be the unit of the variable specified for the `new_var` argument.                                                                                                                                                                                                                                                                                                                                                                                               |
-| `filter`           | Expression to filter a dataset, e.g., `PARAMCD == "TEMP"`.                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
-| `start_date`       | The start date of an event/interval. Expects a date object.                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
-| `end_date`         | The end date of an event/interval. Expects a date object.                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
-| `start_dtc`        | (Partial) start date/datetime in ISO 8601 format.                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
-| `dtc`              | (Partial) date/datetime in ISO 8601 format.                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
-| `date`             | Date of an event / interval. Expects a date object.                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
-| `subject_keys`     | Variables to uniquely identify a subject, defaults to `exprs(STUDYID, USUBJID)`. In function formals, use `subject_keys = get_admiral_option("subject_keys")`                                                                                                                                                                                                                                                                                                                                                    |
-| `set_values_to`    | List of variable name-value pairs. Use `process_set_values_to()` for processing the value and providing user friendly error messages.                                                                                                                                                                                                                                                                                                                                                                            |
+| Argument Name | Description |
+|----|----|
+| `dataset` | The input dataset. Expects a data.frame or a tibble. |
+| `dataset_ref` | The reference dataset, e.g. ADSL. Typically includes just one observation per subject. |
+| `dataset_add` | An additional dataset. Used in some `derive_xx` and `filter_xx` functions to access variables from an additional dataset. |
+| `by_vars` | Variables to group by. |
+| `order` | List of expressions for sorting a dataset, e.g., `exprs(PARAMCD, AVISITN, desc(AVAL))`. |
+| `new_var` | Name of a single variable to be added to the dataset. |
+| `new_vars` | List of variables to be added to the dataset. |
+| `new_var_unit` | Name of the unit variable to be added. It should be the unit of the variable specified for the `new_var` argument. |
+| `filter` | Expression to filter a dataset, e.g., `PARAMCD == "TEMP"`. |
+| `start_date` | The start date of an event/interval. Expects a date object. |
+| `end_date` | The end date of an event/interval. Expects a date object. |
+| `start_dtc` | (Partial) start date/datetime in ISO 8601 format. |
+| `dtc` | (Partial) date/datetime in ISO 8601 format. |
+| `date` | Date of an event / interval. Expects a date object. |
+| `subject_keys` | Variables to uniquely identify a subject, defaults to `exprs(STUDYID, USUBJID)`. In function formals, use `subject_keys = get_admiral_option("subject_keys")` |
+| `set_values_to` | List of variable name-value pairs. Use `process_set_values_to()` for processing the value and providing user friendly error messages. |
 | `keep_source_vars` | Specifies which variables from the selected observations should be kept. The default of the argument should be `exprs(everything())`. The primary difference between `set_values_to` and `keep_source_vars` is that `keep_source_vars` only selects and retains the variables from a source dataset, so e.g. `keep_source_vars = exprs(DOMAIN)` would join + keep the `DOMAIN` variable, whereas `set_values_to` can make renaming and inline function changes such as `set_values_to = exprs(LALVDOM = DOMAIN)` |
-| `missing_value`    | A singular value to be entered if the data is missing.                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
-| `missing_values`   | A named list of expressions where the names are variables in the dataset and the values are a value to be entered if the data is missing, e.g., `exprs(BASEC = "MISSING", BASE = -1)`.                                                                                                                                                                                                                                                                                                                           |
+| `missing_value` | A singular value to be entered if the data is missing. |
+| `missing_values` | A named list of expressions where the names are variables in the dataset and the values are a value to be entered if the data is missing, e.g., `exprs(BASEC = "MISSING", BASE = -1)`. |
 
 ## Source Code Formatting
 
@@ -594,39 +594,39 @@ Below are the list of available keyword/family tags to be used in
 `admiral` functions. If you think an additional keyword/family tag
 should be added, then please add an issue in GitHub for discussion.
 
-| Keyword/Family          | Description                                                                                                                                         |
-|-------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------|
-| `com_date_time`         | Date/Time Computation Functions that returns a vector                                                                                               |
-| `com_bds_findings`      | BDS-Findings Functions that returns a vector                                                                                                        |
-| `create_aux`            | Functions for Creating Auxiliary Datasets                                                                                                           |
-| `datasets`              | Example datasets used within [admiral](https://pharmaverse.github.io/admiral/)                                                                      |
-| `der_gen`               | General Derivation Functions that can be used for any ADaM.                                                                                         |
-| `der_date_time`         | Date/Time Derivation Function                                                                                                                       |
-| `der_bds_gen`           | Basic Data Structure (BDS) Functions that can be used across different BDS ADaM (adex, advs, adlb, etc)                                             |
-| `der_bds_findings`      | Basic Data Structure (BDS) Functions specific to the BDS-Findings ADaMs                                                                             |
-| `der_prm_bds_findings`  | BDS-Findings Functions for adding Parameters                                                                                                        |
-| `der_adsl`              | Functions that can only be used for creating ADSL.                                                                                                  |
-| `der_tte`               | Function used only for creating a Time to Event (TTE) Dataset                                                                                       |
-| `der_occds`             | OCCDS specific derivation of helper Functions                                                                                                       |
-| `der_prm_tte`           | TTE Functions for adding Parameters to TTE Dataset                                                                                                  |
-| `deprecated`            | Function which will be removed from [admiral](https://pharmaverse.github.io/admiral/) after next release. See [Deprecation Guidance](#deprecation). |
-| `metadata`              | Auxiliary datasets providing definitions as input for derivations, e.g. grading criteria or dose frequencies                                        |
-| `utils_ds_chk`          | Utilities for Dataset Checking                                                                                                                      |
-| `utils_fil`             | Utilities for Filtering Observations                                                                                                                |
-| `utils_fmt`             | Utilities for Formatting Observations                                                                                                               |
-| `utils_print`           | Utilities for Printing Objects in the Console                                                                                                       |
-| `utils_help`            | Utilities used within Derivation functions                                                                                                          |
-| `utils_examples`        | Utilities used for examples and template scripts                                                                                                    |
-| `source_specifications` | Source Objects                                                                                                                                      |
-| `other_advanced`        | Other Advanced Functions                                                                                                                            |
-| `high_order_function`   | Higher Order Functions                                                                                                                              |
-| `internal`              | Internal functions only available to [admiral](https://pharmaverse.github.io/admiral/) developers                                                   |
-|                         |                                                                                                                                                     |
-| `assertion`\*           | Asserts a certain type and gives warning, error to user                                                                                             |
-| `warning`               | Provides custom warnings to user                                                                                                                    |
-| `what`                  | A function that …                                                                                                                                   |
-| `is`                    | A function that …                                                                                                                                   |
-| `get`                   | A function that …                                                                                                                                   |
+| Keyword/Family | Description |
+|----|----|
+| `com_date_time` | Date/Time Computation Functions that returns a vector |
+| `com_bds_findings` | BDS-Findings Functions that returns a vector |
+| `create_aux` | Functions for Creating Auxiliary Datasets |
+| `datasets` | Example datasets used within [admiral](https://pharmaverse.github.io/admiral/) |
+| `der_gen` | General Derivation Functions that can be used for any ADaM. |
+| `der_date_time` | Date/Time Derivation Function |
+| `der_bds_gen` | Basic Data Structure (BDS) Functions that can be used across different BDS ADaM (adex, advs, adlb, etc) |
+| `der_bds_findings` | Basic Data Structure (BDS) Functions specific to the BDS-Findings ADaMs |
+| `der_prm_bds_findings` | BDS-Findings Functions for adding Parameters |
+| `der_adsl` | Functions that can only be used for creating ADSL. |
+| `der_tte` | Function used only for creating a Time to Event (TTE) Dataset |
+| `der_occds` | OCCDS specific derivation of helper Functions |
+| `der_prm_tte` | TTE Functions for adding Parameters to TTE Dataset |
+| `deprecated` | Function which will be removed from [admiral](https://pharmaverse.github.io/admiral/) after next release. See [Deprecation Guidance](#deprecation). |
+| `metadata` | Auxiliary datasets providing definitions as input for derivations, e.g. grading criteria or dose frequencies |
+| `utils_ds_chk` | Utilities for Dataset Checking |
+| `utils_fil` | Utilities for Filtering Observations |
+| `utils_fmt` | Utilities for Formatting Observations |
+| `utils_print` | Utilities for Printing Objects in the Console |
+| `utils_help` | Utilities used within Derivation functions |
+| `utils_examples` | Utilities used for examples and template scripts |
+| `source_specifications` | Source Objects |
+| `other_advanced` | Other Advanced Functions |
+| `high_order_function` | Higher Order Functions |
+| `internal` | Internal functions only available to [admiral](https://pharmaverse.github.io/admiral/) developers |
+|  |  |
+| `assertion`\* | Asserts a certain type and gives warning, error to user |
+| `warning` | Provides custom warnings to user |
+| `what` | A function that … |
+| `is` | A function that … |
+| `get` | A function that … |
 
 **NOTE:** It is strongly encouraged that each `@keyword` and `@family`
 are to be identical. This eases the burden of development and
@@ -650,18 +650,18 @@ The table below describes the key directories and files in the
 repository. Understanding this layout helps contributors know where to
 find and where to place code.
 
-| Directory or File | Purpose                                                                                                                           |
-|:------------------|:----------------------------------------------------------------------------------------------------------------------------------|
-| `R/`              | R source files containing package functions. File names reflect their contents (see [File Structuring](#file-structuring) below). |
-| `man/`            | Auto-generated Rd documentation files. **Do not edit manually.** Run `devtools::document()` to regenerate.                        |
-| `tests/testthat/` | Unit test scripts. Each file follows the naming convention `test-<source_file>.R`.                                                |
-| `vignettes/`      | Developer-facing guidance vignettes (and any user-facing articles).                                                               |
-| `inst/lintr/`     | Linting helpers/configuration used by `.lintr.R` (e.g., sourced via `system.file(...)`).                                          |
-| `inst/templates/` | ADaM R script templates made available to users.                                                                                  |
-| `NAMESPACE`       | Auto-generated export/import declarations. **Do not edit manually.** Run `devtools::document()`.                                  |
-| `NEWS.md`         | Package changelog. Updated with every user-facing change per PR.                                                                  |
-| `DESCRIPTION`     | Package metadata and dependency declarations (`Imports`, `Suggests`).                                                             |
-| `_pkgdown.yml`    | Configuration for the package website built by [pkgdown](https://pkgdown.r-lib.org/).                                             |
+| Directory or File | Purpose |
+|:---|:---|
+| `R/` | R source files containing package functions. File names reflect their contents (see [File Structuring](#file-structuring) below). |
+| `man/` | Auto-generated Rd documentation files. **Do not edit manually.** Run `devtools::document()` to regenerate. |
+| `tests/testthat/` | Unit test scripts. Each file follows the naming convention `test-<source_file>.R`. |
+| `vignettes/` | Developer-facing guidance vignettes (and any user-facing articles). |
+| `inst/lintr/` | Linting helpers/configuration used by `.lintr.R` (e.g., sourced via `system.file(...)`). |
+| `inst/templates/` | ADaM R script templates made available to users. |
+| `NAMESPACE` | Auto-generated export/import declarations. **Do not edit manually.** Run `devtools::document()`. |
+| `NEWS.md` | Package changelog. Updated with every user-facing change per PR. |
+| `DESCRIPTION` | Package metadata and dependency declarations (`Imports`, `Suggests`). |
+| `_pkgdown.yml` | Configuration for the package website built by [pkgdown](https://pkgdown.r-lib.org/). |
 
 # File Structuring
 
@@ -925,8 +925,8 @@ admiral.
 ## Unit Testing
 
 Unit tests for deprecated functions and arguments must be added to the
-test file [¹](#fn1) of the function to ensure that a message, warning,
-or error is issued.
+test file [^1] of the function to ensure that a message, warning, or
+error is issued.
 
 The unit-test should follow the corresponding format, per the [unit test
 guidance](https://pharmaverse.github.io/admiraldev/articles/unit_test_guidance.html#writing-unit-tests-in-admiral).
@@ -1611,8 +1611,6 @@ been run.
 
 *Auto-generated by `pharmaverse/admiralci` – `create-agents-md.yml`*
 
-------------------------------------------------------------------------
-
-1.  For example, if `derive_var_example()` is going to be deprecated and
-    it is defined in `examples.R`, the unit tests are in
+[^1]: For example, if `derive_var_example()` is going to be deprecated
+    and it is defined in `examples.R`, the unit tests are in
     `tests/testthat/test-examples.R`.

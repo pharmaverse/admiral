@@ -68,7 +68,7 @@ depends on the type of the event. If the event is a negative event like
 death, worsening, adverse event, etc., the most conservative approach is
 to ignore time points where it is not known if the event occurred, i.e.,
 the censoring time is set to the time of the last assessment where it is
-known that the event didn’t occur [¹](#fn1).
+known that the event didn’t occur [^1].
 
 ![](tte_analyses_web_files/figure-html/unnamed-chunk-4-1.png)
 
@@ -194,7 +194,7 @@ improvement is confirmed or not, the
 function can be used. Here an assessment is considered as confirmed if
 it doesn’t change at the next visit. Only assessments within the
 observation period (`ANL01FL == "Y"`) are considered for the
-confirmation [²](#fn2).
+confirmation [^2].
 
 ``` r
 adqs_ext <- adqs_a %>%
@@ -506,13 +506,11 @@ repository](https://github.com/pharmaverse/admiral/issues/new/choose).
 Any feedback helps us improving
 [admiral](https://pharmaverse.github.io/admiral/)!
 
-------------------------------------------------------------------------
-
-1.  see for example [Clinical Trial Endpoints for the Approval of
+[^1]: see for example [Clinical Trial Endpoints for the Approval of
     Non-Small Cell Lung Cancer Drugs and Biologics Guidance for
     Industry](https://www.fda.gov/media/116860/download)
 
-2.  See also the [CDISC Diabetic Kidney Disease Therapeutic Area User
+[^2]: See also the [CDISC Diabetic Kidney Disease Therapeutic Area User
     Guide
     v1.0](https://www.cdisc.org/standards/therapeutic-areas/diabetic-kidney-disease/diabetic-kidney-disease-therapeutic-area-user)
     for a similar example.

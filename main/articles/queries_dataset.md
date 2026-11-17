@@ -33,17 +33,17 @@ function.
 
 ### Variables
 
-| Variable     | Scope                                                                       | Type      | Example Value                               |
-|--------------|-----------------------------------------------------------------------------|-----------|---------------------------------------------|
-| **PREFIX**   | The prefix used to define the grouping variables                            | Character | `"SMQ01"`                                   |
-| **GRPNAME**  | The value provided to the grouping variables name                           | Character | `"Immune-Mediated Guillain-Barre Syndrome"` |
-| **SRCVAR**   | The variable used to define the grouping. Used in conjunction with TERMCHAR | Character | `"AEDECOD"`                                 |
-| **TERMCHAR** | A term used to define the grouping. Used in conjunction with SRCVAR         | Character | `"GUILLAIN-BARRE SYNDROME"`                 |
-| **TERMNUM**  | A code used to define the grouping. Used in conjunction with SRCVAR         | Integer   | `10018767`                                  |
-| GRPID        | Id number of the query. This could be a SMQ identifier                      | Integer   | `20000131`                                  |
-| SCOPE        | Scope (Broad/Narrow) of the query                                           | Character | `BROAD`, `NARROW`, `NA`                     |
-| SCOPEN       | Scope (Broad/Narrow) of the query                                           | Integer   | `1`, `2`, `NA`                              |
-| VERSION      | The version of the dictionary                                               | Character | `"20.1"`                                    |
+| Variable | Scope | Type | Example Value |
+|----|----|----|----|
+| **PREFIX** | The prefix used to define the grouping variables | Character | `"SMQ01"` |
+| **GRPNAME** | The value provided to the grouping variables name | Character | `"Immune-Mediated Guillain-Barre Syndrome"` |
+| **SRCVAR** | The variable used to define the grouping. Used in conjunction with TERMCHAR | Character | `"AEDECOD"` |
+| **TERMCHAR** | A term used to define the grouping. Used in conjunction with SRCVAR | Character | `"GUILLAIN-BARRE SYNDROME"` |
+| **TERMNUM** | A code used to define the grouping. Used in conjunction with SRCVAR | Integer | `10018767` |
+| GRPID | Id number of the query. This could be a SMQ identifier | Integer | `20000131` |
+| SCOPE | Scope (Broad/Narrow) of the query | Character | `BROAD`, `NARROW`, `NA` |
+| SCOPEN | Scope (Broad/Narrow) of the query | Integer | `1`, `2`, `NA` |
+| VERSION | The version of the dictionary | Character | `"20.1"` |
 
 **Bold variables** are required in `dataset_queries`: an error is issued
 if any of these variables is missing. `TERMCHAR` is only REQUIRED if
@@ -206,10 +206,10 @@ information.
 These variables are optional and if not populated in `dataset_queries`,
 the corresponding output variable will not be created:
 
-| PREFIX | GRPNAME | GRPID    | SCOPE  | SCOPEN | **Variables created**                        |
-|--------|---------|----------|--------|--------|----------------------------------------------|
-| SMQ01  | Query 1 | XXXXXXXX | NARROW | 2      | `SMQ01NAM`, `SMQ01CD`, `SMQ01SC`, `SMQ01SCN` |
-| SMQ02  | Query 2 | XXXXXXXX | BROAD  |        | `SMQ02NAM`, `SMQ02CD`, `SMQ02SC`             |
-| SMQ03  | Query 3 | XXXXXXXX |        | 1      | `SMQ03NAM`, `SMQ03CD`, `SMQ03SCN`            |
-| SMQ04  | Query 4 | XXXXXXXX |        |        | `SMQ04NAM`, `SMQ04CD`                        |
-| SMQ05  | Query 5 |          |        |        | `SMQ05NAM`                                   |
+| PREFIX | GRPNAME | GRPID | SCOPE | SCOPEN | **Variables created** |
+|----|----|----|----|----|----|
+| SMQ01 | Query 1 | XXXXXXXX | NARROW | 2 | `SMQ01NAM`, `SMQ01CD`, `SMQ01SC`, `SMQ01SCN` |
+| SMQ02 | Query 2 | XXXXXXXX | BROAD |  | `SMQ02NAM`, `SMQ02CD`, `SMQ02SC` |
+| SMQ03 | Query 3 | XXXXXXXX |  | 1 | `SMQ03NAM`, `SMQ03CD`, `SMQ03SCN` |
+| SMQ04 | Query 4 | XXXXXXXX |  |  | `SMQ04NAM`, `SMQ04CD` |
+| SMQ05 | Query 5 |  |  |  | `SMQ05NAM` |

@@ -38,7 +38,7 @@ In this vignette we use the example data from the CDISC ADaM Supplements
 ([Generalized Anxiety Disorder 7-Item Version 2
 (GAD-7)](https://www.cdisc.org/standards/foundational/qrs/generalized-anxiety-disorder-7-item-version-2-0),
 [Geriatric Depression Scale Short Form
-(GDS-SF)](https://www.cdisc.org/standards/foundational/qrs/geriatric-depression-scale-short-form-0))[¹](#fn1):
+(GDS-SF)](https://www.cdisc.org/standards/foundational/qrs/geriatric-depression-scale-short-form-0))[^1]:
 
 ``` r
 qs <- admiral::example_qs
@@ -529,7 +529,5 @@ adgdssf <- adgdssf %>%
   select(-filled_in)
 ```
 
-------------------------------------------------------------------------
-
-1.  The example `QS` data (`example_qs`) is included in the admiral
+[^1]: The example `QS` data (`example_qs`) is included in the admiral
     package.

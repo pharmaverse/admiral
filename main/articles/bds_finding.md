@@ -147,15 +147,15 @@ To assign parameter level values such as `PARAMCD`, `PARAM`, `PARAMN`,
 For example, when creating `ADVS`, a lookup based on the SDTM `--TESTCD`
 value may be created:
 
-| `VSTESTCD` | `PARAMCD` | `PARAM`                         | `PARAMN` | `PARCAT1`              | `PARCAT1N` |
-|------------|-----------|---------------------------------|----------|------------------------|------------|
-| HEIGHT     | HEIGHT    | Height (cm)                     | 1        | Subject Characteristic | 1          |
-| WEIGHT     | WEIGHT    | Weight (kg)                     | 2        | Subject Characteristic | 1          |
-| DIABP      | DIABP     | Diastolic Blood Pressure (mmHg) | 3        | Vital Sign             | 2          |
-| MAP        | MAP       | Mean Arterial Pressure          | 4        | Vital Sign             | 2          |
-| PULSE      | PULSE     | Pulse Rate (beats/min)          | 5        | Vital Sign             | 2          |
-| SYSBP      | SYSBP     | Systolic Blood Pressure (mmHg)  | 6        | Vital Sign             | 2          |
-| TEMP       | TEMP      | Temperature (C)                 | 7        | Vital Sign             | 2          |
+| `VSTESTCD` | `PARAMCD` | `PARAM` | `PARAMN` | `PARCAT1` | `PARCAT1N` |
+|----|----|----|----|----|----|
+| HEIGHT | HEIGHT | Height (cm) | 1 | Subject Characteristic | 1 |
+| WEIGHT | WEIGHT | Weight (kg) | 2 | Subject Characteristic | 1 |
+| DIABP | DIABP | Diastolic Blood Pressure (mmHg) | 3 | Vital Sign | 2 |
+| MAP | MAP | Mean Arterial Pressure | 4 | Vital Sign | 2 |
+| PULSE | PULSE | Pulse Rate (beats/min) | 5 | Vital Sign | 2 |
+| SYSBP | SYSBP | Systolic Blood Pressure (mmHg) | 6 | Vital Sign | 2 |
+| TEMP | TEMP | Temperature (C) | 7 | Vital Sign | 2 |
 
 This lookup may now be joined to the source data:
 

@@ -746,20 +746,20 @@ by `BASETYPE`, `ADATYPE`, `ADAPARM`.
 
 The key analysis variables computed in this section are:
 
-| Variable   | Meaning                                                                                                                                                                                                                                                                                                             |
-|------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `FPPDT`    | Date of first ADA Positive                                                                                                                                                                                                                                                                                          |
-| `LPPDT`    | Date of Last ADA Positive                                                                                                                                                                                                                                                                                           |
-| `ADADUR`   | Duration of ADA (`LPPDT` - `FPPDT`)                                                                                                                                                                                                                                                                                 |
-| `TIMADA`   | Time to ADA Positive (from date of first of dose of corresponding drug)                                                                                                                                                                                                                                             |
-| `INDUCED`  | Negative at Baseline to Positive Post-Baseline                                                                                                                                                                                                                                                                      |
-| `ENHANCED` | Positive at Baseline to Positive Post-Baseline where `CHG` \>= 0.60                                                                                                                                                                                                                                                 |
-| `TRANADA`  | Transient ADA (either of): (1) `INDUCED` and Positive at any post-baseline (other than the last result) or (2) `INDUCED`and multiple post baseline positive (other than the last result) and duration between the first and last positive is \< 16 weeks                                                            |
-| `PERSADA`  | Persistent ADA (either of): (1) `INDUCED` and Positive at the last post-baseline result or (2) `INDUCED` and multiple post-baseline positive (other than the last result) and duration between the first and last positive is \>= 16 weeks                                                                          |
+| Variable | Meaning |
+|----|----|
+| `FPPDT` | Date of first ADA Positive |
+| `LPPDT` | Date of Last ADA Positive |
+| `ADADUR` | Duration of ADA (`LPPDT` - `FPPDT`) |
+| `TIMADA` | Time to ADA Positive (from date of first of dose of corresponding drug) |
+| `INDUCED` | Negative at Baseline to Positive Post-Baseline |
+| `ENHANCED` | Positive at Baseline to Positive Post-Baseline where `CHG` \>= 0.60 |
+| `TRANADA` | Transient ADA (either of): (1) `INDUCED` and Positive at any post-baseline (other than the last result) or (2) `INDUCED`and multiple post baseline positive (other than the last result) and duration between the first and last positive is \< 16 weeks |
+| `PERSADA` | Persistent ADA (either of): (1) `INDUCED` and Positive at the last post-baseline result or (2) `INDUCED` and multiple post-baseline positive (other than the last result) and duration between the first and last positive is \>= 16 weeks |
 | `TRANADAE` | Any Treatment Emergent Transient ADA (either of): (1) `INDUCED` or `ENHANCED` and Positive at any post-baseline (other than the last result) or (2) `INDUCED` or `ENHANCED` and multiple post-baseline positive (other than the last result) and duration between the first and last positive result is \< 16 weeks |
-| `PERSADAE` | Any Treatment Emergent Persistent ADA (either of): (1) `INDUCED` or `ENHANCED` and Positive at the last post-baseline result or (2) `INDUCED` or `ENHANCED` and multiple post-baseline positive (other than the last result) and duration between the first and last positive is \>= 16 weeks                       |
-| `ADABLPFL` | Baseline ADA Evaluable - a baseline record exists (`ABLFL = "Y"`)                                                                                                                                                                                                                                                   |
-| `ADPBFPFL` | Post-Baseline ADA Evaluable - At least one valid (non-missing) post-baseline result                                                                                                                                                                                                                                 |
+| `PERSADAE` | Any Treatment Emergent Persistent ADA (either of): (1) `INDUCED` or `ENHANCED` and Positive at the last post-baseline result or (2) `INDUCED` or `ENHANCED` and multiple post-baseline positive (other than the last result) and duration between the first and last positive is \>= 16 weeks |
+| `ADABLPFL` | Baseline ADA Evaluable - a baseline record exists (`ABLFL = "Y"`) |
+| `ADPBFPFL` | Post-Baseline ADA Evaluable - At least one valid (non-missing) post-baseline result |
 
 ``` r
 # Put TFLAG, BFLAG and PBFLAG and the nabstat_ variables onto the main

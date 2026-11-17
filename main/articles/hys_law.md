@@ -37,7 +37,7 @@ library(dplyr, warn.conflicts = FALSE)
 
 ### Read in Data
 
-We assume that an `ADLB` dataset is available [¹](#fn1).
+We assume that an `ADLB` dataset is available [^1].
 
 First we read in the `ADLB` parameters required for the Hy’s Law
 parameters:
@@ -214,9 +214,7 @@ ideas to improve this guide!
 |----------|-----------------------------|
 | `ADLBHY` | `use_ad_template("ADLBHY")` |
 
-------------------------------------------------------------------------
-
-1.  In the walk through below we will use the `ADLB` dataset created
+[^1]: In the walk through below we will use the `ADLB` dataset created
     from the call `use_ad_template("adlb")`. Due to the size of the
     dataset, we only included the following `USUBJID`s:
 
