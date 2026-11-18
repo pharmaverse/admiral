@@ -60,7 +60,7 @@ code can be an incentive for better architecture.
 
 If ease of adding unit tests to a code base is a good sign, the opposite is also
 true. Having a hard time creating unit tests for a given piece of code might be 
-a sign of code smells in the code—e.g. functions that are too complex.
+a sign of code smells in the code, e.g. functions that are too complex.
 
 # Writing Good Unit Tests
 
@@ -149,7 +149,7 @@ Some challenges include:
   - Text output that includes many characters like quotes and newlines that require special handling in a string.  
   - Binary formats like plots or images, which are very difficult to describe in code: i.e. the plot looks right, the error message is useful to a human, the print method uses color effectively.
 
-For these situations, testthat provides an alternative mechanism: snapshot tests.
+For these situations, `testthat` provides an alternative mechanism: snapshot tests.
 Snapshot tests record results in a separate human readable file and records the results, including output, messages, warnings, and errors.
 Review the [{testthat} snapshot vignette](https://testthat.r-lib.org/articles/snapshotting.html) for details.
 
@@ -253,7 +253,7 @@ the testing framework used is testthat and has the following format :
 ## Test 1: <Explanation of the test> ----
 test_that("<function_name> Test 1: <Explanation of the test>", {
   
-  input <- dplyr::tribble(
+  input <- tibble::tribble(
     ~inputvar1, ~inputvar2, ...
     <Add Test Data Scenarios>
     ...
@@ -280,7 +280,7 @@ Open the newly created file `test-all_funcs.R`  and use the following format:
 ## Test 1: <Explanation of the test> ----
 test_that("my_new_func Test 1: <Explanation of the test>", {
   
-  input <- dplyr::tribble(
+  input <- tibble::tribble(
     ~inputvar1, ~inputvar2, ...
     <Add Test Data Scenarios>
     ...
@@ -300,7 +300,7 @@ The input and expected output for the unit tests must follow the following rules
 * If values need to be derived, only unit tested functions can be used.
 
 In contrast to the [Programming Strategy](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html#function-header-documentation) documentation for function examples, test files should not include `library(pkg_name)` calls. 
-If a dataset needs to be created for testing purposes, it should be done so using the function `tribble()` from the `tibble` package with the following command `dplyr::tribble(<data here>)`. 
+If a dataset needs to be created for testing purposes, it should be done so using the function `tribble()` from the `tibble` package with the following command `tibble::tribble(<data here>)`. 
 Furthermore, if other functions need to be called, it should also be done using `pkg_name::fun()` notation. 
 Make sure to align columns as well. This ensures quick code readability.
 
@@ -317,7 +317,7 @@ knitr::include_graphics("./unit_test_toc.png")
 
 ## Addin `pharmaverse4devs::format_test_that_file()`
 
-To ease the burden on developers for writing and adding tests we have developed an Addin for formatting test_that test files according to `{admiral}` programming standards. The Addin will add and update comments as well as number or re-numbers the tests. To access the Addin, be sure to install `{pharmaverse4devs}` from Github. 
+To ease the burden on developers for writing and adding tests we have developed an Addin for formatting `test_that` test files according to `{admiral}` programming standards. The Addin will add and update comments as well as number or re-numbers the tests. To access the Addin, be sure to install `{pharmaverse4devs}` from Github. 
 
 To install the latest development version of the package directly from
 GitHub use the following code:
@@ -329,7 +329,7 @@ GitHub use the following code:
     remotes::install_github("pharmaverse/pharmaverse4devs")
 ```
 
-Then use the Addin button and select the "Format
+Then use the Addins button and select the "Format
 test_that test file" as seen in the image.  Be sure to have the test-file open and selected when calling the Addin.
 
 ```{r echo=FALSE, out.width='120%'}
