@@ -298,6 +298,8 @@ navbar:
         href: articles/lab_grading.html
       - text: Estimands
         href: articles/estimands_web.html
+      - text: Summarizing Datasets with admiral_df
+        href: articles/admiral_df.html
       - text: -------
       - text: FAQ
         href: articles/faq.html
