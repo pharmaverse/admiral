@@ -297,7 +297,12 @@ These records may be used for input into summary records or be used individually
 for summarization in outputs.  Some examples may be exposure duration, dose
 administered, dose adjusted, etc. based on one exposure record in SDTM.
 
-These records can be derived using simple `dplyr::mutate` assignments and then combined:
+These records can be derived using simple `dplyr::mutate` assignments and then
+combined. Calling `summary()` on the combined dataset gives a quick overview of
+the parameters created, with their record and subject counts and the range of
+`AVAL` (see [Summarizing Datasets with `admiral_df`](admiral_df.html) for
+details). Parameters such as `ADJ`, whose result is in `AVALC`, show all
+`AVAL` values as missing:
 
 ```{r eval=TRUE, echo=TRUE}
 adex_durd <- adex %>%
@@ -339,7 +344,7 @@ adex <- bind_rows(
 ) %>%
   mutate(PARCAT1 = "INDIVIDUAL")
 
-count(adex, PARAMCD)
+summary(adex)
 ```
 
 ```{r, eval=TRUE, echo=FALSE}

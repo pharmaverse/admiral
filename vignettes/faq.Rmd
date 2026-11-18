@@ -84,6 +84,12 @@ a way to look up common ADaM variables with recommended `{admiral}` functions to
 
 * Guidance is available for ADSL, BDS and OCCDS ADaM structure including template scripts.
 
+##### How can a user **quickly check a dataset** while deriving it?
+
+* Call `summary()` on the dataset. `{admiral}` functions return an `admiral_df` dataset, for which `summary()` reports the subjects, records, and the content specific to the type of dataset (e.g. the parameters of a BDS dataset), and runs some quick checks, e.g. for more than one baseline record per subject and parameter.
+* Set the key variables with `admiral_df()` to also check that there is one record per key, and pass ADSL to the `adsl` argument to see which subjects have records.
+* See [Summarizing Datasets with `admiral_df`](admiral_df.html) for details.
+
 ##### Is the `{admiral}` package **validated**?
 
  * All functions are reviewed and tested (see [What is provided around **function testing**?]) to ensure that  they  work as described in the documentation. 
