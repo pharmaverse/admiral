@@ -1022,12 +1022,12 @@ test_that("summary.admiral_df Test 39: the ADSL subject flow, outcome and demogr
 ## Test 40: the BDS per-parameter statistics and derived records ----
 test_that("summary.admiral_df Test 40: the BDS per-parameter statistics and derived records", { # nolint
   input <- tibble::tribble(
-    ~STUDYID, ~USUBJID, ~PARAMCD, ~PARAM,                  ~AVISIT,    ~AVAL, ~DTYPE,
-    "P",      "1",      "SYSBP",  "Systolic BP (mmHg)",    "BASELINE",   120, NA,
-    "P",      "1",      "SYSBP",  "Systolic BP (mmHg)",    "WEEK 2",      NA, NA,
-    "P",      "1",      "SYSBP",  "Systolic BP (mmHg)",    "WEEK 2",     125, "LOCF",
-    "P",      "2",      "SYSBP",  "Systolic BP (mm Hg)",   "BASELINE",  130.5, NA,
-    "P",      "2",      "DIABP",  "Diastolic BP (mmHg)",   NA,            NA, NA
+    ~STUDYID, ~USUBJID, ~PARAMCD, ~PARAM, ~AVISIT, ~AVAL, ~DTYPE,
+    "P", "1", "SYSBP", "Systolic BP (mmHg)", "BASELINE", 120, NA,
+    "P", "1", "SYSBP", "Systolic BP (mmHg)", "WEEK 2", NA, NA,
+    "P", "1", "SYSBP", "Systolic BP (mmHg)", "WEEK 2", 125, "LOCF",
+    "P", "2", "SYSBP", "Systolic BP (mm Hg)", "BASELINE", 130.5, NA,
+    "P", "2", "DIABP", "Diastolic BP (mmHg)", NA, NA, NA
   ) %>%
     admiral_df()
 
