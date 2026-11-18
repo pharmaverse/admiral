@@ -75,7 +75,7 @@ jobs:
     if: github.event_name == 'pull_request' && github.event.action != 'closed'
   docs:
     name: Documentation
-    uses: pharmaverse/admiralci/.github/workflows/pkgdown.yml@main
+    uses: pharmaverse/admiralci/.github/workflows/pkgdown.yml@240_pkgdown_check_if_running_on_a_fork
     if: >
       github.event_name == 'push' ||
       startsWith(github.ref, 'refs/tags/v') ||
