@@ -401,6 +401,19 @@ create_single_dose_dataset <- function(dataset,
     by = as.character(dose_freq)
   )
 
+  # Only values used by the data are checked, unused lookup rows are not an issue
+  permitted_windows <- c("MINUTE", "HOUR", "DAY", "WEEK", "MONTH", "YEAR")
+  invalid_windows <- setdiff(unique(data_not_once$DOSE_WINDOW), permitted_windows)
+  if (length(invalid_windows) > 0) {
+    cli_abort(
+      c(
+        "The {.val DOSE_WINDOW} column of {.arg lookup_table} contains unsupported
+         values: {.val {invalid_windows}}.",
+        i = "Permitted values: {.val {permitted_windows}}."
+      )
+    )
+  }
+
   if (any(data_not_once$DOSE_WINDOW %in% c("MINUTE", "HOUR")) &&
     (is.null(start_datetime) || is.null(end_datetime))) {
     cli_abort(
