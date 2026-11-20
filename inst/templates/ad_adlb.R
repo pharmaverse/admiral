@@ -452,6 +452,18 @@ adlb <- adlb %>%
 # This process will be based on your metadata, no example given for this reason
 # ...
 
+# Check the dataset ----
+# Store the dataset name and key variables, then summarize the dataset. The
+# summary checks that there is one record per key and reports the content of
+# the dataset, comparing its subjects with ADSL
+adlb <- admiral_df(
+  adlb,
+  dataset_name = "ADLB",
+  dataset_keys = exprs(STUDYID, USUBJID, PARAMCD, ADT, AVISITN, VISITNUM)
+)
+
+summary(adlb, adsl = adsl)
+
 # Save output ----
 
 # Change to whichever directory you want to save the dataset in

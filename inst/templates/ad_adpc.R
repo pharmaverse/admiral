@@ -525,6 +525,20 @@ adpc <- adpc_baselines %>%
 # Final Steps, Select final variables and Add labels
 # This process will be based on your metadata, no example given for this reason
 # ...
+# ---- Check the dataset ----
+# Store the dataset name and key variables, then summarize the dataset. The
+# summary checks that there is one record per key and reports the content of
+# the dataset, comparing its subjects with ADSL
+adpc <- admiral_df(
+  adpc,
+  dataset_name = "ADPC",
+  dataset_keys = exprs(
+    STUDYID, USUBJID, ADTM, BASETYPE, AVISITN, ATPTN, PARCAT1, DTYPE
+  )
+)
+
+summary(adpc, adsl = adsl)
+
 # ---- Save output ----
 
 # Change to whichever directory you want to save the dataset in

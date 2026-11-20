@@ -644,8 +644,20 @@ dataset_vignette(
 )
 ```
 
-Note: Additional examples of the `derive_var_extreme_flag()` function can be 
+Note: Additional examples of the `derive_var_extreme_flag()` function can be
 found [above.](#analysisrec)
+
+More than one baseline record per subject, parameter, and `BASETYPE` would
+silently corrupt `BASE`, `CHG`, and `PCHG`, so it is worth checking before
+going further. Calling `summary()` on the dataset does this for you, alongside
+an overview of the parameters and visits:
+
+```{r eval=TRUE}
+summary(advs)
+```
+
+See [Summarizing Datasets with `admiral_df`](admiral_df.html) for more on what
+the summary reports.
 
 Lastly, the `BASE`, and  `BNRIND` columns can be derived using the `{admiral}` function
 `derive_var_base()`. Example calls are:

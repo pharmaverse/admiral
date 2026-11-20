@@ -35,7 +35,8 @@ Utilities for printing:
 \code{\link[=print.adam_templates]{print.adam_templates()}},
 \code{\link[=print.admiral_df]{print.admiral_df()}},
 \code{\link[=print.duplicates]{print.duplicates()}},
-\code{\link[=print.source]{print.source()}}
+\code{\link[=print.source]{print.source()}},
+\code{\link[=print.summary_admiral_df]{print.summary_admiral_df()}}
 }
 \concept{utils_print}
 \keyword{internal}

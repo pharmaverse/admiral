@@ -13,6 +13,8 @@ S3method(print,adam_templates)
 S3method(print,admiral_df)
 S3method(print,duplicates)
 S3method(print,source)
+S3method(print,summary_admiral_df)
+S3method(summary,admiral_df)
 export("%>%")
 export(admiral_df)
 export(admiral_labels_attrs_section)
@@ -168,9 +170,13 @@ import(admiraldev)
 importFrom(cli,
   ansi_collapse,
   cli_abort,
+  cli_bullets,
   cli_div,
   cli_inform,
+  cli_rule,
   cli_text,
+  cli_vec,
+  cli_verbatim,
   cli_warn,
   qty
 )
@@ -183,6 +189,7 @@ importFrom(dplyr,
   bind_rows,
   case_when,
   coalesce,
+  count,
   cross_join,
   desc,
   distinct,
@@ -203,6 +210,7 @@ importFrom(dplyr,
   n,
   n_distinct,
   na_if,
+  pick,
   pull,
   recode_values,
   reframe,
@@ -302,7 +310,10 @@ importFrom(rlang,
   syms,
   zap
 )
-importFrom(stats,setNames)
+importFrom(stats,
+  median,
+  setNames
+)
 importFrom(stringr,
   fixed,
   regex,

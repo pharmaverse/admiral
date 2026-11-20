@@ -313,6 +313,20 @@ adeg <- adeg %>%
   )
 
 
+# Check the dataset ----
+# Store the dataset name and key variables, then summarize the dataset. The
+# summary checks that there is one record per key and reports the content of
+# the dataset, comparing its subjects with ADSL
+adeg <- admiral_df(
+  adeg,
+  dataset_name = "ADEG",
+  dataset_keys = exprs(
+    STUDYID, USUBJID, PARAMCD, ADT, AVISITN, VISITNUM, ATPTN, DTYPE
+  )
+)
+
+summary(adeg, adsl = adsl)
+
 # Save output ----
 
 # Change to whichever directory you want to save the dataset in

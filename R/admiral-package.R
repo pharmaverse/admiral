@@ -2,14 +2,15 @@
 #' @family internal
 #' @import admiraldev
 #' @importFrom cli
-#'   ansi_collapse cli_abort cli_div cli_inform cli_text cli_warn qty
+#'   ansi_collapse cli_abort cli_bullets cli_div cli_inform cli_rule cli_text
+#'   cli_vec cli_verbatim cli_warn qty
 #'
 #' @importFrom dplyr
 #'   across anti_join arrange between bind_cols bind_rows case_when coalesce
-#'   cross_join desc distinct ends_with everything filter filter_out first
+#'   count cross_join desc distinct ends_with everything filter filter_out first
 #'   full_join group_by group_by_at group_split if_else inner_join lag
 #'   left_join mutate n n_distinct na_if pull recode_values reframe rename
-#'   rename_with replace_when row_number select semi_join slice starts_with
+#'   pick rename_with replace_when row_number select semi_join slice starts_with
 #'   summarise summarise_all tibble tribble ungroup union
 #'
 #' @importFrom hms as_hms
@@ -33,7 +34,7 @@
 #'   exec expr_label exprs inform is_call is_expression is_missing
 #'   is_named list2 new_environment parse_expr parse_exprs set_names sym syms zap
 #'
-#' @importFrom stats setNames
+#' @importFrom stats median setNames
 #'
 #' @importFrom stringr
 #'   fixed str_c str_count str_detect str_extract str_glue str_length
