@@ -206,9 +206,9 @@ Dinakar Kulkarni, Pavan Kumar, Pooja Kumari, Shan Lee, Wenyi Liu,
 Sadchla Mascary, Iain McCay, Jack McGavigan, Koji Miyazawa, Jordanna
 Morrish, Syed Mubasheer, Kirill Muller, Marco Musca, Thomas Neitmann,
 Yohann Omnes, Barbara O’Reilly, Dimple Patel, Celine Piraux, Hamza
-Rahal, Nick Ramirez, Tom Ratford, Sukalpo Saha, Tamara Senior, Sophie
-Shapcott, Vladyslav Shuliar, Eric Simms, Daniel Sjoberg, Ondrej Slama,
-Andrew Smith, Daniil Stefonishin, Vignesh Thanikachalam, Michael Thorpe,
-Steven Ting, Ojesh Upadhyay, Franciszek Walkowiak, Enki Wang, Phillip
-Webster, Annie Yang, Andrii Yurovskyi, Junze Zhang, Kangjie Zhang, Zelos
-Zhu
+Rahal, Nick Ramirez, Tom Ratford, Gerardo Rodriguez, Sukalpo Saha,
+Tamara Senior, Sophie Shapcott, Vladyslav Shuliar, Eric Simms, Daniel
+Sjoberg, Ondrej Slama, Andrew Smith, Daniil Stefonishin, Vignesh
+Thanikachalam, Michael Thorpe, Steven Ting, Ojesh Upadhyay, Franciszek
+Walkowiak, Enki Wang, Phillip Webster, Annie Yang, Andrii Yurovskyi,
+Junze Zhang, Kangjie Zhang, and Zelos Zhu.

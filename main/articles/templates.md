@@ -266,10 +266,11 @@ is_aval <- is_basetype %>%
       ADATYPE == "ADA_BAB" & toupper(RESULTC) == "POSITIVE" & is.na(ISSTRESN) & !is.na(MRT) ~ MRT,
       TRUE ~ NA_real_
     ),
-    AVALC = case_when(
+    AVALC = if_else(
       # NABSTAT gets ISSTRESC, Standard ADA is set to NA as AVAL are numeric original results
-      ADATYPE == "ADA_NAB" ~ ISSTRESC,
-      TRUE ~ NA_character_
+      ADATYPE == "ADA_NAB",
+      ISSTRESC,
+      NA_character_
     ),
     AVALU = case_when(
       ADATYPE == "ADA_NAB" ~ ISSTRESU,
@@ -278,9 +279,10 @@ is_aval <- is_basetype %>%
       ~ "titer",
       TRUE ~ NA_character_
     ),
-    DTYPE = case_when(
-      ADATYPE == "ADA_BAB" & toupper(RESULTC) == "POSITIVE" & is.na(ISSTRESN) & !is.na(MRT) ~ "MRT",
-      TRUE ~ NA_character_
+    DTYPE = if_else(
+      ADATYPE == "ADA_BAB" & toupper(RESULTC) == "POSITIVE" & is.na(ISSTRESN) & !is.na(MRT),
+      "MRT",
+      NA_character_
     )
   )
 
@@ -614,32 +616,40 @@ per_tran_final <- per_tran_last %>%
       TRUE ~ NA_real_
     ),
     # Standard TRANADA and PERSADA based on TFLAGV = 1 (Induced)
-    TRANADA = case_when(
-      TFLAGV == 1 & ((COUNT_EXC_LAST == 1 | (COUNT_INC_LAST >= 2 & tdur < 16)) & is.na(LFLAGPOS)) ~ 1,
-      TRUE ~ NA_integer_
+    TRANADA = if_else(
+      TFLAGV == 1 & ((COUNT_EXC_LAST == 1 | (COUNT_INC_LAST >= 2 & tdur < 16)) & is.na(LFLAGPOS)),
+      1,
+      NA_integer_
     ),
-    PERSADA = case_when(
+    PERSADA = if_else(
       TFLAGV == 1 & (COUNT_INC_LAST == 1 & (COUNT_EXC_LAST <= 0 | is.na(COUNT_EXC_LAST)) |
-        (COUNT_INC_LAST >= 2 & tdur >= 16) | LFLAGPOS == 1) ~ 1,
-      TRUE ~ NA_integer_
+        (COUNT_INC_LAST >= 2 & tdur >= 16) | LFLAGPOS == 1),
+      1,
+      NA_integer_
     ),
     # These TRANADAE and PERSADAE based on TFLAGV = 1 or TFLAGV=2 (Induced or Enhanced)
-    TRANADAE = case_when(
-      TFLAGV >= 1 & ((COUNT_EXC_LAST == 1 | (COUNT_INC_LAST >= 2 & tdur < 16)) & is.na(LFLAGPOS)) ~ 1,
-      TRUE ~ NA_integer_
+    TRANADAE = if_else(
+      TFLAGV >= 1 & ((COUNT_EXC_LAST == 1 | (COUNT_INC_LAST >= 2 & tdur < 16)) & is.na(LFLAGPOS)),
+      1,
+      NA_integer_
     ),
-    PERSADAE = case_when(
+    PERSADAE = if_else(
       TFLAGV >= 1 & (COUNT_INC_LAST == 1 & (COUNT_EXC_LAST <= 0 | is.na(COUNT_EXC_LAST)) |
-        (COUNT_INC_LAST >= 2 & tdur >= 16) | LFLAGPOS == 1) ~ 1,
-      TRUE ~ NA_integer_
+        (COUNT_INC_LAST >= 2 & tdur >= 16) | LFLAGPOS == 1),
+      1,
+      NA_integer_
     ),
-    INDUCED = case_when(
-      TFLAGV == 1 ~ "Y",
-      TRUE ~ "N"
+    INDUCED = if_else(
+      TFLAGV == 1,
+      "Y",
+      "N",
+      missing = "N"
     ),
-    ENHANCED = case_when(
-      TFLAGV == 2 ~ "Y",
-      TRUE ~ "N"
+    ENHANCED = if_else(
+      TFLAGV == 2,
+      "Y",
+      "N",
+      missing = "N"
     )
   ) %>%
   # Drop temporary variables that do not need to be merged into main ADAB
@@ -660,21 +670,25 @@ main_aab_rtimes <- main_aab_pertran %>%
     ATPT = ISTPT,
     ADADUR = round(ADADUR, digits = 4),
     TIMADA = round(TIMADA, digits = 4),
-    PERSADA = case_when(
-      is.na(PERSADA) ~ 0,
-      TRUE ~ PERSADA
+    PERSADA = if_else(
+      is.na(PERSADA),
+      0,
+      PERSADA
     ),
-    PERSADAE = case_when(
-      is.na(PERSADAE) ~ 0,
-      TRUE ~ PERSADAE
+    PERSADAE = if_else(
+      is.na(PERSADAE),
+      0,
+      PERSADAE
     ),
-    TRANADA = case_when(
-      is.na(TRANADA) ~ 0,
-      TRUE ~ TRANADA
+    TRANADA = if_else(
+      is.na(TRANADA),
+      0,
+      TRANADA
     ),
-    TRANADAE = case_when(
-      is.na(TRANADAE) ~ 0,
-      TRUE ~ TRANADAE
+    TRANADAE = if_else(
+      is.na(TRANADAE),
+      0,
+      TRANADAE
     ),
     NABSTAT = nabstat_opt1
   )
@@ -877,9 +891,11 @@ adab_incucd <- core_aab %>%
   mutate(
     PARAMCD = "INDUCDy",
     PARAM = paste("Treatment induced ADA,", PARCAT1, sep = " "),
-    AVAL = case_when(
-      TFLAG == 1 ~ 1,
-      TRUE ~ 0
+    AVAL = if_else(
+      TFLAG == 1,
+      1,
+      0,
+      missing = 0
     ),
     AVALC = case_when(
       AVAL == 1 ~ "Y",
@@ -899,9 +915,11 @@ adab_enhanc <- core_aab %>%
   mutate(
     PARAMCD = "ENHANCy",
     PARAM = paste("Treatment enhanced ADA,", PARCAT1, sep = " "),
-    AVAL = case_when(
-      TFLAG == 2 ~ 1,
-      TRUE ~ 0
+    AVAL = if_else(
+      TFLAG == 2,
+      1,
+      0,
+      missing = 0
     ),
     AVALC = case_when(
       AVAL == 1 ~ "Y",
@@ -921,9 +939,11 @@ adab_emerpos <- core_aab %>%
   mutate(
     PARAMCD = "EMERPOSy",
     PARAM = paste("Treatment Emergent - Positive,", PARCAT1, sep = " "),
-    AVAL = case_when(
-      PBFLAG == 1 ~ 1,
-      TRUE ~ 0
+    AVAL = if_else(
+      PBFLAG == 1,
+      1,
+      0,
+      missing = 0
     ),
     AVALC = case_when(
       AVAL == 1 ~ "Y",
@@ -943,9 +963,11 @@ adab_trunaff <- core_aab %>%
   mutate(
     PARAMCD = "TRUNAFFy",
     PARAM = paste("Treatment unaffected,", PARCAT1, sep = " "),
-    AVAL = case_when(
-      TFLAG == 3 ~ 1,
-      TRUE ~ 0
+    AVAL = if_else(
+      TFLAG == 3,
+      1,
+      0,
+      missing = 0
     ),
     AVALC = case_when(
       AVAL == 1 ~ "Y",
@@ -965,9 +987,11 @@ adab_emerneg <- core_aab %>%
   mutate(
     PARAMCD = "EMERNEGy",
     PARAM = paste("Treatment Emergent - Negative,", PARCAT1, sep = " "),
-    AVAL = case_when(
-      PBFLAG == 0 ~ 1,
-      TRUE ~ 0
+    AVAL = if_else(
+      PBFLAG == 0,
+      1,
+      0,
+      missing = 0
     ),
     AVALC = case_when(
       AVAL == 1 ~ "Y",
@@ -987,9 +1011,10 @@ adab_notrrel <- core_aab %>%
   mutate(
     PARAMCD = "NOTRRELy",
     PARAM = paste("No treatment related ADA,", PARCAT1, sep = " "),
-    AVAL = case_when(
-      is.na(PBFLAG) ~ 1,
-      TRUE ~ 0
+    AVAL = if_else(
+      is.na(PBFLAG),
+      1,
+      0
     ),
     AVALC = case_when(
       AVAL == 1 ~ "Y",
@@ -1233,14 +1258,17 @@ adab_params <- adab_adafl %>%
   ) %>%
   # for the original data, assign PARAM
   mutate(
-    PARAM = case_when(
-      !is.na(PARAM_SUFFIX) ~ paste(PARAM, PARAM_SUFFIX, sep = " "),
-      TRUE ~ PARAM
+    PARAM = if_else(
+      !is.na(PARAM_SUFFIX),
+      paste(PARAM, PARAM_SUFFIX, sep = " "),
+      PARAM
     ),
     # Example to assign PARAMCD based on ADAPARM assigned at program start (SDTM.IS < v2.0)
-    PARAMCD = case_when(
-      PARAMCD == ADAPARM ~ PARAMCD,
-      TRUE ~ PARAMCD_NEW
+    PARAMCD = if_else(
+      PARAMCD == ADAPARM,
+      PARAMCD,
+      PARAMCD_NEW,
+      missing = PARAMCD_NEW
     ),
     # Example to assign PARAMCD based ISTESTCD type and last 5 chars of ISBDAGNT (SDTM.IS >= v2.0)
     PARAMCD = case_when(
@@ -2487,9 +2515,11 @@ adlb <- adlb %>%
       !is.na(VISIT) ~ str_to_title(VISIT),
       TRUE ~ NA_character_
     ),
-    AVISITN = case_when(
-      AVISIT == "Baseline" ~ 0,
-      !is.na(VISITNUM) ~ VISITNUM
+    AVISITN = if_else(
+      AVISIT == "Baseline",
+      0,
+      VISITNUM,
+      missing = VISITNUM
     )
   )
 
@@ -3191,9 +3221,10 @@ ex_dates <- ex %>%
     visit_day = VISITDY
   ) %>%
   # Set missing end dates to start date
-  mutate(AENDTM = case_when(
-    is.na(AENDTM) ~ ASTDTM,
-    TRUE ~ AENDTM
+  mutate(AENDTM = if_else(
+    is.na(AENDTM),
+    ASTDTM,
+    AENDTM
   )) %>%
   # Derive dates from date/times
   derive_vars_dtm_to_dt(exprs(ASTDTM)) %>%
@@ -3398,9 +3429,11 @@ adpc_nrrlt <- adpc_arrlt %>%
       is.na(NFRLT_prev) ~ NFRLT - min_NFRLT,
       TRUE ~ NFRLT - NFRLT_prev
     ),
-    NXRLT = case_when(
-      EVID == 1 ~ 0,
-      TRUE ~ NFRLT - NFRLT_next
+    NXRLT = if_else(
+      EVID == 1,
+      0,
+      NFRLT - NFRLT_next,
+      missing = NFRLT - NFRLT_next
     )
   )
 
@@ -3413,13 +3446,17 @@ adpc_nrrlt <- adpc_arrlt %>%
 adpc_aval <- adpc_nrrlt %>%
   mutate(
     PARCAT1 = PCSPEC,
-    ATPTN = case_when(
-      EVID == 1 ~ 0,
-      TRUE ~ PCTPTNUM
+    ATPTN = if_else(
+      EVID == 1,
+      0,
+      PCTPTNUM,
+      missing = PCTPTNUM
     ),
-    ATPT = case_when(
-      EVID == 1 ~ "Dose",
-      TRUE ~ PCTPT
+    ATPT = if_else(
+      EVID == 1,
+      "Dose",
+      PCTPT,
+      missing = PCTPT
     ),
     ATPTREF = case_when(
       EVID == 1 ~ AVISIT,
@@ -3448,13 +3485,17 @@ adpc_aval <- adpc_nrrlt %>%
     PARAMCD = coalesce(PCTESTCD, "DOSE"),
     ALLOQ = PCLLOQ,
     # Derive AVAL
-    AVAL = case_when(
-      EVID == 1 ~ EXDOSE,
-      TRUE ~ PCSTRESN
+    AVAL = if_else(
+      EVID == 1,
+      EXDOSE,
+      PCSTRESN,
+      missing = PCSTRESN
     ),
-    AVALU = case_when(
-      EVID == 1 ~ EXDOSU,
-      TRUE ~ PCSTRESU
+    AVALU = if_else(
+      EVID == 1,
+      EXDOSU,
+      PCSTRESU,
+      missing = PCSTRESU
     ),
     AVALCAT1 = if_else(PCSTRESC == "<BLQ", PCSTRESC, prettyNum(signif(AVAL, digits = 3))),
   ) %>%
@@ -3509,9 +3550,10 @@ adpc_dtype <- bind_rows(adpc_lloq, dtype) %>%
   arrange(STUDYID, USUBJID, BASETYPE, ADTM, NFRLT) %>%
   mutate(
     # Derive baseline flag for pre-dose records
-    ABLFL = case_when(
-      ATPT == "Pre-dose" & !is.na(AVAL) ~ "Y",
-      TRUE ~ NA_character_
+    ABLFL = if_else(
+      ATPT == "Pre-dose" & !is.na(AVAL),
+      "Y",
+      NA_character_
     ),
     # Derive MRRLT, ANL01FL and ANL02FL
     MRRLT = if_else(ARRLT < 0, 0, ARRLT),
@@ -3872,9 +3914,10 @@ ex_dates <- ex %>%
     visit_day = VISITDY
   ) %>%
   # Set missing end dates to start date
-  mutate(AENDTM = case_when(
-    is.na(AENDTM) ~ ASTDTM,
-    TRUE ~ AENDTM
+  mutate(AENDTM = if_else(
+    is.na(AENDTM),
+    ASTDTM,
+    AENDTM
   )) %>%
   # Derive dates from date/times
   derive_vars_dtm_to_dt(exprs(ASTDTM)) %>%
@@ -4038,9 +4081,11 @@ adppk_aval <- adppk_aprlt %>%
       TRT01P == "Placebo" ~ 0
     ),
     # Derive PARAMCD
-    PARAMCD = case_when(
-      EVID == 1 ~ "DOSE",
-      TRUE ~ PCTESTCD
+    PARAMCD = if_else(
+      EVID == 1,
+      "DOSE",
+      PCTESTCD,
+      missing = PCTESTCD
     ),
     ALLOQ = PCLLOQ,
     # Derive CMT
@@ -4050,24 +4095,30 @@ adppk_aval <- adppk_aprlt %>%
       TRUE ~ 3
     ),
     # Derive BLQFL/BLQFN
-    BLQFL = case_when(
-      PCSTRESC == "<BLQ" ~ "Y",
-      TRUE ~ "N"
+    BLQFL = if_else(
+      PCSTRESC == "<BLQ",
+      "Y",
+      "N",
+      missing = "N"
     ),
-    BLQFN = case_when(
-      PCSTRESC == "<BLQ" ~ 1,
-      TRUE ~ 0
+    BLQFN = if_else(
+      PCSTRESC == "<BLQ",
+      1,
+      0,
+      missing = 0
     ),
-    AMT = case_when(
-      EVID == 1 ~ EXDOSE,
-      TRUE ~ NA_real_
+    AMT = if_else(
+      EVID == 1,
+      EXDOSE,
+      NA_real_
     ),
     # Derive DV and AVAL
     DV = PCSTRESN,
     AVAL = DV,
-    DVL = case_when(
-      DV != 0 ~ log(DV),
-      TRUE ~ NA_real_
+    DVL = if_else(
+      DV != 0,
+      log(DV),
+      NA_real_
     ),
     # Derive MDV
     MDV = case_when(
@@ -4075,9 +4126,11 @@ adppk_aval <- adppk_aprlt %>%
       is.na(DV) ~ 1,
       TRUE ~ 0
     ),
-    AVALU = case_when(
-      EVID == 1 ~ NA_character_,
-      TRUE ~ PCSTRESU
+    AVALU = if_else(
+      EVID == 1,
+      NA_character_,
+      PCSTRESU,
+      missing = PCSTRESU
     ),
     UDTC = coalesce(PCDTC, EXSTDTC),
     II = if_else(EVID == 1, 1, 0),
@@ -4156,14 +4209,17 @@ covar <- adsl %>%
     COHORT = ARMN,
     COHORTC = ARM,
     ROUTE = unique(ex$EXROUTE),
-    ROUTEN = case_when(
-      ROUTE == "TRANSDERMAL" ~ 3,
-      TRUE ~ NA_real_
+    ROUTEN = if_else(
+      ROUTE == "TRANSDERMAL",
+      3,
+      NA_real_
     ),
     FORM = unique(ex$EXDOSFRM),
-    FORMN = case_when(
-      FORM == "PATCH" ~ 3,
-      TRUE ~ 4
+    FORMN = if_else(
+      FORM == "PATCH",
+      3,
+      4,
+      missing = 4
     )
   ) %>%
   select(
