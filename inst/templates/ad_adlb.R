@@ -165,9 +165,11 @@ adlb <- adlb %>%
       !is.na(VISIT) ~ str_to_title(VISIT),
       TRUE ~ NA_character_
     ),
-    AVISITN = case_when(
-      AVISIT == "Baseline" ~ 0,
-      !is.na(VISITNUM) ~ VISITNUM
+    AVISITN = if_else(
+      AVISIT == "Baseline",
+      0,
+      VISITNUM,
+      missing = VISITNUM
     )
   )
 
