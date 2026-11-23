@@ -2,45 +2,93 @@
 % Please edit documentation in R/compute_qual_imputation.R
 \name{compute_qual_imputation}
 \alias{compute_qual_imputation}
-\title{Function to Impute Values When Qualifier Exists in Character Result}
+\title{Impute Numeric Values from Character Results with Qualifiers}
 \usage{
-compute_qual_imputation(character_value, imputation_type = 1, factor = 0)
+compute_qual_imputation(
+  character_value,
+  imputation_type = "strip",
+  factor = NULL,
+  offset = 0
+)
 }
 \arguments{
-\item{character_value}{Character version of value to be imputed
+\item{character_value}{Character vector of numeric results, optionally prefixed
+with a qualifier, for example, \code{c("<40", ">=40.1", "3")}.
 
 \describe{
 \item{Default value}{none}
 }}
 
-\item{imputation_type}{(default value=1)
-Valid Values:
-1: Strip <, >, = and convert to numeric.
-2: imputation_type=1 and if the character value contains a < or >, the number of
-of decimals associated with the character value is found and then a factor of
-1/10^(number of decimals + 1) will be added/subtracted from the numeric value.
-If no decimals exists, a factor of 1/10 will be added/subtracted from the value.
+\item{imputation_type}{How to convert the character results:
+\itemize{
+\item \code{"strip"}: Remove qualifiers and use \code{offset} as the additive offset for
+strict inequalities.
+\item \code{"shift"}: Remove qualifiers and use the decimal precision of each original
+character result as the additive offset. See Details.
+\item \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} \code{1} - equivalent to \code{"strip"}.
+\item \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} \code{2} - equivalent to \code{"shift"}.
+}
 
 \describe{
-\item{Default value}{\code{1}}
+\item{Permitted values}{\code{"strip"}, \code{"shift"}}
+\item{Default value}{\code{"strip"}}
 }}
 
-\item{factor}{Numeric value (default=0), when using \code{imputation_type} = 1, this
-value can be added or subtracted when the qualifier is removed.
+\item{factor}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Deprecated alias for \code{offset}.
+
+\describe{
+\item{Default value}{\code{NULL}}
+}}
+
+\item{offset}{Finite, nonnegative numeric scalar used when
+\code{imputation_type = "strip"}. It is added for results with \code{>} and subtracted
+for results with \code{<}. It is ignored when \code{imputation_type = "shift"}.
 
 \describe{
 \item{Default value}{\code{0}}
 }}
 }
 \value{
-The imputed value
+A numeric vector of imputed results.
 }
 \description{
-Derive an imputed value
+Converts character results to numeric values, with an optional shift for
+strict inequality qualifiers.
+}
+\details{
+Qualified results must match \verb{^[<>]=?[0-9]+[.]?[0-9]*$}, for example,
+\code{"<40"}, \code{">=40.1"}, or \code{">40."}. Unqualified decimal numbers, optionally
+signed, are also accepted, including \code{"-3"}, \code{"+3"}, and \code{".5"}. Whitespace,
+scientific notation, signed qualified values, and malformed qualifiers are
+not accepted. Invalid strings and missing values return \code{NA_real_} without
+a warning. Results keep the input order and length.
+
+For a strict \code{>} qualifier, add the offset; for a strict \code{<} qualifier,
+subtract it. Results with \code{>=} or \code{<=}, or without an inequality qualifier,
+are converted without a shift.
+
+With \code{imputation_type = "shift"}, the offset is \eqn{10^{-d}}, where \eqn{d} is
+the number of decimal places in the original character result, including
+trailing zeros. For integer results, the offset is 1. For example, \code{"<40"}
+becomes 39, \code{">40.1"} becomes 40.2, and \code{">40.10"} becomes 40.11.
+
+Numeric methods \code{1} and \code{2} are deprecated aliases for \code{"strip"} and \code{"shift"},
+respectively. Both still work and produce a deprecation message.
+
+Choose an imputation rule that matches the analysis specification.
+A shift can cross zero, so results can be negative.
 }
 \examples{
-compute_qual_imputation("<40")
-compute_qual_imputation(c("3", ">30.2"))
+values <- c("<40", ">40.1", "<=40", ">=40.1", "3")
+compute_qual_imputation(values)
+compute_qual_imputation(values, offset = 0.5)
+compute_qual_imputation(values, imputation_type = "shift")
+
+# Trailing zeros retain the reported precision
+compute_qual_imputation(c(">40.1", ">40.10"), imputation_type = "shift")
+
+# Malformed qualifiers produce missing values without warnings
+compute_qual_imputation(c("0>1", "-<0.9>", ">100.00", "<1"), "shift")
 }
 \seealso{
 BDS-Findings Functions that returns a vector:

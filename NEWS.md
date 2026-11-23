@@ -65,6 +65,12 @@ was removed without a deprecation cycle because its functionality is covered by 
 value = NA_real_))` instead, together with `keep_unit_for_special = FALSE` to also set
 the unit variable to `NA`. (#3168)
 
+- `compute_qual_imputation()` now requires qualified results to match
+  `^[<>]=?[0-9]+[.]?[0-9]*$`. Malformed strings previously converted to numbers,
+  such as `"0>1"` and `"-<0.9>"`, now return `NA_real_`. Whitespace and signed
+  qualified results are not accepted. Unqualified signed decimal numbers remain
+  supported. Invalid method and offset arguments now raise errors. (#2922)
+
 - `impute_dtc_dt()` and `impute_dtc_dtm()` now return `NA_character_` rather than an 
   invalid date/datetime string, in line with the updates made to date/datetime functions
   to introduce the `check_date_type` and `check_datetime_type` arguments (see entries under
@@ -73,6 +79,15 @@ the unit variable to `NA`. (#3168)
 - The following functions are entering the next phase of the [deprecation process](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html#deprecation):
 
   **Phase 1 (message)**
+
+  - `compute_qual_imputation(imputation_type = 1)` is deprecated in favor of
+    `compute_qual_imputation(imputation_type = "strip")`.
+
+  - `compute_qual_imputation(imputation_type = 2)` is deprecated in favor of
+    `compute_qual_imputation(imputation_type = "shift")`.
+
+  - `compute_qual_imputation(factor = )` is deprecated in favor of
+    the `offset` argument.
 
   - `derive_vars_merged_lookup(print_not_mapped = )` is deprecated in favor of the 
   `check_not_mapped_type` argument.
