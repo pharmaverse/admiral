@@ -26,6 +26,7 @@ list(
     mode = "`\"first\"`, `\"last\"`",
     msg = "a console message to be printed, e.g. `\"Attention\"` or for longer messages use `paste(\"Line 1\", \"Line 2\")`",
     msg_type = "`\"none\"`, `\"message\"`, `\"warning\"`, `\"error\"`",
+    nfrlt_special = "a list of `nfrlt_special()` objects",
     order_optional = "list of expressions created by `exprs()`, e.g., `exprs(ADT, desc(AVAL))` or `NULL`",
     pos_int = "a positive integer, e.g. `2` or `5`",
     source_list = "a list of source objects, e.g., `list(pd, death)`",

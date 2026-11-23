@@ -80,8 +80,8 @@ is_dates <- is %>%
     AVISITN = VISITNUM
   ) %>%
   # Assign nominal time to NFRLT in DAYS
-  # Special visits can be set to NA then can add more code to assign custom values
-  #   (i.e. UNSCHEDULED to 99999, etc.)
+  # Special visits are assigned custom values (the first matching condition is
+  #   used). The unit variable is not populated for these records.
   derive_var_nfrlt(
     new_var = NFRLT,
     new_var_unit = FRLTU,
@@ -89,14 +89,11 @@ is_dates <- is %>%
     tpt_var = ISTPT,
     visit_day = VISITDY,
     treatment_duration = 0,
-    set_values_to_na = str_detect(toupper(VISIT), "UNSCHED") | str_detect(toupper(VISIT), "TREATMENT DISC")
-  ) %>%
-  mutate(
-    NFRLT = case_when(
-      str_detect(toupper(VISIT), "TREATMENT DISC") ~ 99997,
-      str_detect(toupper(VISIT), "UNSCHED") ~ 99999,
-      TRUE ~ NFRLT
-    )
+    special_values = list(
+      nfrlt_special(condition = str_detect(toupper(VISIT), "TREATMENT DISC"), value = 99997),
+      nfrlt_special(condition = str_detect(toupper(VISIT), "UNSCHED"), value = 99999)
+    ),
+    keep_unit_for_special = FALSE
   ) %>%
   # Join ADSL with is (need TRTSDT for ADY derivation)
   derive_vars_merged(

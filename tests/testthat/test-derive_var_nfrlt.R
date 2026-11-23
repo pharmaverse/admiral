@@ -556,7 +556,9 @@ test_that("derive_var_nfrlt Test 22: handles unscheduled visits", {
     new_var = NFRLT,
     tpt_var = PCTPT,
     visit_day = VISITDY,
-    set_values_to_na = VISIT == "UNSCHEDULED"
+    special_values = list(
+      nfrlt_special(condition = VISIT == "UNSCHEDULED", value = NA_real_)
+    )
   )
 
   expect_equal(
@@ -579,7 +581,9 @@ test_that("derive_var_nfrlt Test 23: handles early discontinuation", {
     new_var = NFRLT,
     tpt_var = PCTPT,
     visit_day = VISITDY,
-    set_values_to_na = VISIT == "STUDY DRUG EARLY DISCONTINUATION"
+    special_values = list(
+      nfrlt_special(condition = VISIT == "STUDY DRUG EARLY DISCONTINUATION", value = NA_real_)
+    )
   )
 
   expect_equal(
@@ -603,7 +607,12 @@ test_that("derive_var_nfrlt Test 24: handles multiple exclusion criteria", {
     new_var = NFRLT,
     tpt_var = PCTPT,
     visit_day = VISITDY,
-    set_values_to_na = VISIT %in% c("UNSCHEDULED", "STUDY DRUG EARLY DISCONTINUATION")
+    special_values = list(
+      nfrlt_special(
+        condition = VISIT %in% c("UNSCHEDULED", "STUDY DRUG EARLY DISCONTINUATION"),
+        value = NA_real_
+      )
+    )
   )
 
   expect_equal(
@@ -612,8 +621,8 @@ test_that("derive_var_nfrlt Test 24: handles multiple exclusion criteria", {
   )
 })
 
-## Test 25: works without tpt_var and with set_values_to_na ----
-test_that("derive_var_nfrlt Test 25: works without tpt_var and with set_values_to_na", {
+## Test 25: works without tpt_var and with special_values ----
+test_that("derive_var_nfrlt Test 25: works without tpt_var and with special_values", {
   input <- tibble::tribble(
     ~USUBJID, ~VISITDY, ~VISIT,
     "001",    1,        "VISIT 1",
@@ -625,7 +634,9 @@ test_that("derive_var_nfrlt Test 25: works without tpt_var and with set_values_t
     input,
     new_var = NFRLT,
     visit_day = VISITDY,
-    set_values_to_na = VISIT == "UNSCHEDULED"
+    special_values = list(
+      nfrlt_special(condition = VISIT == "UNSCHEDULED", value = NA_real_)
+    )
   )
 
   expect_equal(
@@ -677,8 +688,8 @@ test_that("derive_var_nfrlt Test 27: NA in VISITDY results in NA", {
   )
 })
 
-## Test 28: set_values_to_na with complex condition ----
-test_that("derive_var_nfrlt Test 28: set_values_to_na with complex condition", {
+## Test 28: special_values with complex condition ----
+test_that("derive_var_nfrlt Test 28: special_values with complex condition", {
   input <- tibble::tribble(
     ~USUBJID, ~VISITDY, ~VISIT,        ~PCTPT,
     "001",    1,        "VISIT 1",     "Pre-dose",
@@ -693,7 +704,9 @@ test_that("derive_var_nfrlt Test 28: set_values_to_na with complex condition", {
     new_var = NFRLT,
     tpt_var = PCTPT,
     visit_day = VISITDY,
-    set_values_to_na = is.na(VISITDY) | VISIT == "UNSCHEDULED"
+    special_values = list(
+      nfrlt_special(condition = is.na(VISITDY) | VISIT == "UNSCHEDULED", value = NA_real_)
+    )
   )
 
   expect_equal(
@@ -1109,8 +1122,8 @@ test_that("derive_var_nfrlt Test 43: unit variable handles NA correctly", {
   expect_equal(result$FRLTU, c("HOURS", NA_character_))
 })
 
-## Test 44: unit variable with set_values_to_na ----
-test_that("derive_var_nfrlt Test 44: unit variable respects set_values_to_na", {
+## Test 44: unit variable with special_values set to NA ----
+test_that("derive_var_nfrlt Test 44: unit variable respects special_values set to NA", {
   adpc <- tribble(
     ~USUBJID, ~VISITDY, ~VISIT,        ~PCTPT,
     "001",    1,        "VISIT 1",     "Pre-dose",
@@ -1123,7 +1136,10 @@ test_that("derive_var_nfrlt Test 44: unit variable respects set_values_to_na", {
     new_var_unit = FRLTU,
     tpt_var = PCTPT,
     visit_day = VISITDY,
-    set_values_to_na = VISIT == "UNSCHEDULED"
+    special_values = list(
+      nfrlt_special(condition = VISIT == "UNSCHEDULED", value = NA_real_)
+    ),
+    keep_unit_for_special = FALSE
   )
 
   expect_equal(result$NFRLT, c(0, NA_real_))
@@ -1395,4 +1411,144 @@ test_that("derive_var_nfrlt Test 50: unit variations produce correct results", {
   expect_equal(result_hour$NFRLT, 168)
   expect_equal(result_hr$NFRLT, 168)
   expect_equal(result_h$NFRLT, 168)
+})
+
+## Test 51: special values are assigned ----
+test_that("derive_var_nfrlt Test 51: special values are assigned", {
+  input <- tibble::tribble(
+    ~VISITDY, ~VISIT,           ~PCTPT,
+    1,        "CYCLE 1 DAY 1",  "PRE-DOSE",
+    1,        "CYCLE 1 DAY 1",  "2HR POSTDOSE",
+    14,       "CYCLE 1 DAY 14", "1HR POSTDOSE",
+    999,      "UNSCHEDULED",    "POSTDOSE",
+    998,      "END OF STUDY",   "POSTDOSE"
+  )
+
+  expected <- input %>%
+    dplyr::mutate(
+      NFRLT = c(0, 2, 313, 99998, 99999),
+      FRLTU = "HOURS"
+    )
+
+  actual <- derive_var_nfrlt(
+    input,
+    new_var = NFRLT,
+    new_var_unit = FRLTU,
+    tpt_var = PCTPT,
+    visit_day = VISITDY,
+    treatment_duration = 1,
+    special_values = list(
+      nfrlt_special(condition = VISIT == "UNSCHEDULED", value = 99998),
+      nfrlt_special(condition = VISIT == "END OF STUDY", value = 99999)
+    )
+  )
+
+  expect_dfs_equal(actual, expected, keys = c("VISITDY", "PCTPT"))
+})
+
+## Test 52: special values are not converted to out_unit ----
+test_that("derive_var_nfrlt Test 52: special values are not converted to out_unit", {
+  input <- tibble::tribble(
+    ~VISITDY, ~VISIT,
+    8,        "DAY 8",
+    NA,       "UNSCHEDULED"
+  )
+
+  actual <- derive_var_nfrlt(
+    input,
+    new_var = NFRLTDY,
+    new_var_unit = FRLTDYU,
+    out_unit = "days",
+    visit_day = VISITDY,
+    special_values = list(
+      nfrlt_special(condition = VISIT == "UNSCHEDULED", value = 99998)
+    )
+  )
+
+  expect_equal(actual$NFRLTDY, c(7, 99998))
+  expect_equal(actual$FRLTDYU, c("days", "days"))
+})
+
+## Test 53: unit variable is NA for special values if requested ----
+test_that("derive_var_nfrlt Test 53: unit variable is NA for special values if requested", {
+  input <- tibble::tribble(
+    ~VISITDY, ~VISIT,
+    1,        "DAY 1",
+    999,      "UNSCHEDULED"
+  )
+
+  actual <- derive_var_nfrlt(
+    input,
+    new_var = NFRLT,
+    new_var_unit = FRLTU,
+    visit_day = VISITDY,
+    special_values = list(
+      nfrlt_special(condition = VISIT == "UNSCHEDULED", value = 99998)
+    ),
+    keep_unit_for_special = FALSE
+  )
+
+  expect_equal(actual$NFRLT, c(0, 99998))
+  expect_equal(actual$FRLTU, c("HOURS", NA_character_))
+})
+
+## Test 54: first matching special value is used ----
+test_that("derive_var_nfrlt Test 54: first matching special value is used", {
+  input <- tibble::tribble(
+    ~VISITDY, ~VISIT,
+    999,      "UNSCHEDULED"
+  )
+
+  actual <- derive_var_nfrlt(
+    input,
+    new_var = NFRLT,
+    visit_day = VISITDY,
+    special_values = list(
+      nfrlt_special(condition = VISIT == "UNSCHEDULED", value = 99998),
+      nfrlt_special(condition = VISITDY == 999, value = 99999)
+    )
+  )
+
+  expect_equal(actual$NFRLT, 99998)
+})
+
+## Test 55: error if special_values is not a list of nfrlt_special objects ----
+test_that("derive_var_nfrlt Test 55: error if special_values is invalid", {
+  input <- tibble::tribble(
+    ~VISITDY, ~VISIT,
+    1,        "DAY 1"
+  )
+
+  expect_error(
+    derive_var_nfrlt(
+      input,
+      new_var = NFRLT,
+      visit_day = VISITDY,
+      special_values = list(99998)
+    ),
+    class = "assert_list_of"
+  )
+})
+
+# nfrlt_special ----
+
+## Test 56: nfrlt_special object is created ----
+test_that("nfrlt_special Test 56: nfrlt_special object is created", {
+  actual <- nfrlt_special(condition = VISIT == "UNSCHEDULED", value = 99998)
+
+  expect_s3_class(actual, "nfrlt_special")
+  expect_equal(actual$condition, rlang::expr(VISIT == "UNSCHEDULED"))
+  expect_equal(actual$value, 99998)
+})
+
+## Test 57: error if value is not a numeric scalar ----
+test_that("nfrlt_special Test 57: error if value is not a numeric scalar", {
+  expect_error(
+    nfrlt_special(condition = VISIT == "UNSCHEDULED", value = "99998"),
+    class = "assert_numeric_vector"
+  )
+  expect_error(
+    nfrlt_special(condition = VISIT == "UNSCHEDULED", value = c(1, 2)),
+    class = "assert_numeric_vector"
+  )
 })
