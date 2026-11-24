@@ -110,6 +110,12 @@
   [admiral](https://pharmaverse.github.io/admiral/) creates date-times
   in UTC. ([\#2763](https://github.com/pharmaverse/admiral/issues/2763))
 
+- [`create_single_dose_dataset()`](https:/pharmaverse.github.io/admiral/3209-5-summary-override/reference/create_single_dose_dataset.md)
+  now issues an informative error if the `DOSE_WINDOW` column of
+  `lookup_table` contains unsupported or missing values for the dose
+  frequencies in the input dataset.
+  ([\#3215](https://github.com/pharmaverse/admiral/issues/3215))
+
 ### Breaking Changes
 
 - [`compute_qual_imputation()`](https:/pharmaverse.github.io/admiral/3209-5-summary-override/reference/compute_qual_imputation.md)
