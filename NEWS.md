@@ -65,6 +65,10 @@ datetime without time zone, or if their time zones differ. The documentation
 of `compute_duration()`, `derive_vars_dtm()`, and `convert_dtc_to_dtm()` was
 updated to state that `{admiral}` creates date-times in UTC. (#2763)
 
+- `create_single_dose_dataset()` now issues an informative error if the
+`DOSE_WINDOW` column of `lookup_table` contains unsupported or missing values for the
+dose frequencies in the input dataset. (#3215)
+
 ## Breaking Changes
 
 - `compute_qual_imputation()` now requires qualified results to match

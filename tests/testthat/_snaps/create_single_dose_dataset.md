@@ -35,3 +35,23 @@
       Error in `create_single_dose_dataset()`:
       ! There are dose frequencies more frequent than once a day, thus arguments `start_datetime` and `end_datetime` must be specified.
 
+# create_single_dose_dataset Test 13: Error if DOSE_WINDOW is unsupported or missing
+
+    Code
+      create_single_dose_dataset(input, lookup_table = tribble(~Value, ~DOSE_COUNT,
+        ~DOSE_WINDOW, ~CONVERSION_FACTOR, "QD", 1, "FORTNIGHT", 1), lookup_column = Value)
+    Condition
+      Error in `create_single_dose_dataset()`:
+      ! The "DOSE_WINDOW" column of `lookup_table` contains unsupported values: "FORTNIGHT".
+      i Permitted values: "MINUTE", "HOUR", "DAY", "WEEK", "MONTH", and "YEAR".
+
+---
+
+    Code
+      create_single_dose_dataset(input, lookup_table = tribble(~Value, ~DOSE_COUNT,
+        ~DOSE_WINDOW, ~CONVERSION_FACTOR, "QD", 1, NA_character_, 1), lookup_column = Value)
+    Condition
+      Error in `create_single_dose_dataset()`:
+      ! The "DOSE_WINDOW" column of `lookup_table` contains unsupported values: NA.
+      i Permitted values: "MINUTE", "HOUR", "DAY", "WEEK", "MONTH", and "YEAR".
+
