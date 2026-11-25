@@ -242,3 +242,12 @@ test_that("compute_qual_imputation_dec preserves precision and missing-value fal
   expect_identical(compute_qual_imputation_dec(NA_character_), 1)
   expect_identical(compute_qual_imputation_dec(character()), numeric())
 })
+
+test_that("compute_qual_imputation_dec preserves precision and missing-value fallback", {
+  expect_identical(
+    compute_qual_imputation_dec(c(" <40.10 ", "40", NA_character_, "", "0.001")),
+    c(0.01, 1, 1, 1, 0.001)
+  )
+  expect_identical(compute_qual_imputation_dec(NA_character_), 1)
+  expect_identical(compute_qual_imputation_dec(character()), numeric())
+})
