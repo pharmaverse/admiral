@@ -27,9 +27,11 @@
 compute_qual_imputation_dec <- function(character_value_decimal) {
   x <- str_trim(character_value_decimal)
 
-  decimal <- case_when(
-    str_detect(x, "\\.") ~ 1 / (10^(str_length(x) - str_locate(x, "\\.")[, 1])),
-    TRUE ~ 1
+  decimal <- if_else(
+    str_detect(x, "\\."),
+    1 / (10^(str_length(x) - str_locate(x, "\\.")[, 1])),
+    1,
+    missing = 1
   )
 
   unname(decimal)
