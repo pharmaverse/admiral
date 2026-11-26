@@ -233,13 +233,13 @@ duration, dose administered, dose adjusted, etc. based on one exposure
 record in SDTM.
 
 These records can be derived using simple
-[`dplyr::mutate`](https://dplyr.tidyverse.org/reference/mutate.html)
+[`dplyr::mutate()`](https://dplyr.tidyverse.org/reference/mutate.html)
 assignments and then combined. Calling
-[`summary()`](https://rdrr.io/r/base/summary.html) on the combined
-dataset gives a quick overview of the parameters created, with their
-record and subject counts and the range of `AVAL` (see [Summarizing
-Datasets with
-`admiral_df`](https:/pharmaverse.github.io/admiral/3209-5-summary-override/articles/admiral_df.md)
+[`summary()`](https:/pharmaverse.github.io/admiral/3209-5-summary-override/reference/summary.admiral_df.md)
+on the combined dataset gives a quick overview of the parameters
+created, with their record and subject counts and the range of `AVAL`
+(see [Summarizing ADaM
+Datasets](https:/pharmaverse.github.io/admiral/3209-5-summary-override/articles/admiral_df_web.md)
 for details). Parameters such as `ADJ`, whose result is in `AVALC`, show
 all `AVAL` values as missing:
 
@@ -288,13 +288,12 @@ summary(adex)
 #> Subjects (USUBJID): 6
 #> Observations: 65 | Variables: 41
 #> ℹ Structure: not checked, no keys set (see `admiral_df()`)
-#> Parameters (5):
+#> 3 numeric parameters (AVAL):
 #>   PARAMCD  records  subjects  missing  min  median   max
-#>   ADJ           13         6       13    .       .     .
-#>   ADJAE         13         6       13    .       .     .
 #>   DOSE          13         6        0    0       0  4266
 #>   DURD          13         6        0    5      16   160
 #>   PLDOSE        13         6        0    0       0  4266
+#> ✖ 2 parameters have neither `AVAL` nor `AVALC` populated: "ADJ" and "ADJAE"
 ```
 
 ### Create Summary Records

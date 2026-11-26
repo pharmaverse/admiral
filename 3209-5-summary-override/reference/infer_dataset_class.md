@@ -41,9 +41,8 @@ the dataset has no records and its variables do not decide the class.
 A dataset is first classed as device data or subject data:
 
 - **Device data** contains `SPDEVID`, the device identifier, populated
-  (neither `NA` nor `""`) for every record. Its class is one of the
-  medical device classes `"ADDL"`, `"MDBDS"`, `"MDTTE"`, and
-  `"MDOCCDS"`.
+  (not `NA`) for every record. Its class is one of the medical device
+  classes `"ADDL"`, `"MDBDS"`, `"MDTTE"`, and `"MDOCCDS"`.
 
 - **Subject data** is otherwise data which contains all the subject keys
   (`get_admiral_option("subject_keys")`, by default `STUDYID` and
@@ -120,6 +119,7 @@ Other internal:
 [`summarize_adsl()`](https:/pharmaverse.github.io/admiral/3209-5-summary-override/reference/summarize_admiral_df_type.md),
 [`summarize_bds_params()`](https:/pharmaverse.github.io/admiral/3209-5-summary-override/reference/summarize_bds_params.md),
 [`summarize_distribution()`](https:/pharmaverse.github.io/admiral/3209-5-summary-override/reference/summarize_distribution.md),
+[`summarize_params_by()`](https:/pharmaverse.github.io/admiral/3209-5-summary-override/reference/summarize_params_by.md),
 [`summarize_structure()`](https:/pharmaverse.github.io/admiral/3209-5-summary-override/reference/summarize_structure.md),
 [`summarize_subject_flow()`](https:/pharmaverse.github.io/admiral/3209-5-summary-override/reference/summarize_subject_flow.md),
 [`summarize_vs_adsl()`](https:/pharmaverse.github.io/admiral/3209-5-summary-override/reference/summarize_vs_adsl.md)

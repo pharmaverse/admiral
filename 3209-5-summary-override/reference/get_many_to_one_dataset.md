@@ -29,8 +29,7 @@ can no longer be accessed (unless it has been saved in a variable).
 
 Utilities for Dataset Checking:
 [`get_duplicates_dataset()`](https:/pharmaverse.github.io/admiral/3209-5-summary-override/reference/get_duplicates_dataset.md),
-[`get_one_to_many_dataset()`](https:/pharmaverse.github.io/admiral/3209-5-summary-override/reference/get_one_to_many_dataset.md),
-[`summary.admiral_df()`](https:/pharmaverse.github.io/admiral/3209-5-summary-override/reference/summary.admiral_df.md)
+[`get_one_to_many_dataset()`](https:/pharmaverse.github.io/admiral/3209-5-summary-override/reference/get_one_to_many_dataset.md)
 
 ## Examples
 

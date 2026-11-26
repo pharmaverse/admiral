@@ -445,27 +445,17 @@ to produce additional datasets
 
 - [`get_duplicates_dataset()`](https:/pharmaverse.github.io/admiral/3209-5-summary-override/reference/get_duplicates_dataset.md)
   : Get Duplicate Records that Led to a Prior Error
-
 - [`get_many_to_one_dataset()`](https:/pharmaverse.github.io/admiral/3209-5-summary-override/reference/get_many_to_one_dataset.md)
   : Get Many to One Values that Led to a Prior Error
-
 - [`get_one_to_many_dataset()`](https:/pharmaverse.github.io/admiral/3209-5-summary-override/reference/get_one_to_many_dataset.md)
   : Get One to Many Values that Led to a Prior Error
 
-- [`summary(`*`<admiral_df>`*`)`](https:/pharmaverse.github.io/admiral/3209-5-summary-override/reference/summary.admiral_df.md)
-  :
-
-  Summarize an `admiral_df` Dataset
-
-### Utilities used within Derivation Functions
+### The admiral_df Class
 
 - [`admiral_df()`](https:/pharmaverse.github.io/admiral/3209-5-summary-override/reference/admiral_df.md)
   **\[experimental\]** :
 
   Create an `admiral_df` Dataset
-
-- [`extract_unit()`](https:/pharmaverse.github.io/admiral/3209-5-summary-override/reference/extract_unit.md)
-  : Extract Unit From Parameter Description
 
 - [`get_dataset_class()`](https:/pharmaverse.github.io/admiral/3209-5-summary-override/reference/get_dataset_class.md)
   **\[experimental\]** : Get the ADaM Dataset Class
@@ -476,12 +466,19 @@ to produce additional datasets
 - [`get_dataset_name()`](https:/pharmaverse.github.io/admiral/3209-5-summary-override/reference/get_dataset_name.md)
   **\[experimental\]** : Get the Name of a Dataset
 
+- [`summary(`*`<admiral_df>`*`)`](https:/pharmaverse.github.io/admiral/3209-5-summary-override/reference/summary.admiral_df.md)
+  :
+
+  Summarize an `admiral_df` Dataset
+
+### Utilities used within Derivation Functions
+
+- [`extract_unit()`](https:/pharmaverse.github.io/admiral/3209-5-summary-override/reference/extract_unit.md)
+  : Extract Unit From Parameter Description
 - [`get_flagged_records()`](https:/pharmaverse.github.io/admiral/3209-5-summary-override/reference/get_flagged_records.md)
   : Create an Existence Flag
-
 - [`get_not_mapped()`](https:/pharmaverse.github.io/admiral/3209-5-summary-override/reference/get_not_mapped.md)
   : Get list of records not mapped from the lookup table.
-
 - [`get_vars_query()`](https:/pharmaverse.github.io/admiral/3209-5-summary-override/reference/get_vars_query.md)
   : Get Query Variables
 

@@ -6,8 +6,10 @@
   ADaM](https:/pharmaverse.github.io/admiral/3209-5-summary-override/articles/adab_web.md):
 - [Creating an ADAB
   ADaM](https:/pharmaverse.github.io/admiral/3209-5-summary-override/articles/adab.md):
-- [Summarizing Datasets with
-  \`admiral_df\`](https:/pharmaverse.github.io/admiral/3209-5-summary-override/articles/admiral_df.md):
+- [Summarizing ADaM
+  Datasets](https:/pharmaverse.github.io/admiral/3209-5-summary-override/articles/admiral_df_web.md):
+- [Summarizing ADaM
+  Datasets](https:/pharmaverse.github.io/admiral/3209-5-summary-override/articles/admiral_df.md):
 - [Get
   Started](https:/pharmaverse.github.io/admiral/3209-5-summary-override/articles/admiral.md):
 - [Creating

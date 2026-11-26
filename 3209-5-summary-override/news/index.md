@@ -4,48 +4,48 @@
 
 ### New Features
 
-- Added the `admiral_df` S3 class. All
-  [admiral](https://pharmaverse.github.io/admiral/) dataset functions
-  now tag their output datasets with this class, preserving their
-  existing classes.
-  ([\#3160](https://github.com/pharmaverse/admiral/issues/3160))
+- Added the `admiral_df` S3 class, which carries the metadata of a
+  dataset and provides a
+  [`summary()`](https://rdrr.io/r/base/summary.html) method for checking
+  it. See the “Summarizing ADaM Datasets” article for details.
 
-- Added function
-  [`admiral_df()`](https:/pharmaverse.github.io/admiral/3209-5-summary-override/reference/admiral_df.md).
-  Tags a data frame with the `admiral_df` class and stores its metadata:
-  the key variables – the variables which uniquely identify its records
-  – the dataset name, and the ADaM dataset class. See the function
-  documentation for details.
-  ([\#3198](https://github.com/pharmaverse/admiral/issues/3198))
+  - All [admiral](https://pharmaverse.github.io/admiral/) dataset
+    functions now tag their output datasets with this class, preserving
+    their existing classes.
+    ([\#3160](https://github.com/pharmaverse/admiral/issues/3160))
 
-- Added functions
-  [`get_dataset_keys()`](https:/pharmaverse.github.io/admiral/3209-5-summary-override/reference/get_dataset_keys.md),
-  [`get_dataset_name()`](https:/pharmaverse.github.io/admiral/3209-5-summary-override/reference/get_dataset_name.md),
-  and
-  [`get_dataset_class()`](https:/pharmaverse.github.io/admiral/3209-5-summary-override/reference/get_dataset_class.md)
-  to read the metadata stored by
-  [`admiral_df()`](https:/pharmaverse.github.io/admiral/3209-5-summary-override/reference/admiral_df.md).
-  If no class has been stored,
-  [`get_dataset_class()`](https:/pharmaverse.github.io/admiral/3209-5-summary-override/reference/get_dataset_class.md)
-  infers it from the dataset.
-  ([\#3198](https://github.com/pharmaverse/admiral/issues/3198))
+  - Added function
+    [`admiral_df()`](https:/pharmaverse.github.io/admiral/3209-5-summary-override/reference/admiral_df.md),
+    which tags a data frame with the class and stores its metadata: the
+    key variables – the variables which uniquely identify its records –
+    the dataset name, and the ADaM dataset class. The metadata is read
+    back with the new functions
+    [`get_dataset_keys()`](https:/pharmaverse.github.io/admiral/3209-5-summary-override/reference/get_dataset_keys.md),
+    [`get_dataset_name()`](https:/pharmaverse.github.io/admiral/3209-5-summary-override/reference/get_dataset_name.md),
+    and
+    [`get_dataset_class()`](https:/pharmaverse.github.io/admiral/3209-5-summary-override/reference/get_dataset_class.md).
+    If no class has been stored,
+    [`get_dataset_class()`](https:/pharmaverse.github.io/admiral/3209-5-summary-override/reference/get_dataset_class.md)
+    infers it from the dataset.
+    ([\#3198](https://github.com/pharmaverse/admiral/issues/3198))
 
-- Calling [`summary()`](https://rdrr.io/r/base/summary.html) on an
-  `admiral_df` dataset now prints a short report: the dataset name and
-  ADaM class, the number of subjects, observations and variables, and
-  whether the dataset has one record per key (if the keys were set with
-  [`admiral_df()`](https:/pharmaverse.github.io/admiral/3209-5-summary-override/reference/admiral_df.md)).
-  Depending on the dataset class (`ADSL`, `BDS`, `OCCDS`, `TTE`, or
-  their medical device counterparts) it also reports e.g. the subjects
-  per treatment arm, the records and subjects per parameter, or the
-  events and censored per parameter, and checks e.g. for more than one
-  baseline record per subject and parameter, or for more than one first
-  occurrence flagged per subject. Its `adsl` argument compares the
-  dataset with the ADSL: the subjects with records overall, in the
-  safety population and per arm, and the subjects which are not in ADSL.
-  Medical device datasets are summarized and checked per device
-  (`SPDEVID`).
-  ([\#3209](https://github.com/pharmaverse/admiral/issues/3209))
+  - Calling [`summary()`](https://rdrr.io/r/base/summary.html) on an
+    `admiral_df` dataset now prints a short report: the dataset name and
+    ADaM class, the number of subjects, observations and variables, and
+    whether the dataset has one record per key (if the keys were set
+    with
+    [`admiral_df()`](https:/pharmaverse.github.io/admiral/3209-5-summary-override/reference/admiral_df.md)).
+    Depending on the dataset class (`ADSL`, `BDS`, `OCCDS`, `TTE`, or
+    their medical device counterparts) it also reports e.g. the subjects
+    per treatment arm, the records and subjects per parameter, or the
+    events and censored per parameter, and checks e.g. for more than one
+    baseline record per subject and parameter, or for more than one
+    first occurrence flagged per subject. Its `adsl` argument compares
+    the dataset with the ADSL: the subjects with records overall, in the
+    safety population and per arm, and the subjects which are not in
+    ADSL. Medical device datasets are summarized and checked per device
+    (`SPDEVID`).
+    ([\#3209](https://github.com/pharmaverse/admiral/issues/3209))
 
 ### Updates of Existing Functions
 

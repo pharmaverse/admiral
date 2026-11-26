@@ -37,9 +37,19 @@ summarize_bds_params(dataset, unit_vars, unit = "subjects")
 
 ## Value
 
-The `params` element described in
-[`summarize_bds()`](https:/pharmaverse.github.io/admiral/3209-5-summary-override/reference/summarize_admiral_df_type.md):
-a data frame with one row per `PARAMCD`.
+A named list with the elements `params` and `params_chr` (data frames
+with one row per numeric and character `PARAMCD`; absent if there are
+none), and `params_empty` (the `PARAMCD` values with neither `AVAL` nor
+`AVALC` populated). Without `AVAL` and `AVALC` in `dataset`, `params`
+has every `PARAMCD` and `params_empty` is absent.
+
+## Details
+
+A parameter is numeric if any of its `AVAL` is populated, and character
+if none of its `AVAL` but any of its `AVALC` is. The statistics differ:
+the distribution of `AVAL` for a numeric parameter, the number of
+distinct `AVALC` values for a character one. A parameter with neither
+populated has not been derived, or not correctly.
 
 ## See also
 
@@ -68,6 +78,7 @@ Other internal:
 [`signal_duplicate_records()`](https:/pharmaverse.github.io/admiral/3209-5-summary-override/reference/signal_duplicate_records.md),
 [`summarize_adsl()`](https:/pharmaverse.github.io/admiral/3209-5-summary-override/reference/summarize_admiral_df_type.md),
 [`summarize_distribution()`](https:/pharmaverse.github.io/admiral/3209-5-summary-override/reference/summarize_distribution.md),
+[`summarize_params_by()`](https:/pharmaverse.github.io/admiral/3209-5-summary-override/reference/summarize_params_by.md),
 [`summarize_structure()`](https:/pharmaverse.github.io/admiral/3209-5-summary-override/reference/summarize_structure.md),
 [`summarize_subject_flow()`](https:/pharmaverse.github.io/admiral/3209-5-summary-override/reference/summarize_subject_flow.md),
 [`summarize_vs_adsl()`](https:/pharmaverse.github.io/admiral/3209-5-summary-override/reference/summarize_vs_adsl.md)

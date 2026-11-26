@@ -29,8 +29,7 @@ can no longer be accessed (unless it has been saved in a variable).
 
 Utilities for Dataset Checking:
 [`get_many_to_one_dataset()`](https:/pharmaverse.github.io/admiral/3209-5-summary-override/reference/get_many_to_one_dataset.md),
-[`get_one_to_many_dataset()`](https:/pharmaverse.github.io/admiral/3209-5-summary-override/reference/get_one_to_many_dataset.md),
-[`summary.admiral_df()`](https:/pharmaverse.github.io/admiral/3209-5-summary-override/reference/summary.admiral_df.md)
+[`get_one_to_many_dataset()`](https:/pharmaverse.github.io/admiral/3209-5-summary-override/reference/get_one_to_many_dataset.md)
 
 ## Examples
 
@@ -46,6 +45,7 @@ signal_duplicate_records(adsl, exprs(USUBJID), cnd_type = "warning")
 
 get_duplicates_dataset()
 #> Duplicate records with respect to `USUBJID`.
+#> # An admiral dataset (name: ADSL, class: ADSL, keys: STUDYID, USUBJID)
 #> # A tibble: 2 × 54
 #>   USUBJID     STUDYID  SUBJID RFSTDTC RFENDTC RFXSTDTC RFXENDTC RFICDTC RFPENDTC
 #> * <chr>       <chr>    <chr>  <chr>   <chr>   <chr>    <chr>    <chr>   <chr>   

@@ -78,11 +78,7 @@ and `SCOPEN` respectively, whenever not missing.
 [`create_query_data()`](https:/pharmaverse.github.io/admiral/3209-5-summary-override/reference/create_query_data.md)
 
 Utilities used within Derivation functions:
-[`admiral_df()`](https:/pharmaverse.github.io/admiral/3209-5-summary-override/reference/admiral_df.md),
 [`extract_unit()`](https:/pharmaverse.github.io/admiral/3209-5-summary-override/reference/extract_unit.md),
-[`get_dataset_class()`](https:/pharmaverse.github.io/admiral/3209-5-summary-override/reference/get_dataset_class.md),
-[`get_dataset_keys()`](https:/pharmaverse.github.io/admiral/3209-5-summary-override/reference/get_dataset_keys.md),
-[`get_dataset_name()`](https:/pharmaverse.github.io/admiral/3209-5-summary-override/reference/get_dataset_name.md),
 [`get_flagged_records()`](https:/pharmaverse.github.io/admiral/3209-5-summary-override/reference/get_flagged_records.md),
 [`get_not_mapped()`](https:/pharmaverse.github.io/admiral/3209-5-summary-override/reference/get_not_mapped.md)
 

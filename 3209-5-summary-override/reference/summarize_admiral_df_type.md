@@ -71,17 +71,22 @@ A named list:
   per cause of death), `age` (median, minimum, and maximum of `AGE`),
   `sex` (subjects per `SEX`).
 
-- `summarize_bds()`: `params` (per `PARAMCD`: the `PARAM` values, the
-  records, subjects (or devices), and analysis visits, and the missing
-  values, minimum, median, and maximum of a numeric `AVAL`), `visits`
-  (the analysis visits, in `AVISITN` order if available), `dtype`
-  (records per `DTYPE`), `baseline_by` and `multiple_baselines` (the
-  variables a baseline is unique within, and the number of their
+- `summarize_bds()`: `params` and `params_chr` (per numeric and
+  character `PARAMCD`: the `PARAM` values, the records, subjects (or
+  devices), and analysis visits, and the missing values, minimum,
+  median, and maximum of `AVAL`, or the missing and distinct values of
+  `AVALC`), `params_empty` (the `PARAMCD` values with neither `AVAL` nor
+  `AVALC` populated; see
+  [`summarize_bds_params()`](https:/pharmaverse.github.io/admiral/3209-5-summary-override/reference/summarize_bds_params.md)),
+  `visits` (the analysis visits, in `AVISITN` order if available),
+  `dtype` (records per `DTYPE`), `baseline_by` and `multiple_baselines`
+  (the variables a baseline is unique within, and the number of their
   combinations with more than one `ABLFL == "Y"` record).
 
 - `summarize_occds()`: `terms` (named count of distinct values per
   coding variable), `trtem` (treatment-emergent and total records),
-  `sev_var` and `sev` (the severity or toxicity grade variable, and the
+  `sev_var` and `sev` (the severity variable, and the records per
+  value), `tox_var` and `tox` (the toxicity grade variable, and the
   records per value), `ser_var` and `serious` (the seriousness variable,
   and the serious and total records), `occ_flag_by` (per occurrence flag
   checked, the variables it is unique within), `occ_flag_dups` (per
@@ -99,17 +104,18 @@ records – which the record structure check reports – do not inflate
 them. Every ADSL item counts subjects, so none is returned for a dataset
 without any of the variables subjects are counted by.
 
-The OCCDS severity is the first populated of `ASEV`, `--SEV`, `ATOXGR`,
-and `--TOXGR`, and the seriousness the first populated `--SER`. See
+The OCCDS severity is the first populated of `ASEV` and `--SEV`, the
+toxicity grade the first populated of `ATOXGR` and `--TOXGR`, and the
+seriousness the first populated `--SER`. See
 [`check_occurrence_flags()`](https:/pharmaverse.github.io/admiral/3209-5-summary-override/reference/check_occurrence_flags.md)
 for the occurrence flag check.
 
 A BDS dataset is expected to have at most one baseline record
-(`ABLFL == "Y"`) per subject and parameter, and per `BASETYPE`, `ATPT`,
-and `APERIOD` where these are in the dataset: a baseline per timepoint
-or per period (e.g. in a crossover study) is correct, not a duplicate.
-More than one silently corrupts `BASE`, `CHG`, and `PCHG`, and the
-record structure check cannot see it, as the records differ in their
+(`ABLFL == "Y"`) per subject and parameter, and per `BASETYPE` where it
+is in the dataset. A baseline per timepoint or per period (e.g. in a
+crossover study) needs a `BASETYPE` value of its own, as the ADaMIG
+requires. More than one silently corrupts `BASE`, `CHG`, and `PCHG`, and
+the record structure check cannot see it, as the records differ in their
 visit. Fewer than one is legitimate, as not every parameter has a
 baseline. Records which belong to no subject (see
 [`filter_unit_records()`](https:/pharmaverse.github.io/admiral/3209-5-summary-override/reference/filter_unit_records.md))
@@ -142,6 +148,7 @@ Other internal:
 [`signal_duplicate_records()`](https:/pharmaverse.github.io/admiral/3209-5-summary-override/reference/signal_duplicate_records.md),
 [`summarize_bds_params()`](https:/pharmaverse.github.io/admiral/3209-5-summary-override/reference/summarize_bds_params.md),
 [`summarize_distribution()`](https:/pharmaverse.github.io/admiral/3209-5-summary-override/reference/summarize_distribution.md),
+[`summarize_params_by()`](https:/pharmaverse.github.io/admiral/3209-5-summary-override/reference/summarize_params_by.md),
 [`summarize_structure()`](https:/pharmaverse.github.io/admiral/3209-5-summary-override/reference/summarize_structure.md),
 [`summarize_subject_flow()`](https:/pharmaverse.github.io/admiral/3209-5-summary-override/reference/summarize_subject_flow.md),
 [`summarize_vs_adsl()`](https:/pharmaverse.github.io/admiral/3209-5-summary-override/reference/summarize_vs_adsl.md)

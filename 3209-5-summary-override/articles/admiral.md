@@ -162,10 +162,10 @@ advs <- advs %>%
 ```
 
 Derivation functions return an `admiral_df` dataset, so calling
-[`summary()`](https://rdrr.io/r/base/summary.html) on the result gives a
-quick report of what the dataset now contains. Here it shows that `MAP`
-was added for the same subjects and visits as `SYSBP` and `DIABP`, along
-with the range of the derived values:
+[`summary()`](https:/pharmaverse.github.io/admiral/3209-5-summary-override/reference/summary.admiral_df.md)
+on the result gives a quick report of what the dataset now contains.
+Here it shows that `MAP` was added for the same subjects and visits as
+`SYSBP` and `DIABP`, along with the range of the derived values:
 
 ``` r
 summary(advs)
@@ -173,7 +173,7 @@ summary(advs)
 #> Subjects (USUBJID): 6
 #> Observations: 174 | Variables: 30
 #> ℹ Structure: not checked, no keys set (see `admiral_df()`)
-#> Parameters (3):
+#> 3 numeric parameters (AVAL):
 #>   PARAMCD  records  subjects  visits  missing    min  median  max
 #>   DIABP         58         6      15        0     55    77.5   90
 #>   MAP           58         6      15        0  75.33      94  118
@@ -181,10 +181,11 @@ summary(advs)
 #> Analysis visits (AVISIT): SCREENING 1, SCREENING 2, BASELINE, AMBUL ECG
 #> PLACEMENT, WEEK 2, WEEK 4, AMBUL ECG REMOVAL, WEEK 6, WEEK 8, WEEK 12, WEEK 16,
 #> WEEK 20, WEEK 24, WEEK 26, RETRIEVAL
+#> ✔ Checks passed: every parameter has AVAL or AVALC populated
 ```
 
-See [Summarizing Datasets with
-`admiral_df`](https:/pharmaverse.github.io/admiral/3209-5-summary-override/articles/admiral_df.md)
+See [Summarizing ADaM
+Datasets](https:/pharmaverse.github.io/admiral/3209-5-summary-override/articles/admiral_df_web.md)
 for more on what the summary reports and how to make the most of it.
 
 **Note:** For the users’ convenience,
@@ -354,9 +355,10 @@ While you develop a script, you can check the dataset at any point by
 calling [`summary()`](https://rdrr.io/r/base/summary.html) on it. It
 reports the subjects, records, and parameters (or other content,
 depending on the type of dataset) and runs some quick checks, e.g.
-whether there is one record per key variable combination. The templates
-do this before saving the final dataset. See [Summarizing Datasets with
-`admiral_df`](https:/pharmaverse.github.io/admiral/3209-5-summary-override/articles/admiral_df.md)
+whether there is one record per key variable combination (if the keys
+are supplied). The templates do this before saving the final dataset.
+See [Summarizing ADaM
+Datasets](https:/pharmaverse.github.io/admiral/3209-5-summary-override/articles/admiral_df_web.md)
 for details.
 
 ## Support

@@ -499,9 +499,9 @@ An occurrence flag should be `"Y"` for at most one record per subject
 (or per subject and body system or term, for `AOCCSIFL` and `AOCCPIFL`).
 Otherwise a subject would be counted twice in every summary table built
 from it. This is hard to see by looking at the data, but calling
-[`summary()`](https://rdrr.io/r/base/summary.html) on the dataset checks
-it, together with an overview of the terms, treatment-emergent records,
-and severity:
+[`summary()`](https:/pharmaverse.github.io/admiral/3209-5-summary-override/reference/summary.admiral_df.md)
+on the dataset checks it, together with an overview of the terms,
+treatment-emergent records, and severity:
 
 ``` r
 summary(adae)
@@ -516,8 +516,8 @@ summary(adae)
 #> ✔ Checks passed: at most one "Y" per group in AOCCIFL
 ```
 
-See [Summarizing Datasets with
-`admiral_df`](https:/pharmaverse.github.io/admiral/3209-5-summary-override/articles/admiral_df.md)
+See [Summarizing ADaM
+Datasets](https:/pharmaverse.github.io/admiral/3209-5-summary-override/articles/admiral_df_web.md)
 for more on what the summary reports.
 
 ### Derive Query Variables

@@ -617,6 +617,35 @@ scheduled set of time windows.
     #> 8 2          -1   -30     1 BASELINE
     #> 9 2          13     8    15 WEEK 2  
 
+### Checking the derived visits with [`summary()`](https://rdrr.io/r/base/summary.html)
+
+`{admiral}` functions return an `admiral_df` dataset, so calling
+[`summary()`](https:/pharmaverse.github.io/admiral/3209-5-summary-override/reference/summary.admiral_df.md)
+on the result gives a quick check of the join.
+
+- Tagging the result with its class and keys means the summary lists the
+  analysis visits and checks for one record per subject and visit.
+
+- `"WEEK 1"` is missing, as no study day falls in its window.
+
+- The structure check reports 2 extra records, as subject `"1"` has two
+  study days in the `"BASELINE"` window (-7 and 1) and two in the
+  `"WEEK 2"` window (8 and 15).
+
+    derive_vars_joined(
+      adbds,
+      dataset_add = windows,
+      join_type = "all",
+      filter_join = AWLO <= ADY & ADY <= AWHI
+    ) %>%
+      admiral_df(dataset_class = "BDS", dataset_keys = exprs(USUBJID, AVISIT)) %>%
+      summary()
+    #> ── BDS summary ─────────────────────────────────────────────────────────────────
+    #> Subjects (USUBJID): 2
+    #> Observations: 9 | Variables: 7
+    #> ✖ Structure: expected one record per USUBJID, AVISIT, found 2 extra records
+    #> Analysis visits (AVISIT): BASELINE, WEEK 2, WEEK 3, WEEK 4
+
 ### Join only the lowest/highest value occurring within a condition (`filter_join`, `order` and `mode`)
 
 Derive the nadir value for each observation (i.e. the lowest value

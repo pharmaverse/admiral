@@ -532,8 +532,9 @@ function can be found [above.](#analysisrec)
 More than one baseline record per subject, parameter, and `BASETYPE`
 would silently corrupt `BASE`, `CHG`, and `PCHG`, so it is worth
 checking before going further. Calling
-[`summary()`](https://rdrr.io/r/base/summary.html) on the dataset does
-this for you, alongside an overview of the parameters and visits:
+[`summary()`](https:/pharmaverse.github.io/admiral/3209-5-summary-override/reference/summary.admiral_df.md)
+on the dataset does this for you, alongside an overview of the
+parameters and visits:
 
 ``` r
 summary(advs)
@@ -541,7 +542,7 @@ summary(advs)
 #> Subjects (USUBJID): 6
 #> Observations: 883 | Variables: 47
 #> ℹ Structure: not checked, no keys set (see `admiral_df()`)
-#> Parameters (9):
+#> 9 numeric parameters (AVAL):
 #>   PARAMCD  records  subjects  visits  missing    min  median    max
 #>   BMI           41         6      10        0  22.67   24.45  32.77
 #>   BSA           41         6      10        0  1.474   1.537  2.318
@@ -554,12 +555,12 @@ summary(advs)
 #>   WEIGHT        41         6      10        0  53.07   55.34  98.88
 #> Analysis visits (AVISIT): Baseline, Week 2, Week 4, Week 6, Week 8, Week 12,
 #> Week 16, Week 20, Week 24, Week 26
-#> ✔ Checks passed: at most one baseline record per USUBJID, PARAMCD, BASETYPE,
-#>   ATPT
+#> ✔ Checks passed: every parameter has AVAL or AVALC populated; at most one
+#>   baseline record per USUBJID, PARAMCD, BASETYPE
 ```
 
-See [Summarizing Datasets with
-`admiral_df`](https:/pharmaverse.github.io/admiral/3209-5-summary-override/articles/admiral_df.md)
+See [Summarizing ADaM
+Datasets](https:/pharmaverse.github.io/admiral/3209-5-summary-override/articles/admiral_df_web.md)
 for more on what the summary reports.
 
 Lastly, the `BASE`, and `BNRIND` columns can be derived using the

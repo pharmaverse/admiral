@@ -119,11 +119,12 @@
 - Guidance is available for ADSL, BDS and OCCDS ADaM structure including
   template scripts.
 
-##### How can a user **quickly check a dataset** while deriving it?
+##### How can a user **quickly check the contents of a dataset** while constructing it?
 
-- Call [`summary()`](https://rdrr.io/r/base/summary.html) on the
-  dataset. [admiral](https://pharmaverse.github.io/admiral/) functions
-  return an `admiral_df` dataset, for which
+- Call
+  [`summary()`](https:/pharmaverse.github.io/admiral/3209-5-summary-override/reference/summary.admiral_df.md)
+  on the dataset. [admiral](https://pharmaverse.github.io/admiral/)
+  functions return an `admiral_df` dataset, for which
   [`summary()`](https://rdrr.io/r/base/summary.html) reports the
   subjects, records, and the content specific to the type of dataset
   (e.g. the parameters of a BDS dataset), and runs some quick checks,
@@ -132,8 +133,11 @@
   [`admiral_df()`](https:/pharmaverse.github.io/admiral/3209-5-summary-override/reference/admiral_df.md)
   to also check that there is one record per key, and pass ADSL to the
   `adsl` argument to see which subjects have records.
-- See [Summarizing Datasets with
-  `admiral_df`](https:/pharmaverse.github.io/admiral/3209-5-summary-override/articles/admiral_df.md)
+- For a quick look at the variables and their values,
+  [`dplyr::glimpse()`](https://pillar.r-lib.org/reference/glimpse.html)
+  is also useful.
+- See [Summarizing ADaM
+  Datasets](https:/pharmaverse.github.io/admiral/3209-5-summary-override/articles/admiral_df_web.md)
   for details.
 
 ##### Is the `{admiral}` package **validated**?

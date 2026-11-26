@@ -107,5 +107,50 @@ Other internal:
 [`summarize_adsl()`](https:/pharmaverse.github.io/admiral/3209-5-summary-override/reference/summarize_admiral_df_type.md),
 [`summarize_bds_params()`](https:/pharmaverse.github.io/admiral/3209-5-summary-override/reference/summarize_bds_params.md),
 [`summarize_distribution()`](https:/pharmaverse.github.io/admiral/3209-5-summary-override/reference/summarize_distribution.md),
+[`summarize_params_by()`](https:/pharmaverse.github.io/admiral/3209-5-summary-override/reference/summarize_params_by.md),
 [`summarize_structure()`](https:/pharmaverse.github.io/admiral/3209-5-summary-override/reference/summarize_structure.md),
 [`summarize_subject_flow()`](https:/pharmaverse.github.io/admiral/3209-5-summary-override/reference/summarize_subject_flow.md)
+
+## Examples
+
+``` r
+library(tibble)
+
+adsl <- tribble(
+  ~STUDYID, ~USUBJID, ~SAFFL, ~TRT01A,
+  "PILOT01", "01-701-1015", "Y", "Placebo",
+  "PILOT01", "01-701-1028", "Y", "Xanomeline High Dose",
+  "PILOT01", "01-701-1034", "N", NA
+)
+
+adae <- tribble(
+  ~STUDYID, ~USUBJID, ~AEDECOD, ~TRTEMFL,
+  "PILOT01", "01-701-1015", "HEADACHE", "Y",
+  "PILOT01", "01-701-1015", "NAUSEA", "N",
+  "PILOT01", "01-701-9999", "RASH", "Y"
+)
+
+# `01-701-9999` is not in ADSL, so it is an orphan
+str(admiral:::summarize_vs_adsl(
+  adae,
+  adsl,
+  subject_vars = "USUBJID",
+  dataset_class = "OCCDS"
+))
+#> List of 9
+#>  $ n_adsl         : int 3
+#>  $ n_common       : int 1
+#>  $ n_orphans      : int 1
+#>  $ orphans        : tibble [1 × 1] (S3: tbl_df/tbl/data.frame)
+#>   ..$ USUBJID: chr "01-701-9999"
+#>  $ saffl          : Named int [1:2] 1 2
+#>   ..- attr(*, "names")= chr [1:2] "covered" "total"
+#>  $ arm_var        : chr "TRT01A"
+#>  $ arm            : tibble [3 × 3] (S3: tbl_df/tbl/data.frame)
+#>   ..$ TRT01A  : chr [1:3] "Placebo" "Xanomeline High Dose" NA
+#>   ..$ subjects: int [1:3] 1 0 0
+#>   ..$ total   : int [1:3] 1 1 1
+#>  $ incidence      : Named int [1:2] 1 2
+#>   ..- attr(*, "names")= chr [1:2] "subjects" "total"
+#>  $ incidence_denom: chr "in the safety population"
+```

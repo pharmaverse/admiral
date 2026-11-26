@@ -33,10 +33,9 @@ The records of `dataset` which belong to a subject (or device).
 ## Details
 
 A record belongs to a subject (or device) if none of `unit_vars` is
-missing. A blank (`""`) counts as missing, as data read from SAS has
-`""` rather than `NA`. Such records are typically added by a derivation
-which does not populate these variables, and counting them would add a
-subject which does not exist.
+`NA`. Records with a missing `unit_vars` are typically added by a
+derivation which does not populate these variables, and counting them
+would add a subject which does not exist.
 
 ## See also
 
@@ -65,6 +64,7 @@ Other internal:
 [`summarize_adsl()`](https:/pharmaverse.github.io/admiral/3209-5-summary-override/reference/summarize_admiral_df_type.md),
 [`summarize_bds_params()`](https:/pharmaverse.github.io/admiral/3209-5-summary-override/reference/summarize_bds_params.md),
 [`summarize_distribution()`](https:/pharmaverse.github.io/admiral/3209-5-summary-override/reference/summarize_distribution.md),
+[`summarize_params_by()`](https:/pharmaverse.github.io/admiral/3209-5-summary-override/reference/summarize_params_by.md),
 [`summarize_structure()`](https:/pharmaverse.github.io/admiral/3209-5-summary-override/reference/summarize_structure.md),
 [`summarize_subject_flow()`](https:/pharmaverse.github.io/admiral/3209-5-summary-override/reference/summarize_subject_flow.md),
 [`summarize_vs_adsl()`](https:/pharmaverse.github.io/admiral/3209-5-summary-override/reference/summarize_vs_adsl.md)
