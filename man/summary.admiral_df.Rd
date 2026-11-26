@@ -88,7 +88,7 @@ keys (e.g. \code{STUDYID}) may not be populated on records added by a
 derivation. Otherwise the subject keys
 (\code{get_admiral_option("subject_keys")}) are used if all of them are in the
 dataset, as only together do they identify a subject. A record with any of
-these missing (\code{NA} or \code{""}) belongs to no subject, so it is not counted
+these \code{NA} belongs to no subject, so it is not counted
 as one.
 
 The records of a medical device dataset (\code{ADDL}, \code{MDBDS}, \code{MDTTE},

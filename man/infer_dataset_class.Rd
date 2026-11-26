@@ -33,7 +33,7 @@ only ever declared with \code{\link[=admiral_df]{admiral_df()}}.
 A dataset is first classed as device data or subject data:
 \itemize{
 \item \strong{Device data} contains \code{SPDEVID}, the device identifier, populated
-(neither \code{NA} nor \code{""}) for every record. Its class is one of the medical
+(not \code{NA}) for every record. Its class is one of the medical
 device classes \code{"ADDL"}, \code{"MDBDS"}, \code{"MDTTE"}, and \code{"MDOCCDS"}.
 \item \strong{Subject data} is otherwise data which contains all the subject keys
 (\code{get_admiral_option("subject_keys")}, by default \code{STUDYID} and

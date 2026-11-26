@@ -26,11 +26,10 @@ The records of \code{dataset} which belong to a subject (or device).
 Keep the Records which Belong to a Subject or Device
 }
 \details{
-A record belongs to a subject (or device) if none of \code{unit_vars} is
-missing. A blank (\code{""}) counts as missing, as data read from SAS has \code{""}
-rather than \code{NA}. Such records are typically added by a derivation which
-does not populate these variables, and counting them would add a subject
-which does not exist.
+A record belongs to a subject (or device) if none of \code{unit_vars} is \code{NA}.
+Records with a missing \code{unit_vars} are typically added by a derivation
+which does not populate these variables, and counting them would add a
+subject which does not exist.
 }
 \seealso{
 Other internal:

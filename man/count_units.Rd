@@ -21,8 +21,8 @@ count_units(dataset, unit_vars)
 }
 \value{
 The number of distinct combinations of \code{unit_vars} among the records
-which belong to a subject or device (see \code{\link[=filter_unit_records]{filter_unit_records()}}), or \code{NA}
-if \code{unit_vars} is empty.
+where none of them is \code{NA} (see \code{\link[=filter_unit_records]{filter_unit_records()}}), or \code{NA} if
+\code{unit_vars} is empty.
 }
 \description{
 Count the Subjects or Devices of a Dataset

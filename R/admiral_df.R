@@ -471,7 +471,7 @@ get_dataset_class <- function(dataset) {
 #'   A dataset is first classed as device data or subject data:
 #'
 #'   * **Device data** contains `SPDEVID`, the device identifier, populated
-#'     (neither `NA` nor `""`) for every record. Its class is one of the medical
+#'     (not `NA`) for every record. Its class is one of the medical
 #'     device classes `"ADDL"`, `"MDBDS"`, `"MDTTE"`, and `"MDOCCDS"`.
 #'   * **Subject data** is otherwise data which contains all the subject keys
 #'     (`get_admiral_option("subject_keys")`, by default `STUDYID` and
@@ -532,10 +532,8 @@ infer_dataset_class <- function(dataset) {
   # `SPDEVID` is recorded in subject datasets too, but there only for the
   # records involving a device, so it makes a dataset device data only where it
   # is populated for every record. The subject keys do not decide it, as
-  # `USUBJID` is conditional in a device dataset. A blank counts as missing, as
-  # data read from SAS has `""` rather than `NA`
-  if ("SPDEVID" %in% cols &&
-    !any(is.na(dataset$SPDEVID) | dataset$SPDEVID == "")) {
+  # `USUBJID` is conditional in a device dataset
+  if ("SPDEVID" %in% cols && !anyNA(dataset$SPDEVID)) {
     return(infer_class_by_structure(
       dataset,
       id_vars = intersect(c("STUDYID", "SPDEVID"), cols),
@@ -673,7 +671,7 @@ infer_class_by_structure <- function(dataset, id_vars, classes) {
 #'   derivation. Otherwise the subject keys
 #'   (`get_admiral_option("subject_keys")`) are used if all of them are in the
 #'   dataset, as only together do they identify a subject. A record with any of
-#'   these missing (`NA` or `""`) belongs to no subject, so it is not counted
+#'   these `NA` belongs to no subject, so it is not counted
 #'   as one.
 #'
 #'   The records of a medical device dataset (`ADDL`, `MDBDS`, `MDTTE`,
@@ -751,7 +749,7 @@ infer_class_by_structure <- function(dataset, id_vars, classes) {
 #'
 #' summary(advs, adsl = adsl)
 summary.admiral_df <- function(object, adsl = NULL, ...) {
-  name <- attr(object, "admiral_dataset_name")
+  name <- get_dataset_name(object)
   if (is.null(name)) {
     # the variable `summary()` was called on, unless it is a pipe placeholder
     # or a more complex expression than a name
@@ -836,19 +834,17 @@ summary.admiral_df <- function(object, adsl = NULL, ...) {
 #' @param unit_vars The variables subjects, or devices, are identified by
 #'
 #' @details
-#'   A record belongs to a subject (or device) if none of `unit_vars` is
-#'   missing. A blank (`""`) counts as missing, as data read from SAS has `""`
-#'   rather than `NA`. Such records are typically added by a derivation which
-#'   does not populate these variables, and counting them would add a subject
-#'   which does not exist.
+#'   A record belongs to a subject (or device) if none of `unit_vars` is `NA`.
+#'   Records with a missing `unit_vars` are typically added by a derivation
+#'   which does not populate these variables, and counting them would add a
+#'   subject which does not exist.
 #'
 #' @return The records of `dataset` which belong to a subject (or device).
 #'
 #' @keywords internal
 #' @family internal
 filter_unit_records <- function(dataset, unit_vars) {
-  has_unit <- map(unit_vars, ~ !is.na(dataset[[.x]]) & dataset[[.x]] != "")
-  dataset[reduce(has_unit, `&`, .init = rep(TRUE, nrow(dataset))), , drop = FALSE]
+  filter_out(dataset, if_any(all_of(unit_vars), is.na))
 }
 
 #' Count the Subjects or Devices of a Dataset
@@ -857,8 +853,8 @@ filter_unit_records <- function(dataset, unit_vars) {
 #' @param unit_vars The variables subjects, or devices, are identified by
 #'
 #' @return The number of distinct combinations of `unit_vars` among the records
-#'   which belong to a subject or device (see [filter_unit_records()]), or `NA`
-#'   if `unit_vars` is empty.
+#'   where none of them is `NA` (see [filter_unit_records()]), or `NA` if
+#'   `unit_vars` is empty.
 #'
 #' @keywords internal
 #' @family internal
@@ -866,7 +862,7 @@ count_units <- function(dataset, unit_vars) {
   if (length(unit_vars) == 0) {
     return(NA_integer_)
   }
-  n_distinct(filter_unit_records(dataset[unit_vars], unit_vars))
+  n_distinct(select(dataset, all_of(unit_vars)), na.rm = TRUE)
 }
 
 #' Compare a Dataset with its ADSL
@@ -961,17 +957,19 @@ summarize_vs_adsl <- function(dataset, adsl, subject_vars, dataset_class) {
     )
   }
 
-  arm_var <- intersect(c("TRT01A", "TRT01P", "ARM"), colnames(adsl))
-  arm_var <- keep(arm_var, ~ any(!is.na(adsl[[.x]])))
-  if (length(arm_var) > 0) {
-    out$arm_var <- arm_var[1]
-    out$arm <- count(adsl, !!sym(arm_var[1]), name = "total") %>%
+  # `first()` gives `NA` if no arm variable is populated
+  arm_var <- intersect(c("TRT01A", "TRT01P", "ARM"), colnames(adsl)) %>%
+    keep(~ any(!is.na(adsl[[.x]]))) %>%
+    first()
+  if (!is.na(arm_var)) {
+    out$arm_var <- arm_var
+    out$arm <- count(adsl, !!sym(arm_var), name = "total") %>%
       left_join(
-        count(adsl_with_records, !!sym(arm_var[1]), name = "subjects"),
-        by = arm_var[1]
+        count(adsl_with_records, !!sym(arm_var), name = "subjects"),
+        by = arm_var
       ) %>%
       mutate(subjects = coalesce(subjects, 0L)) %>%
-      select(!!sym(arm_var[1]), subjects, total)
+      select(!!sym(arm_var), subjects, total)
   }
 
   if (dataset_class %in% c("OCCDS", "MDOCCDS") && "TRTEMFL" %in% colnames(dataset)) {
@@ -1117,28 +1115,31 @@ summarize_adsl <- function(dataset, subject_vars) {
     return(out)
   }
   dataset <- filter_unit_records(dataset, subject_vars)
+  cols <- colnames(dataset)
 
   # planned treatment first, falling back to actual treatment and `ARM`; a
-  # variable which is entirely `NA` has not been derived yet
-  trt_var <- intersect(c("TRT01P", "TRT01A", "ARM"), colnames(dataset))
-  trt_var <- keep(trt_var, ~ any(!is.na(dataset[[.x]])))
-  if (length(trt_var) > 0) {
-    out$trt_var <- trt_var[1]
+  # variable which is entirely `NA` has not been derived yet, and `first()`
+  # gives `NA` if none is populated
+  trt_var <- intersect(c("TRT01P", "TRT01A", "ARM"), cols) %>%
+    keep(~ any(!is.na(dataset[[.x]]))) %>%
+    first()
+  if (!is.na(trt_var)) {
+    out$trt_var <- trt_var
     out$trt <- dataset %>%
-      distinct(!!sym(trt_var[1]), !!!syms(subject_vars)) %>%
-      count(!!sym(trt_var[1]), name = "subjects")
+      distinct(!!sym(trt_var), !!!syms(subject_vars)) %>%
+      count(!!sym(trt_var), name = "subjects")
   }
 
   pop_vars <- intersect(
     c("RANDFL", "ENRLFL", "SAFFL", "ITTFL", "FASFL", "EFFFL", "PPROTFL", "COMPLFL"),
-    colnames(dataset)
+    cols
   )
   # subjects rather than records are counted, as the treatment arms are, so
   # that duplicated subject records do not inflate the counts
   if (length(pop_vars) > 0) {
     out$pops <- vapply(
       set_names(pop_vars),
-      function(v) n_distinct(dataset[dataset[[v]] %in% "Y", subject_vars]),
+      function(v) count_units(filter(dataset, .data[[v]] %in% "Y"), subject_vars),
       integer(1)
     )
   }
@@ -1146,7 +1147,6 @@ summarize_adsl <- function(dataset, subject_vars) {
   # one record per subject for the remaining items, so that each counts
   # subjects, and so that a subject's age or duration is only counted once
   subjects <- distinct(dataset, !!!syms(subject_vars), .keep_all = TRUE)
-  cols <- colnames(subjects)
 
   out$flow <- summarize_subject_flow(subjects)
 

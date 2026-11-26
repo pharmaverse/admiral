@@ -605,15 +605,13 @@ test_that("infer_dataset_class Test 23: device datasets are inferred as the devi
   expect_identical(infer_dataset_class(addl_many_per_subject), "ADDL")
 
   # a subject dataset records `SPDEVID` only for the records involving a
-  # device, e.g. an adverse event dataset, so it is subject data -- whether the
-  # missing values are `NA` or blank, as in data read from SAS
+  # device, e.g. an adverse event dataset, so it is subject data
   adae <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~SPDEVID, ~AEDECOD,
     "P",      "1",      "D-1",    "HEADACHE",
     "P",      "2",      NA,       "NAUSEA"
   )
   expect_identical(infer_dataset_class(adae), "OCCDS")
-  expect_identical(infer_dataset_class(mutate(adae, SPDEVID = c("D-1", ""))), "OCCDS")
 
   # without the subject keys, a partly populated `SPDEVID` is neither class
   expect_identical(infer_dataset_class(select(adae, -USUBJID)), "other")
@@ -1327,11 +1325,10 @@ test_that("summary.admiral_df Test 47: an ADSL which cannot be compared with is 
 
 ## Test 48: a record without a subject is not counted as a subject ----
 test_that("summary.admiral_df Test 48: a record without a subject is not counted as a subject", { # nolint
-  # e.g. records added by a derivation which does not populate `USUBJID`; a
-  # blank counts as missing, as in data read from SAS
+  # e.g. records added by a derivation which does not populate `USUBJID`
   advs <- tibble::tibble(
     STUDYID = "P",
-    USUBJID = c("1", "2", NA, ""),
+    USUBJID = c("1", "2", NA, NA),
     PARAMCD = "SYSBP",
     AVAL = c(120, 130, 125, 128)
   ) %>%
@@ -1369,7 +1366,7 @@ test_that("summary.admiral_df Test 49: the checks leave out records without a su
   # second baseline of anyone
   advs <- tibble::tibble(
     STUDYID = "P",
-    USUBJID = c("1", NA, NA, "", ""),
+    USUBJID = c("1", NA, NA, NA, NA),
     PARAMCD = "SYSBP",
     ABLFL = "Y",
     AVAL = c(120, 125, 126, 127, 128)
@@ -1379,7 +1376,7 @@ test_that("summary.admiral_df Test 49: the checks leave out records without a su
 
   adae <- tibble::tibble(
     STUDYID = "P",
-    USUBJID = c("1", NA, NA, "", ""),
+    USUBJID = c("1", NA, NA, NA, NA),
     AEDECOD = "NAUSEA",
     AOCCFL = "Y"
   )
@@ -1470,7 +1467,7 @@ test_that("summary.admiral_df Test 52: records without a subject are no treatmen
   adsl <- tibble::tibble(STUDYID = "P", USUBJID = c("1", "2"), SAFFL = "Y")
   adae <- tibble::tibble(
     STUDYID = "P",
-    USUBJID = c("1", NA, ""),
+    USUBJID = c("1", NA, NA),
     AEDECOD = "NAUSEA",
     TRTEMFL = "Y"
   ) %>%
