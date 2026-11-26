@@ -28,9 +28,9 @@ report tailored to the kind of dataset it is, including some sanity checks.
 
 This article shows how to:
 
-- Tag a dataset with `admiral_df()` and read its metadata back,
 - Use `summary()` to inspect a dataset *in flight*, i.e. at any point of a
   derivation pipeline,
+- Tag a dataset with `admiral_df()` and read its metadata back,
 - Keep the class and metadata when using `{dplyr}` and `{tidyr}`, as some
   common operations keep them, some keep them only in part, and some drop them.
 
@@ -41,8 +41,8 @@ so their behavior may still change.
 ## Required Packages
 
 The examples in this article use the following packages and the example ADSL
-and ADLB datasets which come with `{admiral}`. Both datasets are already tagged
-with their metadata, as described below.
+and ADLB datasets which come with `{admiral}`. Both datasets already have their
+metadata stored, so they can be summarized straight away.
 
 ```{r message=FALSE}
 library(admiral)
@@ -53,9 +53,151 @@ adsl <- admiral_adsl
 adlb <- admiral_adlb
 ```
 
+# Summarizing a Dataset in Flight
+
+The example datasets already have their name, ADaM class, and key variables
+stored (see [Tagging a Dataset](#tagging-a-dataset)), so `summary()` can report
+on them straight away.
+
+Calling `summary()` on an `admiral_df` prints a report on the dataset. It
+always shows the name and ADaM class, the number of subjects, records and
+variables, and whether there is one record per key. Depending on the ADaM class
+it then adds:
+
+- **ADSL**: subjects per treatment arm, population flags, subject flow
+  (randomized, treated, completed), treatment duration, end of study status,
+  deaths and their causes, and age and sex.
+- **BDS**: the records, subjects and visits of each parameter, with the
+  distribution of `AVAL` for numeric parameters and the distinct `AVALC` values
+  for character ones, the analysis visits, the derived records per `DTYPE`, and
+  checks that every parameter has `AVAL` or `AVALC` populated and that there is
+  at most one baseline record (`ABLFL`) per subject, parameter, and `BASETYPE`.
+- **OCCDS**: the number of distinct terms, treatment-emergent and serious
+  records, records per severity and per toxicity grade, and a check that each
+  occurrence flag (`AOCCFL`, `AOCCPFL`, ...) has at most one `"Y"` per group.
+- **TTE**: events and censored records per parameter.
+
+```{r}
+summary(adsl)
+```
+
+```{r}
+summary(adlb)
+```
+
+Each item is only reported when the variables it needs are in the dataset. So
+`summary()` can be called at any point of a derivation: a dataset which is only
+half derived gives a shorter report, not an error.
+
+## Checking the Record Structure
+
+The structure line compares the records with the key variables stored with the
+dataset:
+
+- `✔` -- there is one record per combination of the keys,
+- `✖` -- some combinations have more than one record, and how many extra
+  records there are,
+- `ℹ` -- no keys have been set, so the structure was not checked,
+- `!` -- some keys are no longer variables of the dataset (e.g. after a
+  `select()` or `rename()`), so the structure was not checked.
+
+For example, imagine a merge accidentally duplicated some records. Without
+looking through the data, `summary()` reports it straight away:
+
+```{r}
+adlb_dup <- bind_rows(adlb, slice(adlb, 1:2))
+
+summary(adlb_dup)
+```
+
+## Comparing with ADSL
+
+A dataset cannot tell by itself which subjects are missing from it. If ADSL is
+passed to the `adsl` argument, `summary()` also reports how many of the ADSL
+subjects have records -- overall, in the safety population, and per treatment
+arm -- and checks that every subject in the dataset is in ADSL. For an OCCDS
+dataset it also reports the subjects with a treatment-emergent record.
+
+```{r}
+summary(adlb, adsl = adsl)
+```
+
+## A Worked Example
+
+Summaries are most useful straight after a derivation, to confirm it did what
+you expected. Here we add a parameter for the ratio of ALT to AST. The keys are
+set to one record per subject, parameter, date, and `DTYPE` first, so that the
+derived records (`DTYPE` is populated) and the observed ones are told apart
+(see [Tagging a Dataset](#tagging-a-dataset)):
+
+```{r}
+adlb <- admiral_df(adlb, dataset_keys = exprs(STUDYID, USUBJID, PARAMCD, ADT, DTYPE))
+
+adlb_ratio <- adlb %>%
+  derive_param_computed(
+    by_vars = exprs(STUDYID, USUBJID, AVISIT, AVISITN, ADT),
+    parameters = c("ALT", "AST"),
+    set_values_to = exprs(
+      AVAL = AVAL.ALT / AVAL.AST,
+      PARAMCD = "ALTAST",
+      PARAM = "ALT/AST Ratio"
+    )
+  )
+
+summary(adlb_ratio)
+```
+
+The derivation ran without an error or a warning, but the summary shows that
+something went wrong: the structure check finds 26 extra records. The ratio was
+also computed for the derived `"POST-BASELINE"` visits (`DTYPE` is `"LOV"`,
+`"MAXIMUM"`, or `"MINIMUM"`). As `DTYPE` is not set for the new records, these
+duplicate the ratio of the observed visit on the same date.
+
+The fix is to compute the ratio from the observed records only. The `filter`
+argument of `derive_param_computed()` does this without dropping the derived
+records from the dataset, as filtering the dataset beforehand would:
+
+```{r}
+adlb_ratio <- adlb %>%
+  derive_param_computed(
+    by_vars = exprs(STUDYID, USUBJID, AVISIT, AVISITN, ADT),
+    filter = is.na(DTYPE),
+    parameters = c("ALT", "AST"),
+    set_values_to = exprs(
+      AVAL = AVAL.ALT / AVAL.AST,
+      PARAMCD = "ALTAST",
+      PARAM = "ALT/AST Ratio"
+    )
+  )
+
+summary(adlb_ratio)
+```
+
+Now the structure check passes, and `ALTAST` has a record for each observed
+visit with both values.
+
+## Using the Summary Programmatically
+
+`summary()` returns a list, which is printed. Its elements can be used in your
+own checks, e.g. to warn, or stop a program, if the record structure is wrong:
+
+```{r}
+smry <- summary(adlb_dup)
+
+smry$structure$n_duplicates
+
+if (isTRUE(smry$structure$n_duplicates > 0)) {
+  cli::cli_warn("Duplicates detected!")
+}
+```
+
+`n_duplicates` is `NA` if the structure was not checked, e.g. because no keys
+were set, hence the `isTRUE()`.
+
 # What is an `admiral_df`?
 
-An `admiral_df` is an ordinary data frame (usually a tibble) with an extra
+The summaries above rely on the `admiral_df` class and the metadata stored with
+it. An `admiral_df` is an ordinary data frame (usually a tibble) with an extra
 class. Everything you can do with a tibble you can still do with an
 `admiral_df`; it only changes how the dataset is printed and summarized.
 
@@ -181,137 +323,6 @@ When printed, an inferred class is marked as such. If the inferred class is
 wrong for your dataset -- for example an ADAE which has been restricted to
 device related events may be taken for device data -- set it with
 `admiral_df()`. A class that has been set always takes precedence.
-
-# Summarizing a Dataset in Flight
-
-Calling `summary()` on an `admiral_df` prints a report on the dataset. It
-always shows the name and ADaM class, the number of subjects, records and
-variables, and whether there is one record per key. Depending on the ADaM class
-it then adds:
-
-- **ADSL**: subjects per treatment arm, population flags, subject flow
-  (randomized, treated, completed), treatment duration, end of study status,
-  deaths and their causes, and age and sex.
-- **BDS**: the records, subjects and visits of each parameter, with the
-  distribution of `AVAL` for numeric parameters and the distinct `AVALC` values
-  for character ones, the analysis visits, the derived records per `DTYPE`, and
-  checks that every parameter has `AVAL` or `AVALC` populated and that there is
-  at most one baseline record (`ABLFL`) per subject, parameter, and `BASETYPE`.
-- **OCCDS**: the number of distinct terms, treatment-emergent and serious
-  records, records per severity and per toxicity grade, and a check that each
-  occurrence flag (`AOCCFL`, `AOCCPFL`, ...) has at most one `"Y"` per group.
-- **TTE**: events and censored records per parameter.
-
-```{r}
-summary(adsl)
-```
-
-```{r}
-summary(adlb)
-```
-
-Each item is only reported when the variables it needs are in the dataset. So
-`summary()` can be called at any point of a derivation: a dataset which is only
-half derived gives a shorter report, not an error.
-
-## Checking the Record Structure
-
-The structure line compares the records with the keys:
-
-- `✔` -- there is one record per combination of the keys,
-- `✖` -- some combinations have more than one record, and how many extra
-  records there are,
-- `ℹ` -- no keys have been set, so the structure was not checked,
-- `!` -- some keys are no longer variables of the dataset (e.g. after a
-  `select()` or `rename()`), so the structure was not checked.
-
-For example, imagine a merge accidentally duplicated some records. Without
-looking through the data, `summary()` reports it straight away:
-
-```{r}
-adlb_dup <- bind_rows(adlb, slice(adlb, 1:2))
-
-summary(adlb_dup)
-```
-
-## Comparing with ADSL
-
-A dataset cannot tell by itself which subjects are missing from it. If ADSL is
-passed to the `adsl` argument, `summary()` also reports how many of the ADSL
-subjects have records -- overall, in the safety population, and per treatment
-arm -- and checks that every subject in the dataset is in ADSL. For an OCCDS
-dataset it also reports the subjects with a treatment-emergent record.
-
-```{r}
-summary(adlb, adsl = adsl)
-```
-
-## A Worked Example
-
-Summaries are most useful straight after a derivation, to confirm it did what
-you expected. Here we add a parameter for the ratio of ALT to AST:
-
-```{r}
-adlb_ratio <- adlb %>%
-  derive_param_computed(
-    by_vars = exprs(STUDYID, USUBJID, AVISIT, AVISITN, ADT),
-    parameters = c("ALT", "AST"),
-    set_values_to = exprs(
-      AVAL = AVAL.ALT / AVAL.AST,
-      PARAMCD = "ALTAST",
-      PARAM = "ALT/AST Ratio"
-    )
-  )
-
-summary(adlb_ratio)
-```
-
-The derivation ran without an error or a warning, but the summary shows that
-something went wrong: the structure check finds 26 extra records. The ratio was
-also computed for the derived `"POST-BASELINE"` visits (`DTYPE` is `"LOV"`,
-`"MAXIMUM"`, or `"MINIMUM"`). As `DTYPE` is not set for the new records, these
-duplicate the ratio of the observed visit on the same date.
-
-The fix is to compute the ratio from the observed records only. The `filter`
-argument of `derive_param_computed()` does this without dropping the derived
-records from the dataset, as filtering the dataset beforehand would:
-
-```{r}
-adlb_ratio <- adlb %>%
-  derive_param_computed(
-    by_vars = exprs(STUDYID, USUBJID, AVISIT, AVISITN, ADT),
-    filter = is.na(DTYPE),
-    parameters = c("ALT", "AST"),
-    set_values_to = exprs(
-      AVAL = AVAL.ALT / AVAL.AST,
-      PARAMCD = "ALTAST",
-      PARAM = "ALT/AST Ratio"
-    )
-  )
-
-summary(adlb_ratio)
-```
-
-Now the structure check passes, and `ALTAST` has a record for each observed
-visit with both values.
-
-## Using the Summary Programmatically
-
-`summary()` returns a list, which is printed. Its elements can be used in your
-own checks, e.g. to warn, or stop a program, if the record structure is wrong:
-
-```{r}
-smry <- summary(adlb_dup)
-
-smry$structure$n_duplicates
-
-if (isTRUE(smry$structure$n_duplicates > 0)) {
-  cli::cli_warn("Duplicates detected!")
-}
-```
-
-`n_duplicates` is `NA` if the structure was not checked, e.g. because no keys
-were set, hence the `isTRUE()`.
 
 # What Happens to the Class and Metadata?
 
