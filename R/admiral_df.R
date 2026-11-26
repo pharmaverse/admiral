@@ -147,8 +147,8 @@ device_classes <- c("ADDL", "MDBDS", "MDTTE", "MDOCCDS")
 #'   `rename()` or removed by `select()`: a key which is no longer in the
 #'   dataset means it has changed since its keys were set.
 #'
-#' @keywords utils_help
-#' @family utils_help
+#' @keywords admiral_df
+#' @family admiral_df
 #'
 #' @export
 #'
@@ -346,8 +346,8 @@ print.admiral_df <- function(x, ...) {
 #'   list if the dataset has been declared to have no key variables; or `NULL` if
 #'   its keys have not been set. The keys are never inferred.
 #'
-#' @keywords utils_help
-#' @family utils_help
+#' @keywords admiral_df
+#' @family admiral_df
 #'
 #' @export
 #'
@@ -386,8 +386,8 @@ get_dataset_keys <- function(dataset) {
 #'
 #' @return A character scalar, or `NULL` if no name has been set.
 #'
-#' @keywords utils_help
-#' @family utils_help
+#' @keywords admiral_df
+#' @family admiral_df
 #'
 #' @export
 #'
@@ -424,8 +424,8 @@ get_dataset_name <- function(dataset) {
 #' @return A character scalar: the declared class, or the inferred one (which may
 #'   be `"other"` or `NA`, see [infer_dataset_class()]).
 #'
-#' @keywords utils_help
-#' @family utils_help
+#' @keywords admiral_df
+#' @family admiral_df
 #'
 #' @export
 #'
@@ -607,6 +607,7 @@ infer_class_by_structure <- function(dataset, id_vars, classes) {
 
 #' Summarize an `admiral_df` Dataset
 #'
+#' @description
 #' Reports what a dataset contains and whether it has one record per key
 #' variable combination. This is useful after a derivation, e.g. to check that
 #' [derive_param_computed()] added the records that were expected.
@@ -636,12 +637,10 @@ infer_class_by_structure <- function(dataset, id_vars, classes) {
 #'
 #' @param adsl The subject-level dataset to compare `object` with
 #'
-#'   ADSL holds every subject of the study, so it shows what `object` cannot
-#'   show by itself: the subjects without any records, and the subjects in
-#'   `object` which should not be there. If it is supplied, the summary also
-#'   reports how many of the ADSL subjects have records, overall, within the
-#'   safety population (`SAFFL`), and per treatment arm; checks that every
-#'   subject of `object` is in ADSL; and, for an `OCCDS` dataset, reports the
+#'   If it is supplied, the summary also reports how many of the ADSL subjects
+#'   have records, overall, within the safety population (`SAFFL`), and per
+#'   treatment arm; checks that every subject of `object` is in `ADSL`; and,
+#'   for an `OCCDS` dataset, reports the
 #'   subjects with a treatment-emergent record (`TRTEMFL`) out of the safety
 #'   population, or out of ADSL if there is no `SAFFL`.
 #'
@@ -655,12 +654,11 @@ infer_class_by_structure <- function(dataset, id_vars, classes) {
 #' @param ... Not used
 #'
 #' @details
-#'   The summary reports facts only, apart from the record structure check and
-#'   the checks for the dataset class, which report problems without signaling
-#'   them.
-#'   Each item is only reported when the variables it needs are in the dataset,
-#'   so a dataset which is still being derived gives a shorter summary rather
-#'   than an error.
+#'   The checks (e.g. of the record structure) report problems in the summary
+#'   only: they never raise an error or a warning, so `summary()` can be called
+#'   anywhere in a derivation pipeline. Each item is only reported when the
+#'   variables it needs are in the dataset, so a dataset which is still being
+#'   derived gives a shorter summary rather than an error.
 #'
 #'   The record structure is checked against the keys stored by [admiral_df()].
 #'   Keys are never inferred, so if none were stored the structure is not
@@ -686,8 +684,8 @@ infer_class_by_structure <- function(dataset, id_vars, classes) {
 #' @return An object of class `summary_admiral_df`, a named list which is
 #'   printed by [print.summary_admiral_df()].
 #'
-#' @keywords utils_ds_chk
-#' @family utils_ds_chk
+#' @keywords admiral_df
+#' @family admiral_df
 #'
 #' @export
 #'
@@ -902,6 +900,31 @@ count_units <- function(dataset, unit_vars) {
 #'     with a treatment-emergent record and the subjects they are counted out
 #'     of (`subjects` and `total`), and which subjects these are
 #'     (`"in the safety population"` or `"in ADSL"`).
+#'
+#' @examples
+#' library(tibble)
+#'
+#' adsl <- tribble(
+#'   ~STUDYID, ~USUBJID, ~SAFFL, ~TRT01A,
+#'   "PILOT01", "01-701-1015", "Y", "Placebo",
+#'   "PILOT01", "01-701-1028", "Y", "Xanomeline High Dose",
+#'   "PILOT01", "01-701-1034", "N", NA
+#' )
+#'
+#' adae <- tribble(
+#'   ~STUDYID, ~USUBJID, ~AEDECOD, ~TRTEMFL,
+#'   "PILOT01", "01-701-1015", "HEADACHE", "Y",
+#'   "PILOT01", "01-701-1015", "NAUSEA", "N",
+#'   "PILOT01", "01-701-9999", "RASH", "Y"
+#' )
+#'
+#' # `01-701-9999` is not in ADSL, so it is an orphan
+#' str(admiral:::summarize_vs_adsl(
+#'   adae,
+#'   adsl,
+#'   subject_vars = "USUBJID",
+#'   dataset_class = "OCCDS"
+#' ))
 #'
 #' @keywords internal
 #' @family internal

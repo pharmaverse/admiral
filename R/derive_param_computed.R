@@ -167,7 +167,7 @@
 #'
 #' @caption Example 1 - Data setup
 #'
-#' @info Examples 1a, 1b, and 1c use the following `ADVS` data.
+#' @info Examples 1a, 1b, 1c, and 1d use the following `ADVS` data.
 #'
 #' @code
 #' ADVS <- tribble(
@@ -282,6 +282,37 @@
 #'   ),
 #'   keep_nas = exprs(ADTF)
 #' )
+#'
+#' @caption Example 1d - Checking the result with `summary()`
+#'
+#' @info `{admiral}` functions return an `admiral_df` dataset, so calling
+#'   [`summary()`][summary.admiral_df()] on the result shows per parameter how
+#'   many records and subjects there are.
+#'
+#' - Here the `ADVS` data is tagged with its class and keys first, so that
+#'   the summary also checks for one record per key.
+#' - `MAP` has 3 records rather than 4, as the `"WEEK 2"` systolic blood
+#'   pressure of `01-701-1028` is missing (see Example 1a).
+#'
+#' @code
+#' advs_map <- ADVS %>%
+#'   admiral_df(
+#'     dataset_class = "BDS",
+#'     dataset_keys = exprs(USUBJID, PARAMCD, VISIT)
+#'   ) %>%
+#'   derive_param_computed(
+#'     by_vars = exprs(USUBJID, VISIT),
+#'     parameters = c("SYSBP", "DIABP"),
+#'     set_values_to = exprs(
+#'       AVAL = (AVAL.SYSBP + 2 * AVAL.DIABP) / 3,
+#'       PARAMCD = "MAP",
+#'       PARAM = "Mean Arterial Pressure (mmHg)",
+#'       AVALU = "mmHg",
+#'       ADT = ADT.SYSBP
+#'     )
+#'   )
+#'
+#' summary(advs_map)
 #'
 #' @caption Example 2 - Derivations using parameters measured only once
 #' (`constant_parameters` and `constant_by_vars`)

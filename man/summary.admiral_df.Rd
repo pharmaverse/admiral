@@ -15,12 +15,10 @@
 
 \item{adsl}{The subject-level dataset to compare \code{object} with
 
-ADSL holds every subject of the study, so it shows what \code{object} cannot
-show by itself: the subjects without any records, and the subjects in
-\code{object} which should not be there. If it is supplied, the summary also
-reports how many of the ADSL subjects have records, overall, within the
-safety population (\code{SAFFL}), and per treatment arm; checks that every
-subject of \code{object} is in ADSL; and, for an \code{OCCDS} dataset, reports the
+If it is supplied, the summary also reports how many of the ADSL subjects
+have records, overall, within the safety population (\code{SAFFL}), and per
+treatment arm; checks that every subject of \code{object} is in \code{ADSL}; and,
+for an \code{OCCDS} dataset, reports the
 subjects with a treatment-emergent record (\code{TRTEMFL}) out of the safety
 population, or out of ADSL if there is no \code{SAFFL}.
 
@@ -48,8 +46,7 @@ printed by \code{\link[=print.summary_admiral_df]{print.summary_admiral_df()}}.
 Reports what a dataset contains and whether it has one record per key
 variable combination. This is useful after a derivation, e.g. to check that
 \code{\link[=derive_param_computed]{derive_param_computed()}} added the records that were expected.
-}
-\details{
+
 The summary always shows the dataset name and ADaM class, the number of
 subjects, observations and variables, and the record structure. It then adds
 the information for the dataset class (see \code{\link[=get_dataset_class]{get_dataset_class()}}):
@@ -71,13 +68,13 @@ flags (\code{AOCCFL}, \code{AOCCSFL}, \code{AOCCPFL}, ...).
 
 If \code{adsl} is supplied, the summary also compares the dataset with it, see
 the \code{adsl} argument.
-
-The summary reports facts only, apart from the record structure check and
-the checks for the dataset class, which report problems without signaling
-them.
-Each item is only reported when the variables it needs are in the dataset,
-so a dataset which is still being derived gives a shorter summary rather
-than an error.
+}
+\details{
+The checks (e.g. of the record structure) report problems in the summary
+only: they never raise an error or a warning, so \code{summary()} can be called
+anywhere in a derivation pipeline. Each item is only reported when the
+variables it needs are in the dataset, so a dataset which is still being
+derived gives a shorter summary rather than an error.
 
 The record structure is checked against the keys stored by \code{\link[=admiral_df]{admiral_df()}}.
 Keys are never inferred, so if none were stored the structure is not
@@ -101,13 +98,14 @@ The dataset name is the one stored by \code{\link[=admiral_df]{admiral_df()}} or
 name of the variable \code{summary()} was called on.
 }
 \seealso{
-Utilities for Dataset Checking:
-\code{\link[=get_duplicates_dataset]{get_duplicates_dataset()}},
-\code{\link[=get_many_to_one_dataset]{get_many_to_one_dataset()}},
-\code{\link[=get_one_to_many_dataset]{get_one_to_many_dataset()}}
+The admiral_df Class:
+\code{\link[=admiral_df]{admiral_df()}},
+\code{\link[=get_dataset_class]{get_dataset_class()}},
+\code{\link[=get_dataset_keys]{get_dataset_keys()}},
+\code{\link[=get_dataset_name]{get_dataset_name()}}
 }
-\concept{utils_ds_chk}
-\keyword{utils_ds_chk}
+\concept{admiral_df}
+\keyword{admiral_df}
 \section{Examples}{
 \subsection{Summarizing a BDS dataset after a derivation}{
 

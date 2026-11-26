@@ -23,7 +23,7 @@ subject and parameter?
 
 `{admiral}` helps answer these questions with the `admiral_df` class. A dataset
 of this class can carry a little metadata about itself -- its name, its ADaM
-class, and its key variables -- and calling `summary()` on it prints a short
+class, and its key variables -- and calling [`summary()`](../reference/summary.admiral_df.html) on it prints a short
 report tailored to the kind of dataset it is, including some sanity checks.
 
 This article shows how to:

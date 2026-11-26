@@ -463,6 +463,33 @@ derive_vars_joined(
 #> 7 1          24    23    30 WEEK 4  
 #> 8 2          -1   -30     1 BASELINE
 #> 9 2          13     8    15 WEEK 2  }\if{html}{\out{</div>}}}
+\subsection{Checking the derived visits with \code{summary()}}{
+
+\code{{admiral}} functions return an \code{admiral_df} dataset, so calling
+\code{\link[=summary.admiral_df]{summary()}} on the result gives a quick check of
+the join.
+\itemize{
+\item Tagging the result with its class and keys means the summary lists the
+analysis visits and checks for one record per subject and visit.
+\item \code{"WEEK 1"} is missing, as no study day falls in its window.
+\item The structure check reports 2 extra records, as subject \code{"1"} has two
+study days in the \code{"BASELINE"} window (-7 and 1) and two in the
+\code{"WEEK 2"} window (8 and 15).
+}
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{derive_vars_joined(
+  adbds,
+  dataset_add = windows,
+  join_type = "all",
+  filter_join = AWLO <= ADY & ADY <= AWHI
+) \%>\%
+  admiral_df(dataset_class = "BDS", dataset_keys = exprs(USUBJID, AVISIT)) \%>\%
+  summary()
+#> ── BDS summary ─────────────────────────────────────────────────────────────────
+#> Subjects (USUBJID): 2
+#> Observations: 9 | Variables: 7
+#> ✖ Structure: expected one record per USUBJID, AVISIT, found 2 extra records
+#> Analysis visits (AVISIT): BASELINE, WEEK 2, WEEK 3, WEEK 4}\if{html}{\out{</div>}}}
 \subsection{Join only the lowest/highest value occurring within a condition (\code{filter_join},
 \code{order} and \code{mode})}{
 

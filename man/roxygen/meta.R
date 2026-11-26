@@ -12,6 +12,7 @@ list(
     com_date_time = "Date/Time Computation Functions that returns a vector: ",
     com_bds_findings = "BDS-Findings Functions that returns a vector: ",
     utils_ds_chk = "Utilities for Dataset Checking: ",
+    admiral_df = "The admiral_df Class: ",
     utils_fil = "Utilities for Filtering Observations: ",
     utils_fmt = "Utilities for Formatting Observations: ",
     utils_help = "Utilities used within Derivation functions: ",

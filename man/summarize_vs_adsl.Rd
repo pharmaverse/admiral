@@ -65,6 +65,32 @@ The treatment arm is the first populated of \code{TRT01A}, \code{TRT01P}, and \c
 in \code{adsl}: the actual treatment ahead of the planned one, as the subjects
 with records are most often the treated ones.
 }
+\examples{
+library(tibble)
+
+adsl <- tribble(
+  ~STUDYID, ~USUBJID, ~SAFFL, ~TRT01A,
+  "PILOT01", "01-701-1015", "Y", "Placebo",
+  "PILOT01", "01-701-1028", "Y", "Xanomeline High Dose",
+  "PILOT01", "01-701-1034", "N", NA
+)
+
+adae <- tribble(
+  ~STUDYID, ~USUBJID, ~AEDECOD, ~TRTEMFL,
+  "PILOT01", "01-701-1015", "HEADACHE", "Y",
+  "PILOT01", "01-701-1015", "NAUSEA", "N",
+  "PILOT01", "01-701-9999", "RASH", "Y"
+)
+
+# `01-701-9999` is not in ADSL, so it is an orphan
+str(admiral:::summarize_vs_adsl(
+  adae,
+  adsl,
+  subject_vars = "USUBJID",
+  dataset_class = "OCCDS"
+))
+
+}
 \seealso{
 Other internal:
 \code{\link{admiral-package}},

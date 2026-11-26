@@ -35,8 +35,7 @@ get_one_to_many_dataset()
 \seealso{
 Utilities for Dataset Checking:
 \code{\link[=get_duplicates_dataset]{get_duplicates_dataset()}},
-\code{\link[=get_many_to_one_dataset]{get_many_to_one_dataset()}},
-\code{\link[=summary.admiral_df]{summary.admiral_df()}}
+\code{\link[=get_many_to_one_dataset]{get_many_to_one_dataset()}}
 }
 \concept{utils_ds_chk}
 \keyword{utils_ds_chk}

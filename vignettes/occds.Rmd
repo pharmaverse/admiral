@@ -526,7 +526,7 @@ dataset_vignette(
 An occurrence flag should be `"Y"` for at most one record per subject (or per
 subject and body system or term, for `AOCCSIFL` and `AOCCPIFL`). Otherwise a
 subject would be counted twice in every summary table built from it. This is
-hard to see by looking at the data, but calling `summary()` on the dataset
+hard to see by looking at the data, but calling [`summary()`](../reference/summary.admiral_df.html) on the dataset
 checks it, together with an overview of the terms, treatment-emergent records,
 and severity:
 

@@ -649,7 +649,7 @@ found [above.](#analysisrec)
 
 More than one baseline record per subject, parameter, and `BASETYPE` would
 silently corrupt `BASE`, `CHG`, and `PCHG`, so it is worth checking before
-going further. Calling `summary()` on the dataset does this for you, alongside
+going further. Calling [`summary()`](../reference/summary.admiral_df.html) on the dataset does this for you, alongside
 an overview of the parameters and visits:
 
 ```{r eval=TRUE}

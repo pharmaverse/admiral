@@ -119,17 +119,14 @@ The keys are stored as plain variable names, so they are not updated by
 dataset means it has changed since its keys were set.
 }
 \seealso{
-Utilities used within Derivation functions:
-\code{\link[=extract_unit]{extract_unit()}},
+The admiral_df Class:
 \code{\link[=get_dataset_class]{get_dataset_class()}},
 \code{\link[=get_dataset_keys]{get_dataset_keys()}},
 \code{\link[=get_dataset_name]{get_dataset_name()}},
-\code{\link[=get_flagged_records]{get_flagged_records()}},
-\code{\link[=get_not_mapped]{get_not_mapped()}},
-\code{\link[=get_vars_query]{get_vars_query()}}
+\code{\link[=summary.admiral_df]{summary.admiral_df()}}
 }
-\concept{utils_help}
-\keyword{utils_help}
+\concept{admiral_df}
+\keyword{admiral_df}
 \section{Examples}{
 \subsection{Tagging a dataset with its metadata}{
 

@@ -224,7 +224,7 @@ BDS-Findings Functions for adding Parameters/Records:
 \section{Examples}{
 \subsection{Example 1 - Data setup}{
 
-Examples 1a, 1b, and 1c use the following \code{ADVS} data.
+Examples 1a, 1b, 1c, and 1d use the following \code{ADVS} data.
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{ADVS <- tribble(
   ~USUBJID,      ~PARAMCD, ~PARAM,                            ~AVAL, ~VISIT,
@@ -378,6 +378,45 @@ when \code{AVAL} is \code{NA} in any of the source records,
 #>  9 01-701-1015 MAP     Mean Arterial Pressur…  74.3 BASE… mmHg  2024-01-10 <NA> 
 #> 10 01-701-1015 MAP     Mean Arterial Pressur…  73.7 WEEK… mmHg  2024-01-24 <NA> 
 #> 11 01-701-1028 MAP     Mean Arterial Pressur…  96   BASE… mmHg  2024-01-10 <NA> }\if{html}{\out{</div>}}}
+\subsection{Example 1d - Checking the result with \code{summary()}}{
+
+\code{{admiral}} functions return an \code{admiral_df} dataset, so calling
+\code{\link[=summary.admiral_df]{summary()}} on the result shows per parameter how
+many records and subjects there are.
+\itemize{
+\item Here the \code{ADVS} data is tagged with its class and keys first, so that
+the summary also checks for one record per key.
+\item \code{MAP} has 3 records rather than 4, as the \code{"WEEK 2"} systolic blood
+pressure of \code{01-701-1028} is missing (see Example 1a).
+}
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{advs_map <- ADVS \%>\%
+  admiral_df(
+    dataset_class = "BDS",
+    dataset_keys = exprs(USUBJID, PARAMCD, VISIT)
+  ) \%>\%
+  derive_param_computed(
+    by_vars = exprs(USUBJID, VISIT),
+    parameters = c("SYSBP", "DIABP"),
+    set_values_to = exprs(
+      AVAL = (AVAL.SYSBP + 2 * AVAL.DIABP) / 3,
+      PARAMCD = "MAP",
+      PARAM = "Mean Arterial Pressure (mmHg)",
+      AVALU = "mmHg",
+      ADT = ADT.SYSBP
+    )
+  )
+
+summary(advs_map)
+#> ── advs_map: BDS summary ───────────────────────────────────────────────────────
+#> Subjects (USUBJID): 2
+#> Observations: 11 | Variables: 8
+#> ✔ Structure: one record per USUBJID, PARAMCD, VISIT
+#> Parameters (3):
+#>   PARAMCD  records  subjects  missing    min  median  max
+#>   DIABP          4         2        0     50      65   80
+#>   MAP            3         2        0  73.67   74.33   96
+#>   SYSBP          4         2        1    121     121  130}\if{html}{\out{</div>}}}
 \subsection{Example 2 - Derivations using parameters measured only once
 (\code{constant_parameters} and \code{constant_by_vars})}{
 

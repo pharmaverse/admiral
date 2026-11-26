@@ -176,6 +176,10 @@ reference:
   contents:
   - has_keyword('utils_ds_chk')
 
+- subtitle: The admiral_df Class
+  contents:
+  - has_keyword('admiral_df')
+
 - subtitle: Utilities used within Derivation Functions
   contents:
   - has_keyword('utils_help')

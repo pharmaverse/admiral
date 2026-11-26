@@ -170,7 +170,7 @@ advs %>%
   )
 ```
 
-Derivation functions return an `admiral_df` dataset, so calling `summary()` on
+Derivation functions return an `admiral_df` dataset, so calling [`summary()`](../reference/summary.admiral_df.html) on
 the result gives a quick report of what the dataset now contains. Here it shows
 that `MAP` was added for the same subjects and visits as `SYSBP` and `DIABP`,
 along with the range of the derived values:
