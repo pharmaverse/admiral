@@ -656,7 +656,7 @@ an overview of the parameters and visits:
 summary(advs)
 ```
 
-See [Summarizing Datasets with `admiral_df`](admiral_df_web.html) for more on what
+See [Summarizing ADaM Datasets](admiral_df_web.html) for more on what
 the summary reports.
 
 Lastly, the `BASE`, and  `BNRIND` columns can be derived using the `{admiral}` function

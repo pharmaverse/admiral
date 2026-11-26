@@ -1,8 +1,8 @@
 ---
-title: "Summarizing Datasets with admiral_df"
+title: "Summarizing ADaM Datasets"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Summarizing Datasets with admiral_df}
+  %\VignetteIndexEntry{Summarizing ADaM Datasets}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

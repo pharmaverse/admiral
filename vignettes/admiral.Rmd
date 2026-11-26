@@ -179,7 +179,7 @@ along with the range of the derived values:
 summary(advs)
 ```
 
-See [Summarizing Datasets with `admiral_df`](admiral_df_web.html) for more on what
+See [Summarizing ADaM Datasets](admiral_df_web.html) for more on what
 the summary reports and how to make the most of it.
 
 **Note:** For the users' convenience, `{admiral}` actually provides
@@ -324,7 +324,7 @@ content, depending on the type of dataset) and runs some quick checks, e.g.
 whether there is one record per key variable combination (if the keys are
 supplied). The templates do
 this before saving the final dataset. See
-[Summarizing Datasets with `admiral_df`](admiral_df_web.html) for details.
+[Summarizing ADaM Datasets](admiral_df_web.html) for details.
 
 # Support
 

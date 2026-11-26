@@ -3,8 +3,8 @@
 ## New Features
 
 - Added the `admiral_df` S3 class, which carries the metadata of a dataset and
-provides a `summary()` method for checking it. See the "Summarizing Datasets
-with `admiral_df`" article for details.
+provides a `summary()` method for checking it. See the "Summarizing ADaM
+Datasets" article for details.
 
   - All `{admiral}` dataset functions now tag their output datasets with this
     class, preserving their existing classes. (#3160)

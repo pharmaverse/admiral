@@ -1,8 +1,8 @@
 ---
-title: "Summarizing Datasets with `admiral_df`"
+title: "Summarizing ADaM Datasets"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Summarizing Datasets with admiral_df}
+  %\VignetteIndexEntry{Summarizing ADaM Datasets}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -17,9 +17,9 @@ knitr::opts_chunk$set(
 # Introduction
 
 While an ADaM dataset is being derived it is easy to lose track of what it
-contains: did `derive_param_computed()` add the parameter you expected, did a
-merge duplicate some records, is there still only one baseline record per
-subject and parameter?
+contains: did `derive_param_computed()` add the parameter you expected, is the
+correct number of flags present in the dataset, is there still only one
+baseline record per subject and parameter?
 
 `{admiral}` helps answer these questions with the `admiral_df` class. A dataset
 of this class can carry a little metadata about itself -- its name, its ADaM
@@ -28,14 +28,15 @@ report tailored to the kind of dataset it is, including some sanity checks.
 
 This article shows how to:
 
-- tag a dataset with `admiral_df()` and read its metadata back,
-- use `summary()` to inspect a dataset *in flight*, i.e. at any point of a
+- Tag a dataset with `admiral_df()` and read its metadata back,
+- Use `summary()` to inspect a dataset *in flight*, i.e. at any point of a
   derivation pipeline,
-- keep the class and metadata when using `{dplyr}` and `{tidyr}`, as some
+- Keep the class and metadata when using `{dplyr}` and `{tidyr}`, as some
   common operations keep them, some keep them only in part, and some drop them.
 
 **Note**: The `admiral_df` class and the functions described here are
-experimental, so their behavior may still change.
+[experimental](https://pharmaverse.github.io/admiraldev/articles/programming_strategy.html#experimental-functions),
+so their behavior may still change.
 
 ## Required Packages
 
@@ -107,16 +108,13 @@ adlb %>%
   head(3)
 ```
 
-and it can be read back with the `get_*()` functions:
+and it can be read back with the `get_*()` functions listed in the table above.
+`get_dataset_keys()` returns a list of symbols, so the keys can be passed
+straight to a `by_vars` argument of another function:
 
 ```{r}
-get_dataset_name(adlb)
-get_dataset_class(adlb)
 get_dataset_keys(adlb)
 ```
-
-`get_dataset_keys()` returns a list of symbols, so the keys can be passed
-straight to a `by_vars` argument of another function.
 
 ## Updating the Metadata
 
@@ -163,9 +161,10 @@ The ADaM class decides what `summary()` reports. The supported classes are
 `"ADDL"`, `"MDBDS"`, `"MDOCCDS"`, and `"MDTTE"`.
 
 Unlike the keys, the class does not have to be set: if it has not been,
-`{admiral}` infers it from the variables and records of the dataset. For
-example, a dataset with `PARAMCD` and `AVAL` is inferred as `"BDS"`, and one
-with one record per subject as `"ADSL"`:
+`{admiral}` does its best to infer it from the variables and records of the
+dataset. For example, a dataset with `PARAMCD` and `AVAL` is inferred as
+`"BDS"`, one with occurrence variables such as `AEDECOD` or `TRTEMFL` as
+`"OCCDS"`, and one with neither and one record per subject as `"ADSL"`:
 
 ```{r}
 get_dataset_class(adsl)
@@ -186,8 +185,8 @@ it then adds:
 - **ADSL**: subjects per treatment arm, population flags, subject flow
   (randomized, treated, completed), treatment duration, end of study status,
   deaths and their causes, and age and sex.
-- **BDS**: per parameter the records, subjects, visits and the distribution of
-  `AVAL`, the analysis visits, the derived records per `DTYPE`, and a check that
+- **BDS**: the records, subjects, visits and distribution of `AVAL` of each
+  parameter, the analysis visits, the derived records per `DTYPE`, and a check that
   there is at most one baseline record (`ABLFL`) per subject and parameter.
 - **OCCDS**: the number of distinct terms, treatment-emergent and serious
   records, records per severity or toxicity grade, and a check that each
@@ -204,8 +203,7 @@ summary(adlb)
 
 Each item is only reported when the variables it needs are in the dataset. So
 `summary()` can be called at any point of a derivation: a dataset which is only
-half derived gives a shorter report, not an error. The checks report problems
-but never stop your program.
+half derived gives a shorter report, not an error.
 
 ## Checking the Record Structure
 
@@ -242,12 +240,10 @@ summary(adlb, adsl = adsl)
 ## A Worked Example
 
 Summaries are most useful straight after a derivation, to confirm it did what
-you expected. Here we add a parameter for the ratio of ALT to AST and check the
-result:
+you expected. Here we add a parameter for the ratio of ALT to AST:
 
 ```{r}
 adlb_ratio <- adlb %>%
-  filter(is.na(DTYPE)) %>%
   derive_param_computed(
     by_vars = exprs(STUDYID, USUBJID, AVISIT, AVISITN, ADT),
     parameters = c("ALT", "AST"),
@@ -261,19 +257,52 @@ adlb_ratio <- adlb %>%
 summary(adlb_ratio)
 ```
 
-The report shows the new `ALTAST` parameter with as many records and subjects
-as `ALT` and `AST`, so every visit with both values got a ratio.
+The derivation ran without an error or a warning, but the summary shows that
+something went wrong: the structure check finds 26 extra records. The ratio was
+also computed for the derived `"POST-BASELINE"` visits (`DTYPE` is `"LOV"`,
+`"MAXIMUM"`, or `"MINIMUM"`). As `DTYPE` is not set for the new records, these
+duplicate the ratio of the observed visit on the same date.
+
+The fix is to compute the ratio from the observed records only. The `filter`
+argument of `derive_param_computed()` does this without dropping the derived
+records from the dataset, as filtering the dataset beforehand would:
+
+```{r}
+adlb_ratio <- adlb %>%
+  derive_param_computed(
+    by_vars = exprs(STUDYID, USUBJID, AVISIT, AVISITN, ADT),
+    filter = is.na(DTYPE),
+    parameters = c("ALT", "AST"),
+    set_values_to = exprs(
+      AVAL = AVAL.ALT / AVAL.AST,
+      PARAMCD = "ALTAST",
+      PARAM = "ALT/AST Ratio"
+    )
+  )
+
+summary(adlb_ratio)
+```
+
+Now the structure check passes, and `ALTAST` has a record for each observed
+visit with both values.
 
 ## Using the Summary Programmatically
 
 `summary()` returns a list, which is printed. Its elements can be used in your
-own checks, e.g. to stop a program if the record structure is wrong:
+own checks, e.g. to warn, or stop a program, if the record structure is wrong:
 
 ```{r}
 smry <- summary(adlb_dup)
 
 smry$structure$n_duplicates
+
+if (isTRUE(smry$structure$n_duplicates > 0)) {
+  cli::cli_warn("Duplicates detected!")
+}
 ```
+
+`n_duplicates` is `NA` if the structure was not checked, e.g. because no keys
+were set, hence the `isTRUE()`.
 
 # What Happens to the Class and Metadata?
 

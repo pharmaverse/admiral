@@ -302,7 +302,7 @@ navbar:
         href: articles/lab_grading.html
       - text: Estimands
         href: articles/estimands_web.html
-      - text: Summarizing Datasets with admiral_df
+      - text: Summarizing ADaM Datasets
         href: articles/admiral_df_web.html
       - text: -------
       - text: FAQ
