@@ -322,20 +322,20 @@ builds a new one. The table below summarizes what common operations do to an
 
 ```{r echo=FALSE}
 ops <- tribble(
-  ~Operation, ~Class, ~Metadata, ~Result,
-  "`mutate()`, `filter()`, `arrange()`, `slice()`, `relocate()`, `head()`", "kept", "kept", "Kept",
-  "`mutate(.by = )`, `filter(.by = )`", "kept", "kept", "Kept",
-  "`left_join()` etc. and `semi_join()`/`anti_join()`, dataset as `x`", "kept", "kept", "Kept",
-  "`bind_rows()`, dataset as *first* argument; `rbind()`", "kept", "kept", "Kept",
-  "`select()`, `rename()`, `transmute()`, `distinct()`, `count()`", "kept", "kept, may be out of date", "Partially kept",
-  "`group_by()`, `rowwise()`", "dropped", "kept", "Partially kept",
-  "`as_tibble()`, `as.data.frame()`", "dropped", "kept", "Partially kept",
-  "`group_by()` ... `ungroup()`, `rowwise()` ... `ungroup()`", "dropped", "dropped", "Dropped",
-  "`summarise()`, `reframe()`", "dropped", "dropped", "Dropped",
-  "`left_join()` etc., dataset as `y`", "dropped", "dropped", "Dropped",
-  "`bind_rows()`, dataset *not* the first argument", "dropped", "dropped", "Dropped",
-  "`tidyr::pivot_longer()`, `pivot_wider()`, `complete()`, `nest()`/`unnest()`", "dropped", "dropped", "Dropped",
-  "`{admiral}` functions, e.g. `derive_var_extreme_flag()`", "kept", "not guaranteed", "Partially kept"
+  ~Operation, ~Class, ~Metadata,
+  "`mutate()`, `filter()`, `arrange()`, `slice()`, `relocate()`, `head()`", "kept", "kept",
+  "`mutate(.by = )`, `filter(.by = )`", "kept", "kept",
+  "`left_join()` etc. and `semi_join()`/`anti_join()`, dataset as `x`", "kept", "kept",
+  "`bind_rows()`, dataset as *first* argument; `rbind()`", "kept", "kept",
+  "`select()`, `rename()`, `transmute()`, `distinct()`, `count()`", "kept", "kept, may be out of date",
+  "`group_by()`, `rowwise()`", "dropped", "kept",
+  "`as_tibble()`, `as.data.frame()`", "dropped", "kept",
+  "`group_by()` ... `ungroup()`, `rowwise()` ... `ungroup()`", "dropped", "dropped",
+  "`summarise()`, `reframe()`", "dropped", "dropped",
+  "`left_join()` etc., dataset as `y`", "dropped", "dropped",
+  "`bind_rows()`, dataset *not* the first argument", "dropped", "dropped",
+  "`tidyr::pivot_longer()`, `pivot_wider()`, `complete()`, `nest()`/`unnest()`", "dropped", "dropped",
+  "`{admiral}` functions, e.g. `derive_var_extreme_flag()`", "kept", "not guaranteed"
 )
 knitr::kable(ops)
 ```
