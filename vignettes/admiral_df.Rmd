@@ -1,0 +1,11 @@
+---
+title: "Summarizing Datasets with admiral_df"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Summarizing Datasets with admiral_df}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+This article is web-only - please access it through the User Guides section of
+the [admiral website](https://pharmaverse.github.io/admiral/cran-release/).

@@ -179,7 +179,7 @@ along with the range of the derived values:
 summary(advs)
 ```
 
-See [Summarizing Datasets with `admiral_df`](admiral_df.html) for more on what
+See [Summarizing Datasets with `admiral_df`](admiral_df_web.html) for more on what
 the summary reports and how to make the most of it.
 
 **Note:** For the users' convenience, `{admiral}` actually provides
@@ -321,9 +321,10 @@ list_all_templates()
 While you develop a script, you can check the dataset at any point by calling
 `summary()` on it. It reports the subjects, records, and parameters (or other
 content, depending on the type of dataset) and runs some quick checks, e.g.
-whether there is one record per key variable combination. The templates do
+whether there is one record per key variable combination (if the keys are
+supplied). The templates do
 this before saving the final dataset. See
-[Summarizing Datasets with `admiral_df`](admiral_df.html) for details.
+[Summarizing Datasets with `admiral_df`](admiral_df_web.html) for details.
 
 # Support
 

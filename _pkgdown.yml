@@ -303,7 +303,7 @@ navbar:
       - text: Estimands
         href: articles/estimands_web.html
       - text: Summarizing Datasets with admiral_df
-        href: articles/admiral_df.html
+        href: articles/admiral_df_web.html
       - text: -------
       - text: FAQ
         href: articles/faq.html
