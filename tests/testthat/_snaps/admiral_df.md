@@ -115,10 +115,11 @@
       Subjects (USUBJID): 2
       Observations: 3 | Variables: 5
       i Structure: not checked, no keys set (see `admiral_df()`)
-      Parameters (1):
+      1 numeric parameter (AVAL):
         PARAMCD  records  subjects  visits  missing  min  median  max
         SYSBP          3         2       2        0  118     121  130
       Analysis visits (AVISIT): BASELINE, WEEK 2
+      v Checks passed: every parameter has AVAL or AVALC populated
 
 # summary.admiral_df Test 31: duplicate, missing and empty declared keys
 
@@ -129,10 +130,11 @@
       Subjects (USUBJID): 2
       Observations: 3 | Variables: 5
       x Structure: expected one record per USUBJID, PARAMCD, found 1 extra record
-      Parameters (1):
+      1 numeric parameter (AVAL):
         PARAMCD  records  subjects  visits  missing  min  median  max
         SYSBP          3         2       2        0  118     121  130
       Analysis visits (AVISIT): BASELINE, WEEK 2
+      v Checks passed: every parameter has AVAL or AVALC populated
 
 ---
 
@@ -143,9 +145,10 @@
       Subjects (USUBJID): 2
       Observations: 3 | Variables: 5
       ! Structure: not checked, key AVISIT is not in the dataset
-      Parameters (1):
+      1 numeric parameter (AVAL):
         PARAMCD  records  subjects  missing  min  median  max
         SYSBP          3         2        0  118     121  130
+      v Checks passed: every parameter has AVAL or AVALC populated
 
 ---
 
@@ -166,10 +169,11 @@
       Subjects (USUBJID): 2
       Observations: 3 | Variables: 5
       i Structure: no key variables defined
-      Parameters (1):
+      1 numeric parameter (AVAL):
         PARAMCD  records  subjects  visits  missing  min  median  max
         SYSBP          3         2       2        0  118     121  130
       Analysis visits (AVISIT): BASELINE, WEEK 2
+      v Checks passed: every parameter has AVAL or AVALC populated
 
 # summary.admiral_df Test 32: the ADSL summary
 
@@ -192,11 +196,12 @@
       Subjects (USUBJID): 2
       Observations: 4 | Variables: 6
       i Structure: not checked, no keys set (see `admiral_df()`)
-      Parameters (2):
+      2 numeric parameters (AVAL):
         PARAMCD  records  subjects  visits  missing  min  median  max
         DIABP          1         1       1        0   79      79   79
         SYSBP          3         2       2        0  118     121  130
       Analysis visits (AVISIT): BASELINE, WEEK 2
+      v Checks passed: every parameter has AVAL or AVALC populated
 
 ---
 
@@ -207,7 +212,7 @@
       Subjects (USUBJID): 1
       Observations: 12 | Variables: 4
       i Structure: not checked, no keys set (see `admiral_df()`)
-      Parameters (12):
+      12 numeric parameters (AVAL):
         PARAMCD  records  subjects  missing  min  median  max
         P01            1         1        0    1       1    1
         P02            1         1        0    1       1    1
@@ -220,6 +225,7 @@
         P09            1         1        0    1       1    1
         P10            1         1        0    1       1    1
       ... and 2 more parameters
+      v Checks passed: every parameter has AVAL or AVALC populated
 
 # summary.admiral_df Test 34: the OCCDS summary
 
@@ -309,12 +315,45 @@
       Subjects (USUBJID): 2
       Observations: 5 | Variables: 7
       i Structure: not checked, no keys set (see `admiral_df()`)
-      Parameters (2):
+      1 numeric parameter (AVAL):
         PARAMCD  records  subjects  visits  missing  min  median    max
-        DIABP          1         1       0        1    .       .      .
         SYSBP          4         2       2        1  120     125  130.5
       Analysis visits (AVISIT): BASELINE, WEEK 2
       Derived records (DTYPE): LOCF: 1
+      x 1 parameter has neither `AVAL` nor `AVALC` populated: "DIABP"
+
+# summary.admiral_df Test 40a: numeric and character parameters are summarized apart
+
+    Code
+      print(summary(input))
+    Message
+      -- input: BDS summary ----------------------------------------------------------
+      Subjects (USUBJID): 2
+      Observations: 6 | Variables: 5
+      i Structure: not checked, no keys set (see `admiral_df()`)
+      1 numeric parameter (AVAL):
+        PARAMCD  records  subjects  missing  min  median  max
+        SYSBP          2         2        1  120     120  120
+      1 character parameter (AVALC):
+        PARAMCD  records  subjects  missing  values
+        URINE          3         2        1       2
+      x 1 parameter has neither `AVAL` nor `AVALC` populated: "MAP"
+
+# summary.admiral_df Test 40b: `max_params` limits the parameters printed
+
+    Code
+      print(limited)
+    Message
+      -- input: BDS summary ----------------------------------------------------------
+      Subjects (USUBJID): 1
+      Observations: 3 | Variables: 4
+      i Structure: not checked, no keys set (see `admiral_df()`)
+      3 numeric parameters (AVAL):
+        PARAMCD  records  subjects  missing  min  median  max
+        A              1         1        0    1       1    1
+        B              1         1        0    2       2    2
+      ... and 1 more parameter
+      v Checks passed: every parameter has AVAL or AVALC populated
 
 # summary.admiral_df Test 42: more than one baseline per subject and parameter is reported
 
@@ -325,12 +364,13 @@
       Subjects (USUBJID): 2
       Observations: 5 | Variables: 6
       i Structure: not checked, no keys set (see `admiral_df()`)
-      Parameters (2):
+      2 numeric parameters (AVAL):
         PARAMCD  records  subjects  visits  missing  min  median  max
         DIABP          2         1       2        0   80      81   82
         SYSBP          3         2       3        0  120     121  130
       Analysis visits (AVISIT): BASELINE, SCREENING, WEEK 2
       x 1 combination of USUBJID, PARAMCD has more than one baseline record (`ABLFL`)
+      v Checks passed: every parameter has AVAL or AVALC populated
 
 ---
 
@@ -341,12 +381,13 @@
       Subjects (USUBJID): 2
       Observations: 4 | Variables: 6
       i Structure: not checked, no keys set (see `admiral_df()`)
-      Parameters (2):
+      2 numeric parameters (AVAL):
         PARAMCD  records  subjects  visits  missing  min  median  max
         DIABP          2         1       2        0   80      81   82
         SYSBP          2         2       2        0  121   125.5  130
       Analysis visits (AVISIT): BASELINE, WEEK 2
-      v Checks passed: at most one baseline record per USUBJID, PARAMCD
+      v Checks passed: every parameter has AVAL or AVALC populated; at most one
+        baseline record per USUBJID, PARAMCD
 
 # print_summary_checks Test 43: failed checks are listed, passed ones combined, absent ones left out
 
@@ -356,7 +397,7 @@
       x 2 a failures
       v Checks passed: no b; no c
 
-# summary.admiral_df Test 44: the OCCDS severity and seriousness
+# summary.admiral_df Test 44: the OCCDS severity, toxicity grade and seriousness
 
     Code
       print(summary(input))
@@ -367,6 +408,7 @@
       i Structure: not checked, no keys set (see `admiral_df()`)
       Distinct terms: AEDECOD 2
       Records per severity (ASEV): MILD: 1 | SEVERE: 1 | NA: 1
+      Records per toxicity grade (AETOXGR): 1: 1 | 3: 1 | NA: 1
       Serious (AESER): 1 of 3 records
 
 # check_occurrence_flags Test 45: each flag is checked within the group its name defines
@@ -414,9 +456,10 @@
       Subjects (USUBJID): 1
       Observations: 1 | Variables: 4
       i Structure: not checked, no keys set (see `admiral_df()`)
-      Parameters (1):
+      1 numeric parameter (AVAL):
         PARAMCD  records  subjects  missing  min  median  max
         SYSBP          1         1        0  120     120  120
+      v Checks passed: every parameter has AVAL or AVALC populated
       Subjects with records out of ADSL: 1 of 4 (25.0%) | safety population 1 of 3
       (33.3%)
       Subjects with records per arm (TRT01A): Drug A: 0 of 2 | Placebo: 1 of 1 | NA:
@@ -466,11 +509,12 @@
       Devices (SPDEVID): 2
       Observations: 4 | Variables: 6
       i Structure: not checked, no keys set (see `admiral_df()`)
-      Parameters (1):
+      1 numeric parameter (AVAL):
         PARAMCD  records  devices  visits  missing  min  median  max
         BATTV          4        2       2        0  2.8    2.95  3.1
       Analysis visits (AVISIT): BASELINE, WEEK 4
-      v Checks passed: at most one baseline record per SPDEVID, PARAMCD
+      v Checks passed: every parameter has AVAL or AVALC populated; at most one
+        baseline record per SPDEVID, PARAMCD
 
 ---
 

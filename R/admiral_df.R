@@ -620,13 +620,15 @@ infer_class_by_structure <- function(dataset, id_vars, classes) {
 #'   flow (randomized, treated, completed), the treatment duration, the end of
 #'   study status, the deaths and their causes, and the age and sex of the
 #'   subjects.
-#' * `BDS`/`MDBDS`: records, subjects, visits, and the distribution of `AVAL`
-#'   per parameter, the analysis visits, the derived records per `DTYPE`, and a
-#'   check for more than one baseline record (`ABLFL`) per subject and
-#'   parameter.
+#' * `BDS`/`MDBDS`: records, subjects, and visits per parameter, with the
+#'   distribution of `AVAL` for numeric parameters and the distinct `AVALC`
+#'   values for character ones, the analysis visits, the derived records per
+#'   `DTYPE`, and checks for parameters with neither `AVAL` nor `AVALC`
+#'   populated and for more than one baseline record (`ABLFL`) per subject,
+#'   parameter, and `BASETYPE`.
 #' * `OCCDS`/`MDOCCDS`: the number of distinct terms, the treatment-emergent,
-#'   and the serious vs total records, the records per severity or toxicity
-#'   grade, and a check for more than one `"Y"` per group in the occurrence
+#'   and the serious vs total records, the records per severity and per
+#'   toxicity grade, and a check for more than one `"Y"` per group in the occurrence
 #'   flags (`AOCCFL`, `AOCCSFL`, `AOCCPFL`, ...).
 #' * `TTE`/`MDTTE`: events and censored per parameter.
 #'
@@ -650,6 +652,14 @@ infer_class_by_structure <- function(dataset, id_vars, classes) {
 #'   dataset without any of these variables.
 #'
 #' @permitted a data frame or `NULL`
+#'
+#' @param max_params The maximum number of parameters printed per table
+#'
+#'   A BDS or TTE dataset with more parameters than this prints the first
+#'   `max_params` of them, and the number left out. All of them are in the
+#'   returned object.
+#'
+#' @permitted a positive integer
 #'
 #' @param ... Not used
 #'
@@ -746,7 +756,8 @@ infer_class_by_structure <- function(dataset, id_vars, classes) {
 #' )
 #'
 #' summary(advs, adsl = adsl)
-summary.admiral_df <- function(object, adsl = NULL, ...) {
+summary.admiral_df <- function(object, adsl = NULL, max_params = 10, ...) {
+  assert_integer_scalar(max_params, subset = "positive")
   name <- get_dataset_name(object)
   if (is.null(name)) {
     # the variable `summary()` was called on, unless it is a pipe placeholder
@@ -821,6 +832,8 @@ summary.admiral_df <- function(object, adsl = NULL, ...) {
   if (!is.null(adsl)) {
     out$vs_adsl <- summarize_vs_adsl(dataset, adsl, subject_vars, dataset_class)
   }
+
+  out$max_params <- max_params
 
   class(out) <- c("summary_admiral_df", "list")
   out
@@ -1088,14 +1101,15 @@ summarize_structure <- function(dataset, keys) {
 #'   Every ADSL item counts subjects, so none is returned for a dataset without
 #'   any of the variables subjects are counted by.
 #'
-#'   The OCCDS severity is the first populated of `ASEV`, `--SEV`, `ATOXGR`,
-#'   and `--TOXGR`, and the seriousness the first populated `--SER`. See
+#'   The OCCDS severity is the first populated of `ASEV` and `--SEV`, the
+#'   toxicity grade the first populated of `ATOXGR` and `--TOXGR`, and the
+#'   seriousness the first populated `--SER`. See
 #'   [check_occurrence_flags()] for the occurrence flag check.
 #'
 #'   A BDS dataset is expected to have at most one baseline record
-#'   (`ABLFL == "Y"`) per subject and parameter, and per `BASETYPE`, `ATPT`, and
-#'   `APERIOD` where these are in the dataset: a baseline per timepoint or per
-#'   period (e.g. in a crossover study) is correct, not a duplicate. More than
+#'   (`ABLFL == "Y"`) per subject and parameter, and per `BASETYPE` where it is
+#'   in the dataset. A baseline per timepoint or per period (e.g. in a crossover
+#'   study) needs a `BASETYPE` value of its own, as the ADaMIG requires. More than
 #'   one silently corrupts `BASE`, `CHG`, and `PCHG`, and the record structure
 #'   check cannot see it, as the records differ in their visit. Fewer than one
 #'   is legitimate, as not every parameter has a baseline. Records which belong
@@ -1110,17 +1124,21 @@ summarize_structure <- function(dataset, keys) {
 #'     `n_deaths` and `dthcaus` (subjects who died, and per cause of death),
 #'     `age` (median, minimum, and maximum of `AGE`), `sex` (subjects per
 #'     `SEX`).
-#'   * `summarize_bds()`: `params` (per `PARAMCD`: the `PARAM` values, the
-#'     records, subjects (or devices), and analysis visits, and the missing values, minimum,
-#'     median, and maximum of a numeric `AVAL`), `visits` (the analysis visits,
+#'   * `summarize_bds()`: `params` and `params_chr` (per numeric and character
+#'     `PARAMCD`: the `PARAM` values, the records, subjects (or devices), and
+#'     analysis visits, and the missing values, minimum, median, and maximum of
+#'     `AVAL`, or the missing and distinct values of `AVALC`), `params_empty`
+#'     (the `PARAMCD` values with neither `AVAL` nor `AVALC` populated; see
+#'     [summarize_bds_params()]), `visits` (the analysis visits,
 #'     in `AVISITN` order if available), `dtype` (records per `DTYPE`),
 #'     `baseline_by` and `multiple_baselines` (the variables a baseline is
 #'     unique within, and the number of their combinations with more than one
 #'     `ABLFL == "Y"` record).
 #'   * `summarize_occds()`: `terms` (named count of distinct values per coding
 #'     variable), `trtem` (treatment-emergent and total records), `sev_var`
-#'     and `sev` (the severity or toxicity grade variable, and the records per
-#'     value), `ser_var` and `serious` (the seriousness variable, and the
+#'     and `sev` (the severity variable, and the records per value), `tox_var`
+#'     and `tox` (the toxicity grade variable, and the records per value),
+#'     `ser_var` and `serious` (the seriousness variable, and the
 #'     serious and total records), `occ_flag_by` (per occurrence flag checked,
 #'     the variables it is unique within), `occ_flag_dups` (per occurrence flag
 #'     checked, the number of combinations of those with more than one `"Y"`),
@@ -1208,7 +1226,7 @@ summarize_bds <- function(dataset, unit_vars, unit = "subjects") {
   # per parameter, as that is where most BDS defects show: a parameter with too
   # few subjects or visits, values which were not derived, implausible values
   if ("PARAMCD" %in% cols && nrow(dataset) > 0) {
-    out$params <- summarize_bds_params(dataset, unit_vars, unit)
+    out <- c(out, summarize_bds_params(dataset, unit_vars, unit))
   }
 
   if ("AVISIT" %in% cols && any(!is.na(dataset$AVISIT))) {
@@ -1228,7 +1246,7 @@ summarize_bds <- function(dataset, unit_vars, unit = "subjects") {
 
   if (length(unit_vars) > 0 && all(c("PARAMCD", "ABLFL") %in% cols)) {
     out$baseline_by <- c(
-      unit_vars, "PARAMCD", intersect(c("BASETYPE", "ATPT", "APERIOD"), cols)
+      unit_vars, "PARAMCD", intersect("BASETYPE", cols)
     )
     # records of no subject are no subject's baseline
     out$multiple_baselines <- count_multiple_baselines(
@@ -1247,13 +1265,26 @@ summarize_bds <- function(dataset, unit_vars, unit = "subjects") {
 #' @param unit The name of the column they are counted in, `"subjects"` or
 #'   `"devices"`
 #'
-#' @return The `params` element described in [summarize_bds()]: a data frame
-#'   with one row per `PARAMCD`.
+#' @details
+#'   A parameter is numeric if any of its `AVAL` is populated, and character if
+#'   none of its `AVAL` but any of its `AVALC` is. The statistics differ: the
+#'   distribution of `AVAL` for a numeric parameter, the number of distinct
+#'   `AVALC` values for a character one. A parameter with neither populated has
+#'   not been derived, or not correctly.
+#'
+#' @return A named list with the elements `params` and `params_chr` (data frames
+#'   with one row per numeric and character `PARAMCD`; absent if there are
+#'   none), and `params_empty` (the `PARAMCD` values with neither `AVAL` nor
+#'   `AVALC` populated). Without `AVAL` and `AVALC` in `dataset`, `params` has
+#'   every `PARAMCD` and `params_empty` is absent.
 #'
 #' @keywords internal
 #' @family internal
 summarize_bds_params <- function(dataset, unit_vars, unit = "subjects") {
   cols <- colnames(dataset)
+  has_aval <- "AVAL" %in% cols && is.numeric(dataset$AVAL)
+  has_avalc <- "AVALC" %in% cols
+
   stats <- exprs(records = n())
   if ("PARAM" %in% cols) {
     # all values rather than the first, so that a `PARAMCD` with more than one
@@ -1268,12 +1299,60 @@ summarize_bds_params <- function(dataset, unit_vars, unit = "subjects") {
   if ("AVISIT" %in% cols) {
     stats$visits <- expr(n_distinct(AVISIT, na.rm = TRUE))
   }
-  if ("AVAL" %in% cols && is.numeric(dataset$AVAL)) {
-    stats$missing <- expr(sum(is.na(AVAL)))
-    stats$min <- expr(if (all(is.na(AVAL))) NA_real_ else min(AVAL, na.rm = TRUE))
-    stats$median <- expr(median(AVAL, na.rm = TRUE))
-    stats$max <- expr(if (all(is.na(AVAL))) NA_real_ else max(AVAL, na.rm = TRUE))
+
+  if (!has_aval && !has_avalc) {
+    return(list(params = summarize_params_by(dataset, stats)))
   }
+
+  # `&&` keeps a variable which is not in the dataset from being evaluated
+  kinds <- dataset %>%
+    group_by(PARAMCD) %>%
+    summarise(
+      numeric = has_aval && any(!is.na(AVAL)),
+      character = !numeric && has_avalc && any(!is.na(AVALC)),
+      .groups = "drop"
+    )
+  num_params <- kinds$PARAMCD[kinds$numeric]
+  chr_params <- kinds$PARAMCD[kinds$character]
+
+  out <- list()
+  if (length(num_params) > 0) {
+    num_stats <- c(stats, exprs(
+      missing = sum(is.na(AVAL)),
+      min = if (all(is.na(AVAL))) NA_real_ else min(AVAL, na.rm = TRUE),
+      median = median(AVAL, na.rm = TRUE),
+      max = if (all(is.na(AVAL))) NA_real_ else max(AVAL, na.rm = TRUE)
+    ))
+    out$params <- summarize_params_by(
+      filter(dataset, PARAMCD %in% num_params),
+      num_stats
+    )
+  }
+  if (length(chr_params) > 0) {
+    chr_stats <- c(stats, exprs(
+      missing = sum(is.na(AVALC)),
+      values = n_distinct(AVALC, na.rm = TRUE)
+    ))
+    out$params_chr <- summarize_params_by(
+      filter(dataset, PARAMCD %in% chr_params),
+      chr_stats
+    )
+  }
+  out$params_empty <- setdiff(kinds$PARAMCD, c(num_params, chr_params))
+  out
+}
+
+#' Compute Statistics per Parameter
+#'
+#' @param dataset A data frame with a `PARAMCD` variable
+#' @param stats A named list of expressions, evaluated per `PARAMCD`
+#'
+#' @return A data frame with one row per `PARAMCD`, and `PARAMCD` and `PARAM`
+#'   (if computed) as its first columns.
+#'
+#' @keywords internal
+#' @family internal
+summarize_params_by <- function(dataset, stats) {
   dataset %>%
     group_by(PARAMCD) %>%
     summarise(!!!stats, .groups = "drop") %>%
@@ -1389,16 +1468,22 @@ summarize_occds <- function(dataset, unit_vars) {
     )
   }
 
-  # the analysis version ahead of the SDTM one, and severity ahead of toxicity
-  # grade; a variable which is entirely `NA` has not been derived yet
-  sev_var <- c(
-    intersect("ASEV", cols), str_subset(cols, "^[A-Z]{2}SEV$"),
-    intersect("ATOXGR", cols), str_subset(cols, "^[A-Z]{2}TOXGR$")
-  )
-  sev_var <- keep(sev_var, ~ any(!is.na(dataset[[.x]])))
-  if (length(sev_var) > 0) {
-    out$sev_var <- sev_var[1]
-    out$sev <- count_values(dataset[[sev_var[1]]])
+  # the analysis version ahead of the SDTM one; a variable which is entirely
+  # `NA` has not been derived yet, and `first()` gives `NA` if none is populated
+  sev_var <- c(intersect("ASEV", cols), str_subset(cols, "^[A-Z]{2}SEV$")) %>%
+    keep(~ any(!is.na(dataset[[.x]]))) %>%
+    first()
+  if (!is.na(sev_var)) {
+    out$sev_var <- sev_var
+    out$sev <- count_values(dataset[[sev_var]])
+  }
+
+  tox_var <- c(intersect("ATOXGR", cols), str_subset(cols, "^[A-Z]{2}TOXGR$")) %>%
+    keep(~ any(!is.na(dataset[[.x]]))) %>%
+    first()
+  if (!is.na(tox_var)) {
+    out$tox_var <- tox_var
+    out$tox <- count_values(dataset[[tox_var]])
   }
 
   ser_var <- keep(str_subset(cols, "^[A-Z]{2}SER$"), ~ any(!is.na(dataset[[.x]])))
@@ -1557,13 +1642,15 @@ print.summary_admiral_df <- function(x, ...) {
   cli_text("Observations: {x$n_obs} | Variables: {x$n_vars}")
   print_summary_structure(x$structure)
 
+  # a summary created before `max_params` was stored prints as it did
+  max_params <- if (is.null(x$max_params)) 10 else x$max_params
   d <- x$details
   print_adsl_details(d)
-  print_bds_details(d)
+  print_bds_details(d, max_params)
   print_occds_details(d)
   if (!is.null(d[["events"]])) {
     cli_text("Events and censored per parameter (CNSR):")
-    print_summary_table(d[["events"]])
+    print_summary_table(d[["events"]], max_rows = max_params, what = "parameter")
   }
 
   if (!is.null(x$vs_adsl)) {
@@ -1657,6 +1744,7 @@ format_percent <- function(n, total) {
 #' printed if its item is present.
 #'
 #' @param d The `details` element of a `summary_admiral_df` object
+#' @param max_params The maximum number of parameters printed per table
 #'
 #' @return No return value, called for side effects
 #'
@@ -1707,16 +1795,26 @@ print_adsl_details <- function(d) {
 }
 
 #' @rdname print_admiral_df_details
-print_bds_details <- function(d) {
-  if (!is.null(d[["params"]])) {
-    cli_text("Parameters ({nrow(d[['params']])}):")
-    # `PARAM` is left out as it would make the table too wide for the console;
-    # it is in the summary object
-    print_summary_table(
-      select(d[["params"]], -any_of("PARAM")),
-      max_rows = 10,
-      what = "parameter"
-    )
+print_bds_details <- function(d, max_params = 10) {
+  # "numeric" and "character" only once the parameters have been told apart,
+  # i.e. if there is an `AVAL` or `AVALC`
+  split <- !is.null(d[["params_empty"]])
+  titles <- list(
+    params = if (split) "{n} numeric parameter{?s} (AVAL):" else "Parameters ({n}):",
+    params_chr = "{n} character parameter{?s} (AVALC):"
+  )
+  for (tbl in names(titles)) {
+    if (!is.null(d[[tbl]])) {
+      n <- nrow(d[[tbl]])
+      cli_text(titles[[tbl]])
+      # `PARAM` is left out as it would make the table too wide for the
+      # console; it is in the summary object
+      print_summary_table(
+        select(d[[tbl]], -any_of("PARAM")),
+        max_rows = max_params,
+        what = "parameter"
+      )
+    }
   }
   if (!is.null(d[["visits"]])) {
     visits <- paste(d[["visits"]], collapse = ", ")
@@ -1728,7 +1826,17 @@ print_bds_details <- function(d) {
   }
 
   baseline_by <- paste(d[["baseline_by"]], collapse = ", ")
-  print_summary_checks(d, checks = list(
+  params_empty <- d[["params_empty"]]
+  results <- list(
+    n_params_empty = if (split) length(params_empty),
+    multiple_baselines = d[["multiple_baselines"]]
+  )
+  print_summary_checks(results, checks = list(
+    n_params_empty = list(
+      failed = "{length(params_empty)} parameter{?s} {?has/have} neither
+                {.var AVAL} nor {.var AVALC} populated: {.val {params_empty}}",
+      passed = "every parameter has AVAL or AVALC populated"
+    ),
     multiple_baselines = list(
       failed = "{d[['multiple_baselines']]} combination{?s} of {baseline_by}
                 {qty(d[['multiple_baselines']])}{?has/have} more than one
@@ -1755,6 +1863,10 @@ print_occds_details <- function(d) {
   if (!is.null(d[["sev"]])) {
     sev <- format_counts(d[["sev"]], ": ")
     cli_text("Records per severity ({d[['sev_var']]}): {sev}")
+  }
+  if (!is.null(d[["tox"]])) {
+    tox <- format_counts(d[["tox"]], ": ")
+    cli_text("Records per toxicity grade ({d[['tox_var']]}): {tox}")
   }
   if (!is.null(d[["serious"]])) {
     cli_text(

@@ -41,7 +41,8 @@ so their behavior may still change.
 ## Required Packages
 
 The examples in this article use the following packages and the example ADSL
-and ADLB datasets which come with `{admiral}`.
+and ADLB datasets which come with `{admiral}`. Both datasets are already tagged
+with their metadata, as described below.
 
 ```{r message=FALSE}
 library(admiral)
@@ -167,7 +168,13 @@ dataset. For example, a dataset with `PARAMCD` and `AVAL` is inferred as
 `"OCCDS"`, and one with neither and one record per subject as `"ADSL"`:
 
 ```{r}
-get_dataset_class(adsl)
+adae <- tribble(
+  ~STUDYID,  ~USUBJID,      ~AEDECOD,
+  "PILOT01", "01-701-1015", "HEADACHE",
+  "PILOT01", "01-701-1023", "NAUSEA"
+)
+
+get_dataset_class(adae)
 ```
 
 When printed, an inferred class is marked as such. If the inferred class is
@@ -185,11 +192,13 @@ it then adds:
 - **ADSL**: subjects per treatment arm, population flags, subject flow
   (randomized, treated, completed), treatment duration, end of study status,
   deaths and their causes, and age and sex.
-- **BDS**: the records, subjects, visits and distribution of `AVAL` of each
-  parameter, the analysis visits, the derived records per `DTYPE`, and a check that
-  there is at most one baseline record (`ABLFL`) per subject and parameter.
+- **BDS**: the records, subjects and visits of each parameter, with the
+  distribution of `AVAL` for numeric parameters and the distinct `AVALC` values
+  for character ones, the analysis visits, the derived records per `DTYPE`, and
+  checks that every parameter has `AVAL` or `AVALC` populated and that there is
+  at most one baseline record (`ABLFL`) per subject, parameter, and `BASETYPE`.
 - **OCCDS**: the number of distinct terms, treatment-emergent and serious
-  records, records per severity or toxicity grade, and a check that each
+  records, records per severity and per toxicity grade, and a check that each
   occurrence flag (`AOCCFL`, `AOCCPFL`, ...) has at most one `"Y"` per group.
 - **TTE**: events and censored records per parameter.
 

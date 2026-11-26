@@ -1034,28 +1034,81 @@ test_that("summary.admiral_df Test 40: the BDS per-parameter statistics and deri
   expect_identical(
     actual$params,
     tibble::tibble(
-      PARAMCD = c("DIABP", "SYSBP"),
+      PARAMCD = "SYSBP",
       # every `PARAM` of a `PARAMCD` is shown
-      PARAM = c("Diastolic BP (mmHg)", "Systolic BP (mmHg) / Systolic BP (mm Hg)"),
-      records = c(1L, 4L),
-      subjects = c(1L, 2L),
-      visits = c(0L, 2L),
-      missing = c(1L, 1L),
-      min = c(NA, 120),
-      median = c(NA, 125),
-      max = c(NA, 130.5)
+      PARAM = "Systolic BP (mmHg) / Systolic BP (mm Hg)",
+      records = 4L,
+      subjects = 2L,
+      visits = 2L,
+      missing = 1L,
+      min = 120,
+      median = 125,
+      max = 130.5
     )
   )
+  # a parameter without any value is reported rather than tabulated
+  expect_identical(actual$params_empty, "DIABP")
   expect_identical(actual$dtype, c(LOCF = 1L))
   # `PARAM` is not printed, the fractional maximum is
   expect_snapshot(print(summary(input)))
 
-  # without `AVAL`, `AVISIT`, `PARAM`, or `DTYPE` only the counts are reported
+  # without `AVAL`, `AVISIT`, `PARAM`, or `DTYPE` only the counts are reported,
+  # and an `AVALC` parameter is a character one
   minimal <- summary(admiral_df(tibble::tibble(
     STUDYID = "P", USUBJID = "1", PARAMCD = "A", AVALC = "X"
   )))$details
-  expect_named(minimal$params, c("PARAMCD", "records", "subjects"))
+  expect_null(minimal$params)
+  expect_named(minimal$params_chr, c("PARAMCD", "records", "subjects", "missing", "values"))
   expect_null(minimal$dtype)
+
+  # without `AVAL` and `AVALC` the parameters are not told apart
+  no_values <- summary(admiral_df(
+    tibble::tibble(STUDYID = "P", USUBJID = "1", PARAMCD = "A"),
+    dataset_class = "BDS"
+  ))$details
+  expect_named(no_values$params, c("PARAMCD", "records", "subjects"))
+  expect_null(no_values$params_empty)
+})
+
+## Test 40a: numeric and character parameters are summarized apart ----
+test_that("summary.admiral_df Test 40a: numeric and character parameters are summarized apart", { # nolint
+  input <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~PARAMCD, ~AVAL, ~AVALC,
+    "P",      "1",      "SYSBP",    120, "120",
+    "P",      "2",      "SYSBP",     NA, NA,
+    "P",      "1",      "URINE",     NA, "POS",
+    "P",      "2",      "URINE",     NA, "NEG",
+    "P",      "2",      "URINE",     NA, NA,
+    "P",      "1",      "MAP",       NA, NA
+  ) %>%
+    admiral_df()
+
+  actual <- summary(input)$details
+  # a parameter with any `AVAL` is numeric, even if `AVALC` is populated too
+  expect_identical(actual$params$PARAMCD, "SYSBP")
+  expect_identical(
+    actual$params_chr,
+    tibble::tibble(
+      PARAMCD = "URINE", records = 3L, subjects = 2L, missing = 1L, values = 2L
+    )
+  )
+  expect_identical(actual$params_empty, "MAP")
+  expect_snapshot(print(summary(input)))
+})
+
+## Test 40b: `max_params` limits the parameters printed ----
+test_that("summary.admiral_df Test 40b: `max_params` limits the parameters printed", {
+  input <- tibble::tibble(
+    STUDYID = "P", USUBJID = "1", PARAMCD = c("A", "B", "C"), AVAL = 1:3
+  ) %>%
+    admiral_df()
+
+  limited <- summary(input, max_params = 2)
+  # all parameters are in the object, only the printing is limited
+  expect_identical(nrow(limited$details$params), 3L)
+  expect_snapshot(print(limited))
+
+  expect_error(summary(input, max_params = 0), class = "assert_integer_scalar")
 })
 
 ## Test 41: a declared class does not require the variables of that class ----
@@ -1104,12 +1157,18 @@ test_that("summary.admiral_df Test 42: more than one baseline per subject and pa
   expect_snapshot(print(summary(input)))
   expect_snapshot(print(summary(input[-1, ])))
 
-  # a baseline per baseline type, timepoint, or period is not a duplicate
-  for (by_var in c("BASETYPE", "ATPT", "APERIOD")) {
+  # a baseline per baseline type is not a duplicate
+  by_input <- dplyr::mutate(input, BASETYPE = c("A", "B", "A", "A", "A"))
+  by_actual <- summary(by_input)$details
+  expect_identical(by_actual$baseline_by, c("USUBJID", "PARAMCD", "BASETYPE"))
+  expect_identical(by_actual$multiple_baselines, 0L)
+
+  # but one per timepoint or period is, as these need a `BASETYPE` of their own
+  for (by_var in c("ATPT", "APERIOD")) {
     by_input <- dplyr::mutate(input, !!by_var := c("A", "B", "A", "A", "A"))
     by_actual <- summary(by_input)$details
-    expect_identical(by_actual$baseline_by, c("USUBJID", "PARAMCD", by_var))
-    expect_identical(by_actual$multiple_baselines, 0L)
+    expect_identical(by_actual$baseline_by, c("USUBJID", "PARAMCD"))
+    expect_identical(by_actual$multiple_baselines, 1L)
   }
 
   # without `ABLFL` the check is not run, and not mentioned
@@ -1117,7 +1176,7 @@ test_that("summary.admiral_df Test 42: more than one baseline per subject and pa
   expect_null(no_ablfl$details$multiple_baselines)
   expect_no_match(
     paste(capture.output(print(no_ablfl), type = "message"), collapse = "\n"),
-    "Checks|baseline"
+    "baseline"
   )
 })
 
@@ -1137,8 +1196,8 @@ test_that("print_summary_checks Test 43: failed checks are listed, passed ones c
   expect_silent(print_summary_checks(list(), checks))
 })
 
-## Test 44: the OCCDS severity and seriousness ----
-test_that("summary.admiral_df Test 44: the OCCDS severity and seriousness", {
+## Test 44: the OCCDS severity, toxicity grade and seriousness ----
+test_that("summary.admiral_df Test 44: the OCCDS severity, toxicity grade and seriousness", { # nolint
   input <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~AEDECOD,   ~ASEV,      ~AESEV,     ~AETOXGR, ~AESER,
     "P",      "1",      "HEADACHE", "MILD",     "MILD",     "1",      "N",
@@ -1151,24 +1210,27 @@ test_that("summary.admiral_df Test 44: the OCCDS severity and seriousness", {
   actual <- summary(input)$details
   expect_identical(actual$sev_var, "ASEV")
   expect_identical(actual$sev, c(MILD = 1L, SEVERE = 1L, "NA" = 1L))
+  # the toxicity grade is reported as well, not instead
+  expect_identical(actual$tox_var, "AETOXGR")
+  expect_identical(actual$tox, c("1" = 1L, "3" = 1L, "NA" = 1L))
   expect_identical(actual$ser_var, "AESER")
   expect_identical(actual$serious, c(serious = 1L, total = 3L))
   expect_snapshot(print(summary(input)))
 
-  # a severity which is not derived yet gives way to the next, then to the
-  # toxicity grade
+  # a severity which is not derived yet gives way to the next
   expect_identical(
     summary(dplyr::mutate(input, ASEV = NA))$details$sev_var,
     "AESEV"
   )
-  expect_identical(
-    summary(dplyr::select(input, -ASEV, -AESEV))$details$sev_var,
-    "AETOXGR"
-  )
+  # without a severity, only the toxicity grade is reported
+  tox_only <- summary(dplyr::select(input, -ASEV, -AESEV))$details
+  expect_null(tox_only$sev)
+  expect_identical(tox_only$tox_var, "AETOXGR")
 
   # neither is reported without the variables
   none <- summary(dplyr::select(input, -ASEV, -AESEV, -AETOXGR, -AESER))$details
   expect_null(none$sev)
+  expect_null(none$tox)
   expect_null(none$serious)
 })
 

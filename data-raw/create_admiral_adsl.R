@@ -9,6 +9,14 @@ source("inst/templates/ad_adsl.R", echo = TRUE) # nolint
 
 admiral_adsl <- adsl # use correct name
 
+# Store the metadata, so that the dataset prints and summarizes as an ADSL
+admiral_adsl <- admiral_df(
+  admiral_adsl,
+  dataset_name = "ADSL",
+  dataset_class = "ADSL",
+  dataset_keys = exprs(STUDYID, USUBJID)
+)
+
 # Get previous dataset for comparison
 adsl_old <- admiral::admiral_adsl
 

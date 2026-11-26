@@ -27,11 +27,21 @@ summarize_bds_params(dataset, unit_vars, unit = "subjects")
 }}
 }
 \value{
-The \code{params} element described in \code{\link[=summarize_bds]{summarize_bds()}}: a data frame
-with one row per \code{PARAMCD}.
+A named list with the elements \code{params} and \code{params_chr} (data frames
+with one row per numeric and character \code{PARAMCD}; absent if there are
+none), and \code{params_empty} (the \code{PARAMCD} values with neither \code{AVAL} nor
+\code{AVALC} populated). Without \code{AVAL} and \code{AVALC} in \code{dataset}, \code{params} has
+every \code{PARAMCD} and \code{params_empty} is absent.
 }
 \description{
 Summarize the Parameters of a BDS Dataset
+}
+\details{
+A parameter is numeric if any of its \code{AVAL} is populated, and character if
+none of its \code{AVAL} but any of its \code{AVALC} is. The statistics differ: the
+distribution of \code{AVAL} for a numeric parameter, the number of distinct
+\code{AVALC} values for a character one. A parameter with neither populated has
+not been derived, or not correctly.
 }
 \seealso{
 Other internal:
@@ -59,6 +69,7 @@ Other internal:
 \code{\link[=signal_duplicate_records]{signal_duplicate_records()}},
 \code{\link[=summarize_adsl]{summarize_adsl()}},
 \code{\link[=summarize_distribution]{summarize_distribution()}},
+\code{\link[=summarize_params_by]{summarize_params_by()}},
 \code{\link[=summarize_structure]{summarize_structure()}},
 \code{\link[=summarize_subject_flow]{summarize_subject_flow()}},
 \code{\link[=summarize_vs_adsl]{summarize_vs_adsl()}}

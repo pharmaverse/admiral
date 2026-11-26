@@ -4,7 +4,7 @@
 \alias{summary.admiral_df}
 \title{Summarize an \code{admiral_df} Dataset}
 \usage{
-\method{summary}{admiral_df}(object, adsl = NULL, ...)
+\method{summary}{admiral_df}(object, adsl = NULL, max_params = 10, ...)
 }
 \arguments{
 \item{object}{An \code{admiral_df} object
@@ -32,6 +32,17 @@ dataset without any of these variables.
 \item{Default value}{\code{NULL}}
 }}
 
+\item{max_params}{The maximum number of parameters printed per table
+
+A BDS or TTE dataset with more parameters than this prints the first
+\code{max_params} of them, and the number left out. All of them are in the
+returned object.
+
+\describe{
+\item{Permitted values}{a positive integer}
+\item{Default value}{\code{10}}
+}}
+
 \item{...}{Not used
 
 \describe{
@@ -55,13 +66,15 @@ the information for the dataset class (see \code{\link[=get_dataset_class]{get_d
 flow (randomized, treated, completed), the treatment duration, the end of
 study status, the deaths and their causes, and the age and sex of the
 subjects.
-\item \code{BDS}/\code{MDBDS}: records, subjects, visits, and the distribution of \code{AVAL}
-per parameter, the analysis visits, the derived records per \code{DTYPE}, and a
-check for more than one baseline record (\code{ABLFL}) per subject and
-parameter.
+\item \code{BDS}/\code{MDBDS}: records, subjects, and visits per parameter, with the
+distribution of \code{AVAL} for numeric parameters and the distinct \code{AVALC}
+values for character ones, the analysis visits, the derived records per
+\code{DTYPE}, and checks for parameters with neither \code{AVAL} nor \code{AVALC}
+populated and for more than one baseline record (\code{ABLFL}) per subject,
+parameter, and \code{BASETYPE}.
 \item \code{OCCDS}/\code{MDOCCDS}: the number of distinct terms, the treatment-emergent,
-and the serious vs total records, the records per severity or toxicity
-grade, and a check for more than one \code{"Y"} per group in the occurrence
+and the serious vs total records, the records per severity and per
+toxicity grade, and a check for more than one \code{"Y"} per group in the occurrence
 flags (\code{AOCCFL}, \code{AOCCSFL}, \code{AOCCPFL}, ...).
 \item \code{TTE}/\code{MDTTE}: events and censored per parameter.
 }
@@ -136,12 +149,13 @@ summary(advs)
 #> Subjects (USUBJID): 2
 #> Observations: 6 | Variables: 5
 #> i Structure: not checked, no keys set (see `admiral_df()`)
-#> Parameters (3):
+#> 3 numeric parameters (AVAL):
 #>   PARAMCD  records  subjects  visits  missing    min  median  max
 #>   DIABP          2         2       1        0     51      65   79
 #>   MAP            2         2       1        0  74.33   85.17   96
 #>   SYSBP          2         2       1        0    121   125.5  130
-#> Analysis visits (AVISIT): BASELINE}\if{html}{\out{</div>}}}
+#> Analysis visits (AVISIT): BASELINE
+#> ✔ Checks passed: every parameter has AVAL or AVALC populated}\if{html}{\out{</div>}}}
 \subsection{Checking against declared keys}{
 
 The record structure is only checked once the keys have been stored
@@ -158,12 +172,13 @@ summary(advs)
 #> Subjects (USUBJID): 2
 #> Observations: 6 | Variables: 5
 #> ✔ Structure: one record per USUBJID, PARAMCD, AVISIT
-#> Parameters (3):
+#> 3 numeric parameters (AVAL):
 #>   PARAMCD  records  subjects  visits  missing    min  median  max
 #>   DIABP          2         2       1        0     51      65   79
 #>   MAP            2         2       1        0  74.33   85.17   96
 #>   SYSBP          2         2       1        0    121   125.5  130
-#> Analysis visits (AVISIT): BASELINE}\if{html}{\out{</div>}}}
+#> Analysis visits (AVISIT): BASELINE
+#> ✔ Checks passed: every parameter has AVAL or AVALC populated}\if{html}{\out{</div>}}}
 \subsection{Comparing with ADSL}{
 
 Supplying the ADSL shows the subjects without records, and checks that
@@ -181,12 +196,13 @@ summary(advs, adsl = adsl)
 #> Subjects (USUBJID): 2
 #> Observations: 6 | Variables: 5
 #> ✔ Structure: one record per USUBJID, PARAMCD, AVISIT
-#> Parameters (3):
+#> 3 numeric parameters (AVAL):
 #>   PARAMCD  records  subjects  visits  missing    min  median  max
 #>   DIABP          2         2       1        0     51      65   79
 #>   MAP            2         2       1        0  74.33   85.17   96
 #>   SYSBP          2         2       1        0    121   125.5  130
 #> Analysis visits (AVISIT): BASELINE
+#> ✔ Checks passed: every parameter has AVAL or AVALC populated
 #> Subjects with records out of ADSL: 2 of 3 (66.7\%) | safety population 2 of 2
 #> (100.0\%)
 #> Subjects with records per arm (TRT01A): Placebo: 1 of 1 | Xanomeline High Dose:

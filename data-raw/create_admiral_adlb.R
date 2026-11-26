@@ -24,6 +24,14 @@ usubjids <-
 
 admiral_adlb <- filter(adlb, USUBJID %in% usubjids, PARAMCD %in% c("AST", "ALT", "BILI"))
 
+# Store the metadata, so that the dataset prints and summarizes as an ADLB
+admiral_adlb <- admiral_df(
+  admiral_adlb,
+  dataset_name = "ADLB",
+  dataset_class = "BDS",
+  dataset_keys = exprs(STUDYID, USUBJID, PARAMCD, ADT, AVISITN, VISITNUM)
+)
+
 # Get previous dataset for comparison
 adlb_old <- admiral::admiral_adlb
 

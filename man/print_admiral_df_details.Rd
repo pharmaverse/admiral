@@ -8,7 +8,7 @@
 \usage{
 print_adsl_details(d)
 
-print_bds_details(d)
+print_bds_details(d, max_params = 10)
 
 print_occds_details(d)
 }
@@ -17,6 +17,12 @@ print_occds_details(d)
 
 \describe{
 \item{Default value}{none}
+}}
+
+\item{max_params}{The maximum number of parameters printed per table
+
+\describe{
+\item{Default value}{\code{NULL}}
 }}
 }
 \value{
@@ -53,6 +59,7 @@ Other internal:
 \code{\link[=summarize_adsl]{summarize_adsl()}},
 \code{\link[=summarize_bds_params]{summarize_bds_params()}},
 \code{\link[=summarize_distribution]{summarize_distribution()}},
+\code{\link[=summarize_params_by]{summarize_params_by()}},
 \code{\link[=summarize_structure]{summarize_structure()}},
 \code{\link[=summarize_subject_flow]{summarize_subject_flow()}},
 \code{\link[=summarize_vs_adsl]{summarize_vs_adsl()}}

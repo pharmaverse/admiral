@@ -102,6 +102,7 @@ Other internal:
 \code{\link[=summarize_adsl]{summarize_adsl()}},
 \code{\link[=summarize_bds_params]{summarize_bds_params()}},
 \code{\link[=summarize_distribution]{summarize_distribution()}},
+\code{\link[=summarize_params_by]{summarize_params_by()}},
 \code{\link[=summarize_structure]{summarize_structure()}},
 \code{\link[=summarize_subject_flow]{summarize_subject_flow()}},
 \code{\link[=summarize_vs_adsl]{summarize_vs_adsl()}}

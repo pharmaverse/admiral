@@ -412,11 +412,12 @@ summary(advs_map)
 #> Subjects (USUBJID): 2
 #> Observations: 11 | Variables: 8
 #> ✔ Structure: one record per USUBJID, PARAMCD, VISIT
-#> Parameters (3):
+#> 3 numeric parameters (AVAL):
 #>   PARAMCD  records  subjects  missing    min  median  max
 #>   DIABP          4         2        0     50      65   80
 #>   MAP            3         2        0  73.67   74.33   96
-#>   SYSBP          4         2        1    121     121  130}\if{html}{\out{</div>}}}
+#>   SYSBP          4         2        1    121     121  130
+#> ✔ Checks passed: every parameter has AVAL or AVALC populated}\if{html}{\out{</div>}}}
 \subsection{Example 2 - Derivations using parameters measured only once
 (\code{constant_parameters} and \code{constant_by_vars})}{
 

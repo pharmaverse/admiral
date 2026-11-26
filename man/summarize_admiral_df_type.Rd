@@ -53,17 +53,21 @@ and maximum of \code{TRTDURD}), \code{eosstt} (subjects per end of study status)
 \code{n_deaths} and \code{dthcaus} (subjects who died, and per cause of death),
 \code{age} (median, minimum, and maximum of \code{AGE}), \code{sex} (subjects per
 \code{SEX}).
-\item \code{summarize_bds()}: \code{params} (per \code{PARAMCD}: the \code{PARAM} values, the
-records, subjects (or devices), and analysis visits, and the missing values, minimum,
-median, and maximum of a numeric \code{AVAL}), \code{visits} (the analysis visits,
+\item \code{summarize_bds()}: \code{params} and \code{params_chr} (per numeric and character
+\code{PARAMCD}: the \code{PARAM} values, the records, subjects (or devices), and
+analysis visits, and the missing values, minimum, median, and maximum of
+\code{AVAL}, or the missing and distinct values of \code{AVALC}), \code{params_empty}
+(the \code{PARAMCD} values with neither \code{AVAL} nor \code{AVALC} populated; see
+\code{\link[=summarize_bds_params]{summarize_bds_params()}}), \code{visits} (the analysis visits,
 in \code{AVISITN} order if available), \code{dtype} (records per \code{DTYPE}),
 \code{baseline_by} and \code{multiple_baselines} (the variables a baseline is
 unique within, and the number of their combinations with more than one
 \code{ABLFL == "Y"} record).
 \item \code{summarize_occds()}: \code{terms} (named count of distinct values per coding
 variable), \code{trtem} (treatment-emergent and total records), \code{sev_var}
-and \code{sev} (the severity or toxicity grade variable, and the records per
-value), \code{ser_var} and \code{serious} (the seriousness variable, and the
+and \code{sev} (the severity variable, and the records per value), \code{tox_var}
+and \code{tox} (the toxicity grade variable, and the records per value),
+\code{ser_var} and \code{serious} (the seriousness variable, and the
 serious and total records), \code{occ_flag_by} (per occurrence flag checked,
 the variables it is unique within), \code{occ_flag_dups} (per occurrence flag
 checked, the number of combinations of those with more than one \code{"Y"}),
@@ -86,14 +90,15 @@ records -- which the record structure check reports -- do not inflate them.
 Every ADSL item counts subjects, so none is returned for a dataset without
 any of the variables subjects are counted by.
 
-The OCCDS severity is the first populated of \code{ASEV}, \code{--SEV}, \code{ATOXGR},
-and \code{--TOXGR}, and the seriousness the first populated \code{--SER}. See
+The OCCDS severity is the first populated of \code{ASEV} and \code{--SEV}, the
+toxicity grade the first populated of \code{ATOXGR} and \code{--TOXGR}, and the
+seriousness the first populated \code{--SER}. See
 \code{\link[=check_occurrence_flags]{check_occurrence_flags()}} for the occurrence flag check.
 
 A BDS dataset is expected to have at most one baseline record
-(\code{ABLFL == "Y"}) per subject and parameter, and per \code{BASETYPE}, \code{ATPT}, and
-\code{APERIOD} where these are in the dataset: a baseline per timepoint or per
-period (e.g. in a crossover study) is correct, not a duplicate. More than
+(\code{ABLFL == "Y"}) per subject and parameter, and per \code{BASETYPE} where it is
+in the dataset. A baseline per timepoint or per period (e.g. in a crossover
+study) needs a \code{BASETYPE} value of its own, as the ADaMIG requires. More than
 one silently corrupts \code{BASE}, \code{CHG}, and \code{PCHG}, and the record structure
 check cannot see it, as the records differ in their visit. Fewer than one
 is legitimate, as not every parameter has a baseline. Records which belong
@@ -125,6 +130,7 @@ Other internal:
 \code{\link[=signal_duplicate_records]{signal_duplicate_records()}},
 \code{\link[=summarize_bds_params]{summarize_bds_params()}},
 \code{\link[=summarize_distribution]{summarize_distribution()}},
+\code{\link[=summarize_params_by]{summarize_params_by()}},
 \code{\link[=summarize_structure]{summarize_structure()}},
 \code{\link[=summarize_subject_flow]{summarize_subject_flow()}},
 \code{\link[=summarize_vs_adsl]{summarize_vs_adsl()}}
