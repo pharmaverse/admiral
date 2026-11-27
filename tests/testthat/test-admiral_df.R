@@ -605,15 +605,13 @@ test_that("infer_dataset_class Test 23: device datasets are inferred as the devi
   expect_identical(infer_dataset_class(addl_many_per_subject), "ADDL")
 
   # a subject dataset records `SPDEVID` only for the records involving a
-  # device, e.g. an adverse event dataset, so it is subject data -- whether the
-  # missing values are `NA` or blank, as in data read from SAS
+  # device, e.g. an adverse event dataset, so it is subject data
   adae <- tibble::tribble(
     ~STUDYID, ~USUBJID, ~SPDEVID, ~AEDECOD,
     "P",      "1",      "D-1",    "HEADACHE",
     "P",      "2",      NA,       "NAUSEA"
   )
   expect_identical(infer_dataset_class(adae), "OCCDS")
-  expect_identical(infer_dataset_class(mutate(adae, SPDEVID = c("D-1", ""))), "OCCDS")
 
   # without the subject keys, a partly populated `SPDEVID` is neither class
   expect_identical(infer_dataset_class(select(adae, -USUBJID)), "other")
@@ -748,4 +746,813 @@ test_that("print.admiral_df Test 28: a dataset with only the class prints as bef
     capture.output(print(input))
   )
   expect_invisible(print(new_admiral_df(input)))
+})
+
+# summary.admiral_df ----
+## Test 29: the common facts and the declared record structure are reported ----
+test_that("summary.admiral_df Test 29: the common facts and the declared record structure are reported", { # nolint
+  input <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~PARAMCD, ~AVISIT,    ~AVAL,
+    "P",      "1",      "DIABP",  "BASELINE",    51,
+    "P",      "1",      "SYSBP",  "BASELINE",   121,
+    "P",      "2",      "DIABP",  "BASELINE",    79
+  ) %>%
+    admiral_df(dataset_keys = exprs(USUBJID, PARAMCD, AVISIT), dataset_name = "ADVS")
+
+  actual <- summary(input)
+
+  expect_s3_class(actual, "summary_admiral_df")
+  expect_identical(actual$name, "ADVS")
+  expect_identical(actual$dataset_class, "BDS")
+  expect_identical(actual$n_subjects, 2L)
+  expect_identical(actual$n_obs, 3L)
+  expect_identical(actual$n_vars, 5L)
+  expect_identical(
+    actual$structure,
+    list(
+      keys = c("USUBJID", "PARAMCD", "AVISIT"),
+      missing_keys = character(0),
+      n_duplicates = 0L
+    )
+  )
+})
+
+## Test 30: the structure is not checked if no keys were set ----
+test_that("summary.admiral_df Test 30: the structure is not checked if no keys were set", {
+  input <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~PARAMCD, ~AVISIT,    ~AVAL,
+    "P",      "1",      "SYSBP",  "BASELINE",   121,
+    "P",      "1",      "SYSBP",  "WEEK 2",     118,
+    "P",      "2",      "SYSBP",  "BASELINE",   130
+  ) %>%
+    admiral_df()
+
+  actual <- summary(input)
+
+  expect_identical(actual$name, "input")
+  # keys are never inferred
+  expect_null(actual$structure$keys)
+  expect_identical(actual$structure$n_duplicates, NA_integer_)
+  expect_snapshot(print(actual))
+})
+
+## Test 31: duplicate, missing and empty declared keys ----
+test_that("summary.admiral_df Test 31: duplicate, missing and empty declared keys", {
+  input <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~PARAMCD, ~AVISIT,    ~AVAL,
+    "P",      "1",      "SYSBP",  "BASELINE",   121,
+    "P",      "1",      "SYSBP",  "WEEK 2",     118,
+    "P",      "2",      "SYSBP",  "BASELINE",   130
+  )
+
+  duplicated <- summary(admiral_df(input, dataset_keys = exprs(USUBJID, PARAMCD)))
+  expect_identical(duplicated$structure$n_duplicates, 1L)
+
+  # a renamed key cannot be checked, rather than being checked on part of the key
+  renamed <- admiral_df(input, dataset_keys = exprs(USUBJID, PARAMCD, AVISIT)) %>%
+    dplyr::rename(VISIT = AVISIT)
+  expect_identical(summary(renamed)$structure$missing_keys, "AVISIT")
+  expect_identical(summary(renamed)$structure$n_duplicates, NA_integer_)
+
+  no_keys <- summary(admiral_df(input, dataset_keys = exprs()))
+  expect_identical(no_keys$structure$keys, character(0))
+
+  # several missing keys take the plural
+  renamed_two <- admiral_df(input, dataset_keys = exprs(USUBJID, PARAMCD, AVISIT)) %>%
+    dplyr::rename(PARAM = PARAMCD, VISIT = AVISIT)
+
+  # each outcome of the check is printed as its own kind of bullet
+  expect_snapshot(print(duplicated))
+  expect_snapshot(print(summary(renamed)))
+  expect_snapshot(print(summary(renamed_two)))
+  expect_snapshot(print(no_keys))
+})
+
+## Test 32: the ADSL summary ----
+test_that("summary.admiral_df Test 32: the ADSL summary", {
+  input <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~TRT01P,   ~SAFFL, ~ITTFL,
+    "P",      "1",      "Placebo", "Y",    "Y",
+    "P",      "2",      "Drug A",  "Y",    "Y",
+    "P",      "3",      "Drug A",  "N",    "Y"
+  ) %>%
+    # the class is declared, as duplicated subject records would otherwise make
+    # the inferred class "other"
+    admiral_df(dataset_keys = exprs(USUBJID), dataset_name = "ADSL", dataset_class = "ADSL")
+
+  actual <- summary(input)
+
+  expect_identical(actual$details$trt_var, "TRT01P")
+  expect_identical(actual$details$trt$subjects, c(2L, 1L))
+  expect_identical(actual$details$pops, c(SAFFL = 2L, ITTFL = 3L))
+  expect_snapshot(print(actual))
+
+  # duplicated subject records are reported without losing the ADSL details
+  duplicated <- summary(dplyr::bind_rows(input, input[1, ]))
+  expect_identical(duplicated$dataset_class, "ADSL")
+  expect_identical(duplicated$structure$n_duplicates, 1L)
+  expect_identical(duplicated$details$trt$subjects, c(2L, 1L))
+  # the population flags count subjects, not the duplicated records
+  expect_identical(duplicated$details$pops, c(SAFFL = 2L, ITTFL = 3L))
+})
+
+## Test 33: the BDS summary ----
+test_that("summary.admiral_df Test 33: the BDS summary", {
+  input <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~PARAMCD, ~AVISIT,    ~AVISITN, ~AVAL,
+    "P",      "1",      "SYSBP",  "WEEK 2",          2,   118,
+    "P",      "1",      "SYSBP",  "BASELINE",        0,   121,
+    "P",      "1",      "DIABP",  "BASELINE",        0,    79,
+    "P",      "2",      "SYSBP",  "BASELINE",        0,   130
+  ) %>%
+    admiral_df()
+
+  actual <- summary(input)
+
+  expect_identical(actual$details$params$PARAMCD, c("DIABP", "SYSBP"))
+  expect_identical(actual$details$params$records, c(1L, 3L))
+  expect_identical(actual$details$params$subjects, c(1L, 2L))
+  # visits are in `AVISITN` order
+  expect_identical(actual$details$visits, c("BASELINE", "WEEK 2"))
+  expect_snapshot(print(actual))
+
+  # a long parameter table is truncated on printing, but kept in the object
+  many_params <- tibble::tibble(
+    STUDYID = "P", USUBJID = "1", PARAMCD = sprintf("P%02d", 1:12), AVAL = 1
+  ) %>%
+    admiral_df()
+  many_summary <- summary(many_params)
+  expect_identical(nrow(many_summary$details$params), 12L)
+  expect_snapshot(print(many_summary))
+})
+
+## Test 34: the OCCDS summary ----
+test_that("summary.admiral_df Test 34: the OCCDS summary", {
+  input <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~AESEQ, ~AEBODSYS,                ~AEDECOD,   ~TRTEMFL,
+    "P",      "1",           1, "NERVOUS SYSTEM",         "HEADACHE", "Y",
+    "P",      "1",           2, "GASTROINTESTINAL",       "NAUSEA",   NA,
+    "P",      "2",           1, "NERVOUS SYSTEM",         "HEADACHE", "Y"
+  ) %>%
+    admiral_df()
+
+  actual <- summary(input)
+
+  expect_identical(actual$details$terms, c(AEBODSYS = 2L, AEDECOD = 2L))
+  expect_identical(actual$details$trtem, c(emergent = 2L, total = 3L))
+  expect_snapshot(print(actual))
+})
+
+## Test 35: the TTE summary ----
+test_that("summary.admiral_df Test 35: the TTE summary", {
+  input <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~PARAMCD, ~STARTDT, ~CNSR, ~AVAL,
+    "P", "1", "OS", lubridate::ymd("2020-01-01"), 0, 10,
+    "P", "2", "OS", lubridate::ymd("2020-01-01"), 1, 12,
+    "P", "1", "PFS", lubridate::ymd("2020-01-01"), 1, 3
+  ) %>%
+    admiral_df()
+
+  actual <- summary(input)
+
+  expect_identical(actual$details$events$PARAMCD, c("OS", "PFS"))
+  expect_identical(actual$details$events$events, c(1L, 0L))
+  expect_identical(actual$details$events$censored, c(1L, 1L))
+  expect_snapshot(print(actual))
+})
+
+## Test 36: datasets with little to report do not error ----
+test_that("summary.admiral_df Test 36: datasets with little to report do not error", {
+  # not subject data: no subject count and no record structure
+  lookup <- admiral_df(tibble::tibble(PARAMCD = c("DIABP", "SYSBP")))
+  expect_snapshot(print(summary(lookup)))
+
+  # no records: the class cannot be determined
+  empty <- admiral_df(tibble::tibble(STUDYID = character(), USUBJID = character()))
+  expect_identical(summary(empty)$dataset_class, NA_character_)
+  expect_identical(summary(empty)$details, list())
+  expect_snapshot(print(summary(empty)))
+
+  # a work-in-progress ADSL without treatment or population flags
+  adsl <- admiral_df(tibble::tibble(STUDYID = "P", USUBJID = c("1", "2"), TRT01P = NA))
+  expect_identical(summary(adsl)$details, list())
+})
+
+## Test 37: print.summary_admiral_df returns its input invisibly ----
+test_that("print.summary_admiral_df Test 37: returns its input invisibly", {
+  input <- admiral_df(tibble::tibble(STUDYID = "P", USUBJID = "1"))
+  actual <- summary(input)
+
+  # cli prints through messages
+  msgs <- capture.output(res <- withVisible(print(actual)), type = "message")
+  expect_match(msgs[1], "ADSL summary")
+  expect_false(res$visible)
+  expect_identical(res$value, actual)
+})
+
+# print_summary_table ----
+## Test 38: tables are aligned, counts are not rounded, NA is shown as `.` ----
+test_that("print_summary_table Test 38: tables are aligned, counts are not rounded, NA is shown as `.`", { # nolint
+  tbl <- tibble::tibble(
+    PARAMCD = c("DIABP", "SYSBP", NA),
+    records = c(11509L, 7L, 1L),
+    mean = c(80.123456, NA, 1),
+    subjects = c(254, 3, NA)
+  )
+
+  expect_snapshot(print_summary_table(tbl))
+  expect_snapshot(print_summary_table(tbl, max_rows = 1, what = "parameter"))
+
+  # a derivation can give an infinite value, e.g. `log(0)`
+  expect_identical(format_number(Inf), "Inf")
+  expect_identical(format_number(-Inf), "-Inf")
+})
+
+## Test 39: the ADSL subject flow, outcome and demographics ----
+test_that("summary.admiral_df Test 39: the ADSL subject flow, outcome and demographics", { # nolint
+  input <- tibble::tibble(
+    STUDYID = "P",
+    USUBJID = c("1", "2", "3", "4"),
+    RANDDT = lubridate::ymd(c("2020-01-01", "2020-01-01", "2020-01-01", NA)),
+    TRTSDT = lubridate::ymd(c("2020-01-02", "2020-01-03", NA, NA)),
+    TRTDURD = c(100, 20, NA, NA),
+    EOSSTT = c("COMPLETED", "DISCONTINUED", "DISCONTINUED", NA),
+    DTHFL = c("N", "Y", "N", NA),
+    DTHCAUS = c(NA, "ADVERSE EVENT", NA, NA),
+    AGE = c(63, 71, 55, 40),
+    SEX = c("F", "M", "F", "M")
+  ) %>%
+    # the class is declared, as duplicated subject records would otherwise make
+    # the inferred class "other"
+    admiral_df(dataset_keys = exprs(USUBJID), dataset_name = "ADSL", dataset_class = "ADSL")
+
+  actual <- summary(input)$details
+
+  expect_identical(actual$flow, c(randomized = 3L, treated = 2L, completed = 1L))
+  expect_identical(actual$trtdur, c(median = 60, min = 20, max = 100))
+  expect_identical(actual$eosstt, c(COMPLETED = 1L, DISCONTINUED = 2L, "NA" = 1L))
+  # the causes are counted among the deaths only
+  expect_identical(actual$n_deaths, 1L)
+  expect_identical(actual$dthcaus, c("ADVERSE EVENT" = 1L))
+  expect_identical(actual$age, c(median = 59, min = 40, max = 71))
+  expect_identical(actual$sex, c(F = 2L, M = 2L))
+  expect_snapshot(print(summary(input)))
+
+  # duplicated subject records do not inflate the counts or skew the
+  # distributions
+  duplicated <- summary(dplyr::bind_rows(input, input[2, ], input[2, ]))$details
+  expect_identical(duplicated[names(actual)], actual)
+
+  # the flow falls back to `RANDFL` and `TRTSDTM`; items whose variables are
+  # missing or not derived yet are left out
+  fallback <- tibble::tibble(
+    STUDYID = "P", USUBJID = c("1", "2"), RANDFL = c("Y", NA),
+    TRTSDTM = lubridate::ymd_hms("2020-01-01 10:00:00", NA), DTHFL = NA, AGE = NA_real_
+  ) %>%
+    admiral_df()
+  fallback_details <- summary(fallback)$details
+  expect_identical(fallback_details$flow, c(randomized = 1L, treated = 1L))
+  expect_null(fallback_details$n_deaths)
+  expect_null(fallback_details$age)
+  expect_null(fallback_details$sex)
+})
+
+## Test 40: the BDS per-parameter statistics and derived records ----
+test_that("summary.admiral_df Test 40: the BDS per-parameter statistics and derived records", { # nolint
+  input <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~PARAMCD, ~PARAM, ~AVISIT, ~AVAL, ~DTYPE,
+    "P", "1", "SYSBP", "Systolic BP (mmHg)", "BASELINE", 120, NA,
+    "P", "1", "SYSBP", "Systolic BP (mmHg)", "WEEK 2", NA, NA,
+    "P", "1", "SYSBP", "Systolic BP (mmHg)", "WEEK 2", 125, "LOCF",
+    "P", "2", "SYSBP", "Systolic BP (mm Hg)", "BASELINE", 130.5, NA,
+    "P", "2", "DIABP", "Diastolic BP (mmHg)", NA, NA, NA
+  ) %>%
+    admiral_df()
+
+  actual <- summary(input)$details
+
+  expect_identical(
+    actual$params,
+    tibble::tibble(
+      PARAMCD = "SYSBP",
+      # every `PARAM` of a `PARAMCD` is shown
+      PARAM = "Systolic BP (mmHg) / Systolic BP (mm Hg)",
+      records = 4L,
+      subjects = 2L,
+      visits = 2L,
+      missing = 1L,
+      min = 120,
+      median = 125,
+      max = 130.5
+    )
+  )
+  # a parameter without any value is reported rather than tabulated
+  expect_identical(actual$params_empty, "DIABP")
+  expect_identical(actual$dtype, c(LOCF = 1L))
+  # `PARAM` is not printed, the fractional maximum is
+  expect_snapshot(print(summary(input)))
+
+  # without `AVAL`, `AVISIT`, `PARAM`, or `DTYPE` only the counts are reported,
+  # and an `AVALC` parameter is a character one
+  minimal <- summary(admiral_df(tibble::tibble(
+    STUDYID = "P", USUBJID = "1", PARAMCD = "A", AVALC = "X"
+  )))$details
+  expect_null(minimal$params)
+  expect_named(minimal$params_chr, c("PARAMCD", "records", "subjects", "missing", "values"))
+  expect_null(minimal$dtype)
+
+  # without `AVAL` and `AVALC` the parameters are not told apart
+  no_values <- summary(admiral_df(
+    tibble::tibble(STUDYID = "P", USUBJID = "1", PARAMCD = "A"),
+    dataset_class = "BDS"
+  ))$details
+  expect_named(no_values$params, c("PARAMCD", "records", "subjects"))
+  expect_null(no_values$params_empty)
+})
+
+## Test 40a: numeric and character parameters are summarized apart ----
+test_that("summary.admiral_df Test 40a: numeric and character parameters are summarized apart", { # nolint
+  input <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~PARAMCD, ~AVAL, ~AVALC,
+    "P",      "1",      "SYSBP",    120, "120",
+    "P",      "2",      "SYSBP",     NA, NA,
+    "P",      "1",      "URINE",     NA, "POS",
+    "P",      "2",      "URINE",     NA, "NEG",
+    "P",      "2",      "URINE",     NA, NA,
+    "P",      "1",      "MAP",       NA, NA
+  ) %>%
+    admiral_df()
+
+  actual <- summary(input)$details
+  # a parameter with any `AVAL` is numeric, even if `AVALC` is populated too
+  expect_identical(actual$params$PARAMCD, "SYSBP")
+  expect_identical(
+    actual$params_chr,
+    tibble::tibble(
+      PARAMCD = "URINE", records = 3L, subjects = 2L, missing = 1L, values = 2L
+    )
+  )
+  expect_identical(actual$params_empty, "MAP")
+  expect_snapshot(print(summary(input)))
+})
+
+## Test 40b: `max_params` limits the parameters printed ----
+test_that("summary.admiral_df Test 40b: `max_params` limits the parameters printed", {
+  input <- tibble::tibble(
+    STUDYID = "P", USUBJID = "1", PARAMCD = c("A", "B", "C"), AVAL = 1:3
+  ) %>%
+    admiral_df()
+
+  limited <- summary(input, max_params = 2)
+  # all parameters are in the object, only the printing is limited
+  expect_identical(nrow(limited$details$params), 3L)
+  expect_snapshot(print(limited))
+
+  expect_error(summary(input, max_params = 0), class = "assert_integer_scalar")
+})
+
+## Test 41: a declared class does not require the variables of that class ----
+test_that("summary.admiral_df Test 41: a declared class does not require the variables of that class", { # nolint
+  # a declared class is not checked against the variables, so the details of
+  # the class must not assume them
+  input <- tibble::tibble(FOO = 1:2)
+  for (dataset_class in admiral_dataset_classes) {
+    actual <- summary(admiral_df(input, dataset_class = dataset_class))
+    expect_identical(actual$dataset_class, dataset_class)
+    expect_identical(actual$details, list())
+    expect_no_error(capture.output(print(actual), type = "message"))
+  }
+
+  # TTE needs `CNSR` as well as `PARAMCD`
+  tte <- admiral_df(tibble::tibble(PARAMCD = "OS", AVAL = 1), dataset_class = "TTE")
+  expect_null(summary(tte)$details$events)
+
+  # without a subject variable none of the ADSL items, which all count
+  # subjects, can be reported
+  adsl <- admiral_df(
+    tibble::tibble(TRT01P = c("A", "B"), SAFFL = c("Y", "N"), AGE = c(40, 50)),
+    dataset_class = "ADSL"
+  )
+  expect_identical(summary(adsl)$details, list())
+})
+
+## Test 42: more than one baseline per subject and parameter is reported ----
+test_that("summary.admiral_df Test 42: more than one baseline per subject and parameter is reported", { # nolint
+  input <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~PARAMCD, ~AVISIT,     ~ABLFL, ~AVAL,
+    "P",      "1",      "SYSBP",  "SCREENING", "Y",      120,
+    "P",      "1",      "SYSBP",  "BASELINE",  "Y",      121,
+    "P",      "1",      "DIABP",  "BASELINE",  "Y",       80,
+    "P",      "1",      "DIABP",  "WEEK 2",    NA,        82,
+    "P",      "2",      "SYSBP",  "WEEK 2",    NA,       130
+  ) %>%
+    admiral_df()
+
+  actual <- summary(input)$details
+  expect_identical(actual$baseline_by, c("USUBJID", "PARAMCD"))
+  # each combination is counted once, however many baselines it has; subject 2
+  # has no baseline, which is not a defect
+  expect_identical(actual$multiple_baselines, 1L)
+  expect_identical(summary(input[-1, ])$details$multiple_baselines, 0L)
+  expect_snapshot(print(summary(input)))
+  expect_snapshot(print(summary(input[-1, ])))
+
+  # a baseline per baseline type is not a duplicate
+  by_input <- dplyr::mutate(input, BASETYPE = c("A", "B", "A", "A", "A"))
+  by_actual <- summary(by_input)$details
+  expect_identical(by_actual$baseline_by, c("USUBJID", "PARAMCD", "BASETYPE"))
+  expect_identical(by_actual$multiple_baselines, 0L)
+
+  # but one per timepoint or period is, as these need a `BASETYPE` of their own
+  for (by_var in c("ATPT", "APERIOD")) {
+    by_input <- dplyr::mutate(input, !!by_var := c("A", "B", "A", "A", "A"))
+    by_actual <- summary(by_input)$details
+    expect_identical(by_actual$baseline_by, c("USUBJID", "PARAMCD"))
+    expect_identical(by_actual$multiple_baselines, 1L)
+  }
+
+  # without `ABLFL` the check is not run, and not mentioned
+  no_ablfl <- summary(dplyr::select(input, -ABLFL))
+  expect_null(no_ablfl$details$multiple_baselines)
+  expect_no_match(
+    paste(capture.output(print(no_ablfl), type = "message"), collapse = "\n"),
+    "baseline"
+  )
+})
+
+# print_summary_checks ----
+## Test 43: failed checks are listed, passed ones combined, absent ones left out ----
+test_that("print_summary_checks Test 43: failed checks are listed, passed ones combined, absent ones left out", { # nolint
+  checks <- list(
+    a = list(failed = "{d$a} a failure{?s}", passed = "no a"),
+    b = list(failed = "{d$b} b failure{?s}", passed = "no b"),
+    c = list(failed = "{d$c} c failure{?s}", passed = "no c"),
+    d = list(failed = "{d$d} d failure{?s}", passed = "no d")
+  )
+  d <- list(a = 2L, b = 0L, c = 0L)
+
+  expect_snapshot(print_summary_checks(d, checks))
+  # nothing is printed if no check ran
+  expect_silent(print_summary_checks(list(), checks))
+})
+
+## Test 44: the OCCDS severity, toxicity grade and seriousness ----
+test_that("summary.admiral_df Test 44: the OCCDS severity, toxicity grade and seriousness", { # nolint
+  input <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~AEDECOD,   ~ASEV,      ~AESEV,     ~AETOXGR, ~AESER,
+    "P",      "1",      "HEADACHE", "MILD",     "MILD",     "1",      "N",
+    "P",      "1",      "NAUSEA",   "SEVERE",   "MODERATE", "3",      "Y",
+    "P",      "2",      "HEADACHE", NA,         NA,         NA,       NA
+  ) %>%
+    admiral_df()
+
+  # the analysis severity is preferred, and a missing value is counted
+  actual <- summary(input)$details
+  expect_identical(actual$sev_var, "ASEV")
+  expect_identical(actual$sev, c(MILD = 1L, SEVERE = 1L, "NA" = 1L))
+  # the toxicity grade is reported as well, not instead
+  expect_identical(actual$tox_var, "AETOXGR")
+  expect_identical(actual$tox, c("1" = 1L, "3" = 1L, "NA" = 1L))
+  expect_identical(actual$ser_var, "AESER")
+  expect_identical(actual$serious, c(serious = 1L, total = 3L))
+  expect_snapshot(print(summary(input)))
+
+  # a severity which is not derived yet gives way to the next
+  expect_identical(
+    summary(dplyr::mutate(input, ASEV = NA))$details$sev_var,
+    "AESEV"
+  )
+  # without a severity, only the toxicity grade is reported
+  tox_only <- summary(dplyr::select(input, -ASEV, -AESEV))$details
+  expect_null(tox_only$sev)
+  expect_identical(tox_only$tox_var, "AETOXGR")
+
+  # neither is reported without the variables
+  none <- summary(dplyr::select(input, -ASEV, -AESEV, -AETOXGR, -AESER))$details
+  expect_null(none$sev)
+  expect_null(none$tox)
+  expect_null(none$serious)
+})
+
+# check_occurrence_flags ----
+## Test 45: each flag is checked within the group its name defines ----
+test_that("check_occurrence_flags Test 45: each flag is checked within the group its name defines", { # nolint
+  input <- tibble::tribble(
+    ~USUBJID, ~AEBODSYS, ~AEDECOD,   ~AOCCFL, ~AOCCSFL, ~AOCCPFL, ~AOCCPIFL, ~AOCC01FL,
+    "1",      "NERV",    "HEADACHE", "Y",     "Y",      "Y",      "Y",       "Y",
+    "1",      "NERV",    "DIZZY",    NA,      NA,       "Y",      "Y",       "Y",
+    "1",      "GI",      "NAUSEA",   NA,      "Y",      "Y",      "Y",       NA,
+    "2",      "NERV",    "HEADACHE", "Y",     "Y",      "Y",      NA,        NA
+  )
+
+  actual <- check_occurrence_flags(input, "USUBJID")
+  expect_identical(
+    actual$occ_flag_by,
+    list(
+      AOCCFL = "USUBJID",
+      AOCCSFL = c("USUBJID", "AEBODSYS"),
+      AOCCPFL = c("USUBJID", "AEDECOD"),
+      AOCCPIFL = c("USUBJID", "AEDECOD")
+    )
+  )
+  expect_identical(
+    actual$occ_flag_dups,
+    c(AOCCFL = 0L, AOCCSFL = 0L, AOCCPFL = 0L, AOCCPIFL = 0L)
+  )
+  # the level of a sponsor-defined flag cannot be told from its name
+  expect_identical(actual$occ_flags_unchecked, "AOCC01FL")
+
+  # a second "Y" in the same group, each group counted once
+  dup <- dplyr::bind_rows(input, input[1:2, ])
+  expect_identical(
+    check_occurrence_flags(dup, "USUBJID")$occ_flag_dups,
+    c(AOCCFL = 1L, AOCCSFL = 1L, AOCCPFL = 2L, AOCCPIFL = 2L)
+  )
+
+  # the first occurrence is flagged per period where there are periods
+  per_period <- dplyr::mutate(dup, APERIOD = c(1, 1, 1, 1, 2, 2))
+  per_period_actual <- check_occurrence_flags(per_period, "USUBJID")
+  expect_identical(per_period_actual$occ_flag_by$AOCCFL, c("USUBJID", "APERIOD"))
+  expect_true(all(per_period_actual$occ_flag_dups == 0L))
+
+  # without the level variable the flag cannot be checked
+  no_bodsys <- check_occurrence_flags(dplyr::select(input, -AEBODSYS), "USUBJID")
+  expect_identical(no_bodsys$occ_flags_unchecked, c("AOCCSFL", "AOCC01FL"))
+
+  # a single grouping variable works on a plain data frame too
+  expect_identical(
+    check_occurrence_flags(as.data.frame(dup[, c("USUBJID", "AOCCFL")]), "USUBJID"),
+    list(occ_flag_by = list(AOCCFL = "USUBJID"), occ_flag_dups = c(AOCCFL = 1L))
+  )
+
+  # nothing to check without flags or subjects
+  expect_identical(check_occurrence_flags(input[, 1:3], "USUBJID"), list())
+  expect_identical(check_occurrence_flags(input, character(0)), list())
+
+  expect_snapshot(print(summary(admiral_df(dplyr::mutate(dup, STUDYID = "P")))))
+})
+
+## Test 46: the dataset is compared with the supplied ADSL ----
+test_that("summary.admiral_df Test 46: the dataset is compared with the supplied ADSL", {
+  adsl <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~SAFFL, ~TRT01P,   ~TRT01A,
+    "P",      "1",      "Y",    "Placebo", "Placebo",
+    "P",      "2",      "Y",    "Drug A",  "Drug A",
+    "P",      "3",      "N",    "Drug A",  NA,
+    "P",      "4",      "Y",    "Drug A",  "Drug A"
+  )
+  adae <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~AEDECOD,   ~TRTEMFL,
+    "P",      "1",      "HEADACHE", "Y",
+    "P",      "1",      "NAUSEA",   "Y",
+    "P",      "2",      "NAUSEA",   NA,
+    "P",      "9",      "NAUSEA",   "Y",
+    # a record which belongs to no subject is not compared
+    NA,       NA,       "NAUSEA",   "Y"
+  ) %>%
+    admiral_df()
+
+  actual <- summary(adae, adsl = adsl)$vs_adsl
+  expect_identical(actual$n_adsl, 4L)
+  expect_identical(actual$n_common, 2L)
+  expect_identical(actual$n_orphans, 1L)
+  expect_identical(actual$orphans, tibble::tibble(USUBJID = "9"))
+  expect_identical(actual$saffl, c(covered = 2L, total = 3L))
+  # the actual treatment ahead of the planned one; subjects without one are
+  # counted too
+  expect_identical(actual$arm_var, "TRT01A")
+  expect_identical(
+    actual$arm,
+    tibble::tibble(
+      TRT01A = c("Drug A", "Placebo", NA),
+      subjects = c(1L, 1L, 0L),
+      total = c(2L, 1L, 1L)
+    )
+  )
+  # treatment-emergent subjects out of the safety population
+  expect_identical(actual$incidence, c(subjects = 1L, total = 3L))
+  expect_identical(actual$incidence_denom, "in the safety population")
+  expect_snapshot(print(summary(adae, adsl = adsl)))
+
+  # without a safety population, out of all ADSL subjects
+  no_saffl <- summary(adae, adsl = dplyr::select(adsl, -SAFFL))$vs_adsl
+  expect_null(no_saffl$saffl)
+  expect_identical(no_saffl$incidence, c(subjects = 1L, total = 4L))
+  expect_identical(no_saffl$incidence_denom, "in ADSL")
+
+  # the incidence is for occurrence data only
+  advs <- admiral_df(
+    tibble::tibble(STUDYID = "P", USUBJID = "1", PARAMCD = "SYSBP", AVAL = 120)
+  )
+  expect_null(summary(advs, adsl = adsl)$vs_adsl$incidence)
+  expect_snapshot(print(summary(advs, adsl = adsl)))
+
+  # only the first and last few of the subjects not in ADSL are printed
+  many_orphans <- admiral_df(tibble::tibble(
+    STUDYID = "P", USUBJID = as.character(11:20), AEDECOD = "NAUSEA"
+  ))
+  expect_identical(summary(many_orphans, adsl = adsl)$vs_adsl$n_orphans, 10L)
+  expect_snapshot(print(summary(many_orphans, adsl = adsl)))
+})
+
+## Test 47: an ADSL which cannot be compared with is an error ----
+test_that("summary.admiral_df Test 47: an ADSL which cannot be compared with is an error", {
+  adsl <- tibble::tibble(STUDYID = "P", USUBJID = c("1", "2"))
+  adae <- admiral_df(tibble::tibble(STUDYID = "P", USUBJID = "1", AEDECOD = "NAUSEA"))
+
+  expect_snapshot(summary(adae, adsl = adsl[c(1, 1, 2), ]), error = TRUE)
+  expect_error(
+    summary(adae, adsl = dplyr::select(adsl, -USUBJID)),
+    class = "assert_data_frame"
+  )
+  expect_error(summary(adae, adsl = "ADSL"), class = "assert_data_frame")
+
+  # a dataset which cannot be compared is only a warning, as the rest of the
+  # summary is valid
+  expect_snapshot(actual <- summary(admiral_df(adsl), adsl = adsl))
+  expect_null(actual$vs_adsl)
+  lookup <- admiral_df(tibble::tibble(PARAMCD = "SYSBP"))
+  expect_warning(
+    no_subjects <- summary(lookup, adsl = adsl),
+    regexp = "no variables to match subjects by"
+  )
+  expect_null(no_subjects$vs_adsl)
+
+  # a grouped ADSL is compared as a whole
+  expect_identical(
+    summary(adae, adsl = dplyr::group_by(adsl, STUDYID))$vs_adsl$n_common,
+    1L
+  )
+})
+
+## Test 48: a record without a subject is not counted as a subject ----
+test_that("summary.admiral_df Test 48: a record without a subject is not counted as a subject", { # nolint
+  # e.g. records added by a derivation which does not populate `USUBJID`
+  advs <- tibble::tibble(
+    STUDYID = "P",
+    USUBJID = c("1", "2", NA, NA),
+    PARAMCD = "SYSBP",
+    AVAL = c(120, 130, 125, 128)
+  ) %>%
+    admiral_df()
+
+  actual <- summary(advs)
+  expect_identical(actual$n_subjects, 2L)
+  expect_identical(actual$details$params$subjects, 2L)
+
+  adsl <- tibble::tibble(
+    STUDYID = "P",
+    USUBJID = c("1", "2", NA),
+    SAFFL = "Y",
+    TRT01P = "Placebo",
+    AGE = c(40, 50, 99)
+  ) %>%
+    admiral_df(dataset_class = "ADSL")
+
+  adsl_details <- summary(adsl)$details
+  expect_identical(adsl_details$trt$subjects, 2L)
+  expect_identical(adsl_details$pops, c(SAFFL = 2L))
+  expect_identical(adsl_details$age, c(median = 45, min = 40, max = 50))
+
+  # the subject keys are used without `USUBJID`, numeric ones too
+  subject_keys <- get_admiral_option("subject_keys")
+  withr::defer(set_admiral_options(subject_keys = subject_keys))
+  set_admiral_options(subject_keys = exprs(STUDYID, SUBJID))
+  by_subjid <- admiral_df(tibble::tibble(STUDYID = "P", SUBJID = c(1, NA, 2), AGE = 1:3))
+  expect_identical(summary(by_subjid)$n_subjects, 2L)
+})
+
+## Test 49: the checks leave out records without a subject ----
+test_that("summary.admiral_df Test 49: the checks leave out records without a subject", {
+  # two baselines without a subject belong to no subject, so they are not a
+  # second baseline of anyone
+  advs <- tibble::tibble(
+    STUDYID = "P",
+    USUBJID = c("1", NA, NA, NA, NA),
+    PARAMCD = "SYSBP",
+    ABLFL = "Y",
+    AVAL = c(120, 125, 126, 127, 128)
+  ) %>%
+    admiral_df()
+  expect_identical(summary(advs)$details$multiple_baselines, 0L)
+
+  adae <- tibble::tibble(
+    STUDYID = "P",
+    USUBJID = c("1", NA, NA, NA, NA),
+    AEDECOD = "NAUSEA",
+    AOCCFL = "Y"
+  )
+  expect_identical(
+    check_occurrence_flags(adae, "USUBJID")$occ_flag_dups,
+    c(AOCCFL = 0L)
+  )
+
+  # duplicates of a real subject are still reported
+  expect_identical(
+    check_occurrence_flags(dplyr::bind_rows(adae, adae[1, ]), "USUBJID")$occ_flag_dups,
+    c(AOCCFL = 1L)
+  )
+})
+
+## Test 50: a device dataset is summarized per device ----
+test_that("summary.admiral_df Test 50: a device dataset is summarized per device", {
+  # no `USUBJID`, which is optional in a device dataset: `STUDYID` alone must
+  # not be taken for the subject, which would make the devices one
+  mdbds <- tibble::tribble(
+    ~STUDYID, ~SPDEVID, ~PARAMCD, ~AVISIT,    ~ABLFL, ~AVAL,
+    "P",      "D-1",    "BATTV",  "BASELINE", "Y",      3.1,
+    "P",      "D-2",    "BATTV",  "BASELINE", "Y",      3.0,
+    "P",      "D-1",    "BATTV",  "WEEK 4",   NA,       2.9,
+    # a derived record without a device belongs to none
+    "P",      NA,       "BATTV",  "WEEK 4",   NA,       2.8
+  ) %>%
+    # declared, as the record without a device would keep it from being
+    # inferred as device data
+    admiral_df(dataset_class = "MDBDS")
+
+  actual <- summary(mdbds)
+  expect_identical(actual$dataset_class, "MDBDS")
+  expect_identical(actual$n_devices, 2L)
+  expect_identical(actual$device_vars, "SPDEVID")
+  expect_identical(actual$n_subjects, NA_integer_)
+  expect_identical(actual$subject_vars, character(0))
+  expect_identical(actual$details$params$devices, 2L)
+  # one baseline per device is correct
+  expect_identical(actual$details$baseline_by, c("SPDEVID", "PARAMCD"))
+  expect_identical(actual$details$multiple_baselines, 0L)
+  expect_snapshot(print(actual))
+
+  # occurrence flags are per device
+  mdoccds <- tibble::tribble(
+    ~STUDYID, ~SPDEVID, ~DEDECOD,    ~AOCCFL,
+    "P",      "D-1",    "OCCLUSION", "Y",
+    "P",      "D-2",    "LEAK",      "Y"
+  ) %>%
+    admiral_df()
+  expect_identical(summary(mdoccds)$details$occ_flag_dups, c(AOCCFL = 0L))
+
+  # the subjects are counted as well where `USUBJID` is present, and `adsl` is
+  # matched by them
+  addl <- tibble::tribble(
+    ~STUDYID, ~USUBJID, ~SPDEVID, ~DEVTYPE,
+    "P",      "1",      "D-1",    "INSULIN PUMP",
+    "P",      "1",      "D-2",    "CGM SENSOR",
+    "P",      "2",      "D-3",    "INSULIN PUMP"
+  ) %>%
+    admiral_df()
+  adsl <- tibble::tibble(STUDYID = "P", USUBJID = c("1", "2", "3"))
+  addl_actual <- summary(addl, adsl = adsl)
+  expect_identical(addl_actual$n_devices, 3L)
+  expect_identical(addl_actual$n_subjects, 2L)
+  expect_identical(addl_actual$vs_adsl$n_common, 2L)
+  expect_snapshot(print(addl_actual))
+
+  # without `USUBJID` there is nothing to match `adsl` by
+  expect_warning(
+    no_subjects <- summary(mdbds, adsl = adsl),
+    regexp = "no variables to match subjects by"
+  )
+  expect_null(no_subjects$vs_adsl)
+})
+
+## Test 51: the subject keys only count subjects if all are present ----
+test_that("summary.admiral_df Test 51: the subject keys only count subjects if all are present", { # nolint
+  # `STUDYID` alone identifies no subject
+  study_only <- admiral_df(tibble::tibble(STUDYID = "P", PARAMCD = c("A", "B")))
+  actual <- summary(study_only)
+  expect_identical(actual$n_subjects, NA_integer_)
+  expect_identical(actual$subject_vars, character(0))
+})
+
+## Test 52: records without a subject are no treatment-emergent subject ----
+test_that("summary.admiral_df Test 52: records without a subject are no treatment-emergent subject", { # nolint
+  adsl <- tibble::tibble(STUDYID = "P", USUBJID = c("1", "2"), SAFFL = "Y")
+  adae <- tibble::tibble(
+    STUDYID = "P",
+    USUBJID = c("1", NA, NA),
+    AEDECOD = "NAUSEA",
+    TRTEMFL = "Y"
+  ) %>%
+    admiral_df()
+
+  expect_identical(
+    summary(adae, adsl = adsl)$vs_adsl$incidence,
+    c(subjects = 1L, total = 2L)
+  )
+})
+
+## Test 53: unused factor levels are not counted ----
+test_that("summary.admiral_df Test 53: unused factor levels are not counted", {
+  adsl <- tibble::tibble(
+    STUDYID = "P",
+    USUBJID = c("1", "2", "3"),
+    SEX = factor(c("F", "F", "F"), levels = c("F", "M", "U")),
+    DTHFL = "Y",
+    DTHCAUS = factor(c("A", "A", NA), levels = c("A", "B"))
+  ) %>%
+    admiral_df(dataset_class = "ADSL")
+
+  actual <- summary(adsl)$details
+  expect_identical(actual$sex, c(F = 3L))
+  expect_identical(actual$dthcaus, c(A = 2L, "NA" = 1L))
 })

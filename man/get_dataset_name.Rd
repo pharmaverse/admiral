@@ -36,14 +36,11 @@ advs <- admiral_df(advs, dataset_name = "ADVS")
 get_dataset_name(advs)
 }
 \seealso{
-Utilities used within Derivation functions:
+The admiral_df Class:
 \code{\link[=admiral_df]{admiral_df()}},
-\code{\link[=extract_unit]{extract_unit()}},
 \code{\link[=get_dataset_class]{get_dataset_class()}},
 \code{\link[=get_dataset_keys]{get_dataset_keys()}},
-\code{\link[=get_flagged_records]{get_flagged_records()}},
-\code{\link[=get_not_mapped]{get_not_mapped()}},
-\code{\link[=get_vars_query]{get_vars_query()}}
+\code{\link[=summary.admiral_df]{summary.admiral_df()}}
 }
-\concept{utils_help}
-\keyword{utils_help}
+\concept{admiral_df}
+\keyword{admiral_df}

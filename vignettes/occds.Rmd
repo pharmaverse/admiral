@@ -523,6 +523,20 @@ dataset_vignette(
 )
 ```
 
+An occurrence flag should be `"Y"` for at most one record per subject (or per
+subject and body system or term, for `AOCCSIFL` and `AOCCPIFL`). Otherwise a
+subject would be counted twice in every summary table built from it. This is
+hard to see by looking at the data, but calling [`summary()`](../reference/summary.admiral_df.html) on the dataset
+checks it, together with an overview of the terms, treatment-emergent records,
+and severity:
+
+```{r, eval=TRUE}
+summary(adae)
+```
+
+See [Summarizing ADaM Datasets](admiral_df_web.html) for more on what
+the summary reports.
+
 ## Derive Query Variables {#query}
 
 Most Standardized MedDRA Queries (SMQs) and their associated variables `SMQzzNAM`, 
@@ -899,6 +913,22 @@ dataset_vignette(
     RFENDTC, AGE, AGEU, SEX
   )
 )
+```
+
+As the dataset is now nearly complete, this is a good point to check it against
+ADSL. Tagging it with its name and key variables using `admiral_df()` lets
+`summary()` also check that there is one record per key, and passing `adsl`
+shows how many subjects of the safety population have adverse events, the
+treatment-emergent incidence, and whether any subject is missing from ADSL:
+
+```{r eval=TRUE}
+adae <- admiral_df(
+  adae,
+  dataset_name = "ADAE",
+  dataset_keys = exprs(STUDYID, USUBJID, AESEQ)
+)
+
+summary(adae, adsl = adsl)
 ```
 
 ## Derive Analysis Sequence Number  {#aseq}

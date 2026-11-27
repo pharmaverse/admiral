@@ -134,6 +134,18 @@ adcm <- adcm %>%
   )
 
 
+# Check the dataset ----
+# Store the dataset name and key variables, then summarize the dataset. The
+# summary checks that there is one record per key and reports the content of
+# the dataset, comparing its subjects with ADSL
+adcm <- admiral_df(
+  adcm,
+  dataset_name = "ADCM",
+  dataset_keys = exprs(STUDYID, USUBJID, CMSEQ)
+)
+
+summary(adcm, adsl = adsl)
+
 # Save output ----
 
 # Change to whichever directory you want to save the dataset in

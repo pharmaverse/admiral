@@ -139,5 +139,12 @@ globalVariables(c(
   "prev_intensity",
   "srfl",
   "dose_freq_lookup",
-  "UNIT_CHECK"
+  "UNIT_CHECK",
+  "AVISIT",
+  "AVISITN",
+  "DTHFL",
+  "PARAM",
+  "SAFFL",
+  "subjects",
+  "total"
 ))

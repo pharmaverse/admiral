@@ -170,6 +170,18 @@ advs %>%
   )
 ```
 
+Derivation functions return an `admiral_df` dataset, so calling [`summary()`](../reference/summary.admiral_df.html) on
+the result gives a quick report of what the dataset now contains. Here it shows
+that `MAP` was added for the same subjects and visits as `SYSBP` and `DIABP`,
+along with the range of the derived values:
+
+```{r, eval=TRUE}
+summary(advs)
+```
+
+See [Summarizing ADaM Datasets](admiral_df_web.html) for more on what
+the summary reports and how to make the most of it.
+
 **Note:** For the users' convenience, `{admiral}` actually provides
 `derive_param_map()`  (wrapper of `derive_param_computed()`) to derive MAP.
 The above example serves for illustrative purposes only.
@@ -305,6 +317,14 @@ A list of all available templates can be obtained by `list_all_templates()`:
 library(admiral)
 list_all_templates()
 ```
+
+While you develop a script, you can check the dataset at any point by calling
+`summary()` on it. It reports the subjects, records, and parameters (or other
+content, depending on the type of dataset) and runs some quick checks, e.g.
+whether there is one record per key variable combination (if the keys are
+supplied). The templates do
+this before saving the final dataset. See
+[Summarizing ADaM Datasets](admiral_df_web.html) for details.
 
 # Support
 

@@ -26,10 +26,6 @@ extract_unit("Diastolic Blood Pressure (mmHg)")
 }
 \seealso{
 Utilities used within Derivation functions:
-\code{\link[=admiral_df]{admiral_df()}},
-\code{\link[=get_dataset_class]{get_dataset_class()}},
-\code{\link[=get_dataset_keys]{get_dataset_keys()}},
-\code{\link[=get_dataset_name]{get_dataset_name()}},
 \code{\link[=get_flagged_records]{get_flagged_records()}},
 \code{\link[=get_not_mapped]{get_not_mapped()}},
 \code{\link[=get_vars_query]{get_vars_query()}}

@@ -37,6 +37,9 @@
 #' @source
 #' Derived from the `dm` and `ds` datasets using `{admiral}` (\url{https://github.com/pharmaverse/admiral/blob/main/inst/templates/ad_adsl.R})
 #'
+#' The dataset is an [admiral_df()] with its name (`"ADSL"`), class
+#' (`"ADSL"`), and key variables (`STUDYID`, `USUBJID`) stored.
+#'
 "admiral_adsl"
 
 #' Lab Analysis Dataset
@@ -50,6 +53,10 @@
 #' 01-701-1015, 01-701-1023, 01-701-1028, 01-701-1033,
 #' 01-701-1034, 01-701-1047, 01-701-1097, 01-705-1186,
 #' 01-705-1292, 01-705-1310, 01-708-1286
+#'
+#' The dataset is an [admiral_df()] with its name (`"ADLB"`), class (`"BDS"`),
+#' and key variables (`STUDYID`, `USUBJID`, `PARAMCD`, `ADT`, `AVISITN`,
+#' `VISITNUM`) stored.
 #'
 "admiral_adlb"
 

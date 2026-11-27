@@ -5,7 +5,7 @@
 \alias{admiral_adlb}
 \title{Lab Analysis Dataset}
 \format{
-An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 330 rows and 115 columns.
+An object of class \code{admiral_df} (inherits from \code{tbl_df}, \code{tbl}, \code{data.frame}) with 330 rows and 115 columns.
 }
 \source{
 Derived from the \code{adlb} template, then further filtered
@@ -13,6 +13,10 @@ due to dataset size by the following USUBJIDs:
 01-701-1015, 01-701-1023, 01-701-1028, 01-701-1033,
 01-701-1034, 01-701-1047, 01-701-1097, 01-705-1186,
 01-705-1292, 01-705-1310, 01-708-1286
+
+The dataset is an \code{\link[=admiral_df]{admiral_df()}} with its name (\code{"ADLB"}), class (\code{"BDS"}),
+and key variables (\code{STUDYID}, \code{USUBJID}, \code{PARAMCD}, \code{ADT}, \code{AVISITN},
+\code{VISITNUM}) stored.
 }
 \usage{
 admiral_adlb

@@ -5,10 +5,13 @@
 \alias{admiral_adsl}
 \title{Subject Level Analysis Dataset}
 \format{
-An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 306 rows and 54 columns.
+An object of class \code{admiral_df} (inherits from \code{tbl_df}, \code{tbl}, \code{data.frame}) with 306 rows and 54 columns.
 }
 \source{
 Derived from the \code{dm} and \code{ds} datasets using \code{{admiral}} (\url{https://github.com/pharmaverse/admiral/blob/main/inst/templates/ad_adsl.R})
+
+The dataset is an \code{\link[=admiral_df]{admiral_df()}} with its name (\code{"ADSL"}), class
+(\code{"ADSL"}), and key variables (\code{STUDYID}, \code{USUBJID}) stored.
 }
 \usage{
 admiral_adsl

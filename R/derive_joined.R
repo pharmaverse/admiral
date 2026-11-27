@@ -298,6 +298,27 @@
 #' ) %>%
 #'   select(USUBJID, ADY, AWLO, AWHI, AVISIT)
 #'
+#' @caption Checking the derived visits with `summary()`
+#' @info `{admiral}` functions return an `admiral_df` dataset, so calling
+#'   [`summary()`][summary.admiral_df()] on the result gives a quick check of
+#'   the join.
+#'
+#' - Tagging the result with its class and keys means the summary lists the
+#'   analysis visits and checks for one record per subject and visit.
+#' - `"WEEK 1"` is missing, as no study day falls in its window.
+#' - The structure check reports 2 extra records, as subject `"1"` has two
+#'   study days in the `"BASELINE"` window (-7 and 1) and two in the
+#'   `"WEEK 2"` window (8 and 15).
+#' @code
+#' derive_vars_joined(
+#'   adbds,
+#'   dataset_add = windows,
+#'   join_type = "all",
+#'   filter_join = AWLO <= ADY & ADY <= AWHI
+#' ) %>%
+#'   admiral_df(dataset_class = "BDS", dataset_keys = exprs(USUBJID, AVISIT)) %>%
+#'   summary()
+#'
 #' @caption Join only the lowest/highest value occurring within a condition (`filter_join`,
 #'   `order` and `mode`)
 #' @info Derive the nadir value for each observation (i.e. the lowest value
